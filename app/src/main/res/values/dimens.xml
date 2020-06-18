@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dimen_200">200dp</dimen>
+    <dimen name="dimen_8">8dp</dimen>
+    <dimen name="dimen_16">16dp</dimen>
+    <dimen name="diment_18">18sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="signup_start_margin">2dp</dimen>
+    <dimen name="margin_10dp">10dp</dimen>
+    <dimen name="width_40dp">40dp</dimen>
+    <dimen name="app_name_text_size">28sp</dimen>
+    <dimen name="margint_top_app_name">50dp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
+    <dimen name="width_50dp">50dp</dimen>
+    <dimen name="field_text_size">16sp</dimen>
+
+</resources>

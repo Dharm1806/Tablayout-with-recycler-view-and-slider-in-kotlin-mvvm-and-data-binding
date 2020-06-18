@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CovidHealthCare</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_splash_fragment">Hello Splash Screen</string>
+    <string name="hello_home_fragment">Home Screen</string>
+    <string name="user_email">user email@gmai.com</string>
+    <string name="email_slected">email selected</string>
+    <string name="fav_selected">fav selected</string>
+    <string name="direction_selected">direction selected</string>
+    <string name="email">email</string>
+    <string name="favourites">Favourites</string>
+    <string name="directions">Directions</string>
+    <string name="action_signup">SignUp</string>
+    <string name="msg_don_t_have_an_account">Don\'t have an account?</string>
+    <string name="action_login">Login</string>
+    <string name="msg_password">Password</string>
+    <string name="msg_email">Email</string>
+    <string name="msg_please_wait">Please Wait...</string>
+    <string name="msg_please_connect_to_internet">Please connect to Internet</string>
+    <string name="error_valid_email">Please enter valid email</string>
+    <string name="error_valid_password">Please enter valid password</string>
+
+</resources>
