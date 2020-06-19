@@ -11,7 +11,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.adapters.DemoCollectionAdapter
+import com.tekmindz.covidhealthcare.adapters.HomeTabAdapter
 import com.tekmindz.covidhealthcare.constants.Constants
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var demoCollectionAdapter: DemoCollectionAdapter
+    private lateinit var demoCollectionAdapter: HomeTabAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        demoCollectionAdapter = DemoCollectionAdapter(this)
+        demoCollectionAdapter = HomeTabAdapter(this)
         pager.adapter = demoCollectionAdapter
         setDividers()
         TabLayoutMediator(tab_layout, pager) { tab, position ->
