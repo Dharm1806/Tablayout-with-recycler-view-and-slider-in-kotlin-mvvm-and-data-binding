@@ -5,6 +5,7 @@ import android.app.Application
 import com.google.gson.GsonBuilder
 import com.tekmindz.covidhealthcare.constants.Constants.BASE_URL
 import com.tekmindz.covidhealthcare.repository.api.HealthCareApis
+import com.tekmindz.covidhealthcare.utills.SharedPreference
 import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -18,7 +19,7 @@ class App : Application() {
     companion object {
         private lateinit var retrofit: Retrofit
         lateinit var healthCareApi: HealthCareApis
-
+        lateinit var mSharedPrefrenceManager:SharedPreference
     }
 
     override fun onCreate() {
@@ -34,7 +35,7 @@ class App : Application() {
                 .build()
 
         healthCareApi = retrofit.create(HealthCareApis::class.java)
-
+        mSharedPrefrenceManager = SharedPreference(this)
     }
 
     // function to return interCepter

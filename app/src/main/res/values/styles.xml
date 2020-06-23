@@ -28,7 +28,63 @@
         <item name="titleTextAppearance">@id/center</item>
     </style>
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowBackground">@drawable/splash_bg</item>
     </style>
 
+    <style name="Widget.Design.TextInputLayout1" parent="android:Widget">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Design.TextInputEditText</item>
+        <item name="enforceMaterialTheme">false</item>
+        <item name="enforceTextAppearance">false</item>
+
+        <item name="boxBackgroundMode">none</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="passwordToggleDrawable">@drawable/design_password_eye</item>
+        <item name="passwordToggleTint">@color/white</item>
+        <item name="passwordToggleContentDescription">@string/password_toggle_content_description</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="endIconTint">@color/design_icon_tint</item>
+        <item name="startIconTint">@color/design_icon_tint</item>
+
+        <item name="prefixTextAppearance">@style/TextAppearance.Design.Prefix</item>
+        <item name="suffixTextAppearance">@style/TextAppearance.Design.Suffix</item>
+
+        <item name="counterTextColor">@color/white</item>
+        <item name="counterOverflowTextColor">@color/white</item>
+        <item name="errorTextColor">@android:color/holo_red_dark</item>
+        <item name="helperTextTextColor">@color/white</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="placeholderTextColor">@color/white</item>
+        <item name="prefixTextColor">@color/white</item>
+        <item name="suffixTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="shapeAppearance">@null</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+    </style>
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="hintTextAppearance">@color/white_70</item>
+        <item name="errorTextAppearance">@android:color/holo_red_dark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white_70</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+    <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="itemBackground">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="PopupMenuListView" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:divider">@color/white</item>
+        <item name="android:dividerHeight">5dp</item>
+    </style>
 </resources>

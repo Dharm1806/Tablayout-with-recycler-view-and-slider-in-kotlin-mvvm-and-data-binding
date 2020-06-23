@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat
 
 object Constants {
     //base url for apis
-    const val BASE_URL = "https://api.github.com/"
+    const val BASE_URL = "http://54.218.218.85:8080/"
 
     //endpoints for apis
-    const val LOGIN_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
+    const val LOGIN_END_POINTS = "auth/realms/ctms/protocol/openid-connect/token"
     const val CHECK_ITS_PASSWORD_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
 
@@ -20,12 +20,23 @@ object Constants {
     var isLoginRequired: Boolean = true
     const val HEADER_CONTENT_TYPE = "Content-Type: application/json"
     const val HEADER_AUTHRIZATION = "Authorization"
-    const val CLIENT_ID: String = "covid"
+    const val CLIENT_ID: String = "ctms-app"
     const val CLIENT_SECRET = "covid"
     const val FILTER_DATE_FORMAT = "yyyy-MM-dd"
-    const val PASSWROD = "PASSWORD"
+    const val PASSWROD = "password"
     const val EXTRA_GRANT_TYPE = "grantType"
     const val SET_PASSWROD = "Set Password"
+
+
+    const val PREF_IS_LOGIN = "is_login"
+    const val PREF_ACCESS_TOKEN = "access_token"
+    const val PREF_EXPIRES_IN = "expires_in"
+    const val PREF_REFRESH_EXPIRES_IN = "refresh_expires_in"
+    const val PREF_REFRESH_TOKEN= "refresh_token"
+    const val PREF_TOKEN_TYPE = "token_type"
+    const val PREF_NOT_BEFORE_POLICY = "not_before_policy"
+    const val PREF_SESSION_STATE= "session_state"
+    const val PREF_SCOPE = "scope"
 
     //parse server date to app format
 

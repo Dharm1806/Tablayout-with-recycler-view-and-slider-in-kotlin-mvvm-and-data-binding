@@ -1,5 +1,6 @@
-package com.tekmindz.covidhealthcare.destinations
+package com.tekmindz.covidhealthcare.ui.dashboard
 
+import android.app.ProgressDialog
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.adapters.HomeTabAdapter
-import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -20,6 +22,8 @@ import kotlinx.android.synthetic.main.fragment_home.*
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private lateinit var mDashboardViewModel: DashboardViewModel
+private var mProgressDialog: ProgressDialog? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -50,6 +54,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
+
+        mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+
         demoCollectionAdapter = HomeTabAdapter(this)
         pager.adapter = demoCollectionAdapter
         setDividers()
@@ -57,35 +65,19 @@ class HomeFragment : Fragment() {
             tab.text = "OBJECT ${(position + 1)}"
             pager.setCurrentItem(tab.position, true)
         }.attach()
-        if (Constants.isLoginRequired) {
+        if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
                 R.id.homeTologin, null, NavOptions.Builder()
                     .setPopUpTo(
                         R.id.home,
                         true
                     ).build()
-
             )
-            Constants.isLoginRequired = false
         }
 
-       /* tab_layout.addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                    Log.e("tab selected position", "${tab.position}")
-                pager.setCurrentItem( tab.position, true)
-
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-        })
-        pager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                tab_layout.selectTab(tab_layout.getTabAt(position))
-            }
-        })*/
     }
 
-   fun  setDividers(){
+    fun setDividers() {
         val root: View = tab_layout.getChildAt(0)
         if (root is LinearLayout) {
             (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_NONE

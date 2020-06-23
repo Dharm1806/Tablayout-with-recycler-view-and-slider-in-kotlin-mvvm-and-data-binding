@@ -1,14 +1,14 @@
 package com.tekmindz.covidhealthcare.utills
 
 
-class Resource<T> private constructor(val status: Resource.Status, val data: List<T>?, val exception: String?) {
+class Resource<T> private constructor(val status: Resource.Status, val data: T?, val exception: String?) {
     enum class Status {
         SUCCESS, ERROR, LOADING
     }
 
     companion object {
 
-        fun <T> success(data: List<T>?): Resource<T> {
+        fun <T> success(data: T?): Resource<T> {
             return Resource(Status.SUCCESS, data, null)
         }
 

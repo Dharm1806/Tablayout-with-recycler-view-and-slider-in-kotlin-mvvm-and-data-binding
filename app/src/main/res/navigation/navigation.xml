@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/login"
-        android:name="com.tekmindz.covidhealthcare.destinations.LoginFragment"
+        android:name="com.tekmindz.covidhealthcare.ui.login.LoginFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_login">
         <action
@@ -33,7 +33,7 @@
 
      <fragment
           android:id="@+id/home"
-          android:name="com.tekmindz.covidhealthcare.destinations.HomeFragment"
+          android:name="com.tekmindz.covidhealthcare.ui.dashboard.HomeFragment"
           android:label="@string/app_name"
           tools:layout="@layout/fragment_home">
 

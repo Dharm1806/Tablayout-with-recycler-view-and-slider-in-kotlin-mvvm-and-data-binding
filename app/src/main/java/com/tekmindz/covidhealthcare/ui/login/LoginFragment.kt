@@ -1,4 +1,4 @@
-package com.tekmindz.covidhealthcare.destinations
+package com.tekmindz.covidhealthcare.ui.login
 
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -14,11 +14,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_SCOPE
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
-import com.tekmindz.covidhealthcare.viewModel.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
@@ -66,44 +73,52 @@ class LoginFragment : Fragment() {
         button_login.setOnClickListener {
             validateFields()
         }
+
         mLoginViewModel.response().observe(requireActivity(), Observer {
-            when(it){
-                is Resource<UserModel> ->{
+            when (it) {
+                is Resource<UserModel> -> {
                     handleIssuesResponse(it)
                 }
             }
-        } )
-
-        image_cancel.setOnClickListener {  findNavController().navigate(
-            R.id.loginToHome, null) }
-        /* Handler().postDelayed({
-
-         }, 3000)*/
-
-
+        })
     }
 
     private fun handleIssuesResponse(it: Resource<UserModel>) {
 
-        when(it.status){
+        when (it.status) {
             Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> loginSuccess(it.data!!)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
     }
+
     private fun showProgressBar() {
         mProgressDialog?.show()
     }
 
-    private fun loginSuccess(userData: List<UserModel>) {
+    private fun loginSuccess(userData: UserModel) {
 
         hideProgressbar()
-        if (this.activity!=null) {
+
+        if (this.activity != null) {
             val navController =
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             val id = navController.currentDestination!!.id
             Log.e("id", "$id")
+            mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
+            mLoginViewModel.saveUserData(PREF_EXPIRES_IN, userData.expires_in.toString())
+            mLoginViewModel.saveUserData(
+                PREF_REFRESH_EXPIRES_IN,
+                userData.refresh_expires_in.toString()
+            )
+            mLoginViewModel.saveUserData(PREF_REFRESH_TOKEN, userData.refresh_token)
+            mLoginViewModel.saveUserData(PREF_TOKEN_TYPE, userData.token_type)
+            //mLoginViewModel.saveUserData(PREF_NOT_BEFORE_POLICY, userData.not_before_policy)
+            mLoginViewModel.saveUserData(PREF_SESSION_STATE, userData.session_state)
+            mLoginViewModel.saveUserData(PREF_SCOPE, userData.scope)
+            mLoginViewModel.setIsLogin(true)
+
             if (id == R.id.login) {
                 findNavController().navigate(
                     R.id.loginToHome, null, NavOptions.Builder()
@@ -117,34 +132,51 @@ class LoginFragment : Fragment() {
     }
 
     private fun showError(error: String) {
-       showMessage(error)
+        showMessage(error)
         hideProgressbar()
     }
-
 
 
     //hide the progressbar
     private fun hideProgressbar() {
         mProgressDialog?.hide()
     }
+
     private fun validateFields() {
+
         val email = text_emailLogin.editText?.text.toString()
         val passsword = text_passwordLogin.editText?.text.toString()
+
         if (!mLoginViewModel.isValidEmail(email)) {
+
             showMessage(getString(R.string.error_valid_email))
             text_emailLogin.isErrorEnabled = true
         } else {
+
             text_emailLogin.isErrorEnabled = false
         }
+
         if (!mLoginViewModel.validPassword(passsword)) {
+
             showMessage(getString(R.string.error_valid_password))
             text_passwordLogin.isErrorEnabled = true
         } else {
+
             text_passwordLogin.isErrorEnabled = false
         }
+
         if (mLoginViewModel.isValidEmail(email) && mLoginViewModel.validPassword(passsword)) {
+
             mProgressDialog?.show()
-            mLoginViewModel.login(LoginRequest(email, passsword))
+
+            mLoginViewModel.login(
+                LoginRequest(
+                    email,
+                    passsword,
+                    Constants.CLIENT_ID,
+                    Constants.PASSWROD
+                )
+            )
         }
     }
 

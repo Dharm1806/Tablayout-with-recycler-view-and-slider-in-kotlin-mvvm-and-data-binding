@@ -1,4 +1,4 @@
-package com.tekmindz.covidhealthcare.destinations
+package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater

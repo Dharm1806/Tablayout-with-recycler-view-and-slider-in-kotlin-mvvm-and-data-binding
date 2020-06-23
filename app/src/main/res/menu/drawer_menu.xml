@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/selfAssesment"
+            android:icon="@drawable/ic_self_assesment"
+            android:title="@string/self_assesment" />
 
         <item
-            android:id="@id/home"
-            android:icon="@android:drawable/ic_dialog_email"
-            android:title="@string/email" />
+            android:id="@+id/home"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/dashboard" />
 
         <item
-            android:id="@id/login"
-            android:icon="@android:drawable/btn_star_big_off"
-            android:title="@string/favourites" />
-
-        <item
-            android:id="@+id/directions"
-            android:icon="@android:drawable/ic_menu_directions"
-            android:title="@string/directions" />
-
+            android:id="@+id/logout"
+            android:actionLayout="@layout/action_layout_file"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/logout" />
     </group>
 
 </menu>

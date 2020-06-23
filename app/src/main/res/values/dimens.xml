@@ -11,9 +11,9 @@
     <dimen name="margin_10dp">10dp</dimen>
     <dimen name="width_40dp">40dp</dimen>
     <dimen name="app_name_text_size">28sp</dimen>
-    <dimen name="margint_top_app_name">50dp</dimen>
+    <dimen name="margint_top_app_name">100dp</dimen>
     <dimen name="button_text_size">18sp</dimen>
     <dimen name="width_50dp">50dp</dimen>
-    <dimen name="field_text_size">16sp</dimen>
+    <dimen name="field_text_size">18sp</dimen>
 
 </resources>

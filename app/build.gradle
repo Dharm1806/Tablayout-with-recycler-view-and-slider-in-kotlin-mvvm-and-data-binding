@@ -55,7 +55,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -70,8 +70,6 @@ dependencies {
     //noinspection LifecycleAnnotationProcessorWithJava8
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
 
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.3.0'
 
 
     implementation "com.google.dagger:dagger:2.24"

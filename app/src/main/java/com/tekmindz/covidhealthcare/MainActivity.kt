@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -10,13 +11,14 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.*
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 
-class MainActivity : AppCompatActivity(){// , NavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navController: NavController
@@ -39,7 +41,7 @@ class MainActivity : AppCompatActivity(){// , NavigationView.OnNavigationItemSel
     override fun onBackPressed() = if (drawerLayout.isDrawerOpen(GravityCompat.START))
         drawerLayout.closeDrawer(GravityCompat.START)
     else super.onBackPressed()
-/*
+
     @Override
     override fun onNavigationItemSelected(p0: MenuItem):Boolean {
 
@@ -48,17 +50,25 @@ class MainActivity : AppCompatActivity(){// , NavigationView.OnNavigationItemSel
 
         when(p0.itemId){
           //  R.id.email ->showMessage(getString(R.string.email_slected))
-            *//* if(navController.currentDestination?.id != R.id.commentList){
-                 val action =
-                     IssuesListFragmentDirections.issuesListToComment("4996")
-                 navController.navigate(action)}*//*
+           // *//* if(navController.currentDestination?.id != R.id.commentList){
+                // val action =
+                 //    IssuesListFragmentDirections.issuesListToComment("4996")
+                // navController.navigate(action)}*//*
 
         //    R.id.favourites -> showMessage(getString(R.string.fav_selected))
-            R.id.directions -> showMessage(getString(R.string.direction_selected))
+            R.id.logout -> {
+                App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN,false)
+                navController.navigate(
+                    R.id.homeTologin, null, NavOptions.Builder()
+                        .setPopUpTo(
+                            R.id.home,
+                            true
+                        ).build())
+            }
 
         }
         return true
-    }*/
+    }
 
     private fun showMessage(message:String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -76,16 +86,16 @@ class MainActivity : AppCompatActivity(){// , NavigationView.OnNavigationItemSel
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(navigationView, navController)
-       // navigationView.setNavigationItemSelectedListener(this)
+       navigationView.setNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.home) {
-                toolbar.visibility = View.VISIBLE
-                navigationView.visibility = View.VISIBLE
-                drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            } else {
+            if(destination.id == R.id.login) {
                 toolbar.visibility = View.GONE
                 navigationView.visibility = View.GONE
                 drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            } else {
+                toolbar.visibility = View.VISIBLE
+                navigationView.visibility = View.VISIBLE
+                drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             }
         }
     }
