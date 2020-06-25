@@ -13,7 +13,7 @@ class LoginRepository {
 
     /*request to login user from login api*/
     fun login(loginRequestModel: LoginRequest): Observable<Response<UserModel>> =
-        App.healthCareApi.login(
+        App.healthCareApiLogin.login(
             loginRequestModel.client_id,
             loginRequestModel.username,
             loginRequestModel.password,

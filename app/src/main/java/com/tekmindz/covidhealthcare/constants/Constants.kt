@@ -5,24 +5,26 @@ import java.text.SimpleDateFormat
 
 object Constants {
     //base url for apis
-    const val BASE_URL = "http://54.218.218.85:8080/"
+    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+    const val BASE_URL = "http://54.191.180.13:8081/api/"
 
-    //endpoints for apis
+       //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/ctms/protocol/openid-connect/token"
-    const val CHECK_ITS_PASSWORD_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
+    const val GET_DASHBOARD_OBSERVATIONS = "dashboard/observations"
+    const val GET_DASHBOARD_COUNTS = "dashboard/ragstatus/count"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
 
-    private const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+     const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     private const val APP_DATE_FORMAT = "dd-MM-yyyy HH:mm"
     const val BASIC = "Basic "
-    val ARG_OBJECT = "object"
+    val ARG_TIME = "time"
 
     var isLoginRequired: Boolean = true
     const val HEADER_CONTENT_TYPE = "Content-Type: application/json"
     const val HEADER_AUTHRIZATION = "Authorization"
     const val CLIENT_ID: String = "ctms-app"
     const val CLIENT_SECRET = "covid"
-    const val FILTER_DATE_FORMAT = "yyyy-MM-dd"
+    const val FILTER_DATE_FORMAT = "yyyy-MM-dd hh-mm-ss"
     const val PASSWROD = "password"
     const val EXTRA_GRANT_TYPE = "grantType"
     const val SET_PASSWROD = "Set Password"

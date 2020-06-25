@@ -123,7 +123,7 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(
                     R.id.loginToHome, null, NavOptions.Builder()
                         .setPopUpTo(
-                            R.id.splash,
+                            R.id.login,
                             true
                         ).build()
                 )

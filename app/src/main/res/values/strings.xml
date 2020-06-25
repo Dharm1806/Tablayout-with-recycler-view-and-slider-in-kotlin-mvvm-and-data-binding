@@ -22,5 +22,10 @@
     <string name="logout">LOGOUT</string>
     <string name="dashboard">DASHBOARD</string>
     <string name="self_assesment">SELF ASSESMENT</string>
+    <string name="hours_3">3 Hours</string>
+    <string name="hours_6">6 Hours</string>
+    <string name="hours_12">12 Hours</string>
+    <string name="hours_24">24 Hours</string>
+    <string name="date_range">Date Range</string>
 
 </resources>

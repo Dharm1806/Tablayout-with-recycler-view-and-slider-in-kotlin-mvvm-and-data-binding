@@ -1,8 +1,8 @@
 package com.tekmindz.covidhealthcare
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -17,8 +17,10 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.lifesignals.MainActivity
+import com.tekmindz.lifesignals.SplashActivity
 
-class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
+class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navController: NavController
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_home)
         setupNavigation()
     }
 
@@ -66,6 +68,12 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
                         ).build())
             }
 
+
+            R.id.selfAssesment -> {
+             val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+
         }
         return true
     }
@@ -80,7 +88,6 @@ class MainActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigationView)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)

@@ -9,9 +9,9 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabBackground="@color/colorPrimary"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@android:color/black"
+        android:background="@drawable/title_bg"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="#30ffffff"
         app:tabIndicator="@color/colorAccent"
         app:tabIndicatorHeight="50dp"
         app:tabIconTintMode="add"
@@ -29,8 +29,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/tab_layout"
-
-
          />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

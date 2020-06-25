@@ -4,6 +4,7 @@ import android.app.Application
 
 import com.google.gson.GsonBuilder
 import com.tekmindz.covidhealthcare.constants.Constants.BASE_URL
+import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_BASE_URL
 import com.tekmindz.covidhealthcare.repository.api.HealthCareApis
 import com.tekmindz.covidhealthcare.utills.SharedPreference
 import okhttp3.*
@@ -17,8 +18,12 @@ class App : Application() {
 
     //For the sake of simplicity, for now we use this instead of Dagger
     companion object {
-        private lateinit var retrofit: Retrofit
+        private lateinit var retrofitAll: Retrofit
         lateinit var healthCareApi: HealthCareApis
+
+        private lateinit var retrofit: Retrofit
+        lateinit var healthCareApiLogin: HealthCareApis
+
         lateinit var mSharedPrefrenceManager:SharedPreference
     }
 
@@ -31,10 +36,19 @@ class App : Application() {
                 .addConverterFactory(GsonConverterFactory.create(gGson.create()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                .client(provideOkHttpClient()!!)
-                .baseUrl(BASE_URL)
+                .baseUrl(LOGIN_BASE_URL)
                 .build()
 
-        healthCareApi = retrofit.create(HealthCareApis::class.java)
+        retrofitAll = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gGson.create()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(provideOkHttpClient()!!)
+            .baseUrl(BASE_URL)
+            .build()
+
+        healthCareApi = retrofitAll.create(HealthCareApis::class.java)
+
+        healthCareApiLogin = retrofit.create(HealthCareApis::class.java)
         mSharedPrefrenceManager = SharedPreference(this)
     }
 

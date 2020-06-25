@@ -1,11 +1,9 @@
-package com.tekmindz.covidhealthcare.adapters
+package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.tekmindz.covidhealthcare.constants.Constants.ARG_OBJECT
-import com.tekmindz.covidhealthcare.ui.dashboard.TabItemFragment
+import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 
 class HomeTabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
@@ -17,8 +15,20 @@ class HomeTabAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
             TabItemFragment()
         fragment.arguments = Bundle().apply {
             // Our object is just an integer :-P
-            Log.e("adapter create fragment",  "$position+1")
-            putInt(ARG_OBJECT, position + 1)
+            var hours = 3
+            if (position ==0){
+                hours =3
+            }else if (position ==1){
+                hours = 6
+            } else if (position ==2){
+                hours = 12
+            } else if (position ==3){
+                hours = 24
+            }else{
+                hours = 0
+            }
+
+            putInt(ARG_TIME, hours)
         }
         return fragment
     }

@@ -15,5 +15,7 @@
     <dimen name="button_text_size">18sp</dimen>
     <dimen name="width_50dp">50dp</dimen>
     <dimen name="field_text_size">18sp</dimen>
+    <dimen name="text_size_15sp">15sp</dimen>
+    <dimen name="text_size_12.5sp">12.5sp</dimen>
 
 </resources>

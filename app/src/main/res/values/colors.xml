@@ -10,4 +10,9 @@
     <color name="drawer_bg">#0667ad</color>
     <color name="white">#ffffff</color>
 <color name="white_70">#70ffffff</color>
+    <color name="end_color">#12b2e8</color>
+    <color name="start_color">#014b97</color>
+    <color name="red">#f9514d</color>
+    <color name="amber">#eca806</color>
+    <color name="green">#2ca345</color>
 </resources>

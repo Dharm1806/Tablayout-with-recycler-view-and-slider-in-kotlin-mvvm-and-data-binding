@@ -11,6 +11,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.FILTER_DATE_FORMAT
+import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 
 
 import java.text.SimpleDateFormat
@@ -133,6 +134,14 @@ object Utills {
 
     }
 
+    fun getStartDate(hours:Int): String {
+
+        val date = Date(System.currentTimeMillis() - hours * 60 * 60 * 1000)
+
+        return formatDateIntoFilterFormat(date)
+
+    }
+
     /**
      * get start date for charging history i.e. 1 month more than end date
      */
@@ -152,12 +161,10 @@ object Utills {
 
     private fun formatDateIntoFilterFormat(date: Date): String {
 
-        val formatter = SimpleDateFormat(FILTER_DATE_FORMAT, Locale.ENGLISH)
+        val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.ENGLISH)
         return formatter.format(date)
 
     }
-
-
 
 
 }

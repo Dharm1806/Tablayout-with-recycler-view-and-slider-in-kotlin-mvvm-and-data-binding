@@ -13,7 +13,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.adapters.HomeTabAdapter
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -23,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private lateinit var mDashboardViewModel: DashboardViewModel
-private var mProgressDialog: ProgressDialog? = null
 
 /**
  * A simple [Fragment] subclass.
@@ -54,17 +52,33 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
 
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
-        demoCollectionAdapter = HomeTabAdapter(this)
+        demoCollectionAdapter =
+            HomeTabAdapter(this)
         pager.adapter = demoCollectionAdapter
         setDividers()
         TabLayoutMediator(tab_layout, pager) { tab, position ->
-            tab.text = "OBJECT ${(position + 1)}"
+           var tabTitle = "3"
+            if (position==0){
+                tabTitle = getString(R.string.hours_3)
+            }else if (position ==1){
+                tabTitle=getString(R.string.hours_6)
+            }else if (position == 2){
+                tabTitle =getString(R.string.hours_12)
+            }
+            else if (position ==3){
+                tabTitle = getString(R.string.hours_24)
+            }else{
+                tabTitle = getString(R.string.date_range);
+            }
+
+            tab.text = tabTitle
             pager.setCurrentItem(tab.position, true)
+
         }.attach()
+       // pager.beginFakeDrag()
         if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
                 R.id.homeTologin, null, NavOptions.Builder()
