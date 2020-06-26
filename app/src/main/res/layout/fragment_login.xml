@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/padding_20dp"
-        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="@dimen/padding_20dp"
         android:background="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@+id/text_app_name">
@@ -24,8 +24,8 @@
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/msg_email"
             android:inputType="textWebEmailAddress"
-            android:textColor="@color/white_70"
-            android:textColorHint="@color/white_70"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="@dimen/field_text_size" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +65,7 @@
         android:background="@drawable/btn_signup_bg"
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
-        android:padding="@dimen/margin_10dp"
+        android:padding="@dimen/text_size_15sp"
         android:text="@string/action_login"
         android:textColor="@color/drawer_bg"
         android:textSize="@dimen/button_text_size"

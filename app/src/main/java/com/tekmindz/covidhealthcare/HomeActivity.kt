@@ -18,7 +18,6 @@ import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.lifesignals.MainActivity
-import com.tekmindz.lifesignals.SplashActivity
 
 class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
     lateinit var toolbar: Toolbar

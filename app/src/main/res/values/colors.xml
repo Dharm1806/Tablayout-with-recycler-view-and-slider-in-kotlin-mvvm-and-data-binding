@@ -9,10 +9,15 @@
     <color name="dark_grey">#8c8c8c</color>
     <color name="drawer_bg">#0667ad</color>
     <color name="white">#ffffff</color>
-<color name="white_70">#70ffffff</color>
+    <color name="white_70">#70ffffff</color>
+    <color name="white_50">#50ffffff</color>
+
     <color name="end_color">#12b2e8</color>
     <color name="start_color">#014b97</color>
     <color name="red">#f9514d</color>
     <color name="amber">#eca806</color>
     <color name="green">#2ca345</color>
+    <color name="legend_text_color">#333333</color>
+    <color name="dashboard_text_color">#555555</color>
+    <color name="tab_background">#f7f7ff</color>
 </resources>

@@ -17,5 +17,7 @@
     <dimen name="field_text_size">18sp</dimen>
     <dimen name="text_size_15sp">15sp</dimen>
     <dimen name="text_size_12.5sp">12.5sp</dimen>
+    <dimen name="imf_profile_dimen">120dp</dimen>
+    <dimen name="status_text_size">13sp</dimen>
 
 </resources>

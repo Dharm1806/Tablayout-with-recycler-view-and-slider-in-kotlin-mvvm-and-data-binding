@@ -40,6 +40,11 @@ object Constants {
     const val PREF_SESSION_STATE= "session_state"
     const val PREF_SCOPE = "scope"
 
+
+    const val STATE_CRITICAL= "critical"
+    const val STATE_UNDER_CONTROL = "underControl"
+    const val STATE_RECOVERED = "recovered"
+
     //parse server date to app format
 
     fun parseDate(date: String): String {

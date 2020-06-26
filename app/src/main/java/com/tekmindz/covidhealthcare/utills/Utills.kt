@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.utills
 
+
 import android.app.ProgressDialog
 import android.content.Context
 import android.net.ConnectivityManager
@@ -10,10 +11,7 @@ import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
-import com.tekmindz.covidhealthcare.constants.Constants.FILTER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
-
-
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -34,6 +32,7 @@ object Utills {
                 "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                 ")+"
     )
+
     /**
      * hide action bar of activity
      */
@@ -130,16 +129,16 @@ object Utills {
     fun getCurrentDate(): String {
 
         val date = Date()
-        return formatDateIntoFilterFormat(date)
-
+        //return formatDateIntoFilterFormat(date)
+        return "2020-06-26T06:32:37Z"
     }
 
-    fun getStartDate(hours:Int): String {
+    fun getStartDate(hours: Int): String {
 
         val date = Date(System.currentTimeMillis() - hours * 60 * 60 * 1000)
 
-        return formatDateIntoFilterFormat(date)
-
+//        return formatDateIntoFilterFormat(date)
+        return "2019-06-26T09:32:37Z"
     }
 
     /**

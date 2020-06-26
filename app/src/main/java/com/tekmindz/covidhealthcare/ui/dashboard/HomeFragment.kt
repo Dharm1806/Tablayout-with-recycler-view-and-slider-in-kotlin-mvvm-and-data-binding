@@ -1,19 +1,19 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
-import android.app.ProgressDialog
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -78,7 +78,8 @@ class HomeFragment : Fragment() {
             pager.setCurrentItem(tab.position, true)
 
         }.attach()
-       // pager.beginFakeDrag()
+        pager.setUserInputEnabled(false);
+
         if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
                 R.id.homeTologin, null, NavOptions.Builder()

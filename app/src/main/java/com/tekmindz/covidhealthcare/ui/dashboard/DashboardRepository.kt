@@ -29,7 +29,7 @@ class DashboardRepository {
 
      return  App.healthCareApi.getDashboardPatientList(
             dashBoardObservations,
-            "bearer"+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
     }
 
@@ -37,6 +37,6 @@ class DashboardRepository {
     fun getDashBoardCount(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardCounts>> =
         App.healthCareApi.getDashboardsCounts(
             dashBoardObservations,
-            "bearer"+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
 }

@@ -57,7 +57,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = ResponseList.loading()
             }
             .subscribe({
-
+                    Log.e("size", "${it.size}")
                     response.value = (ResponseList.success(it))
 
             }, {
