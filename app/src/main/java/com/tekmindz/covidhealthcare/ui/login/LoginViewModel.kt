@@ -2,8 +2,10 @@ package com.tekmindz.covidhealthcare.ui.login
 
 import android.app.Application
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -22,7 +24,22 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
 
     private var mLoginRepository: LoginRepository =
         LoginRepository()
+    var UserName = MutableLiveData<String>()
+    var Password = MutableLiveData<String>()
 
+    private var userMutableLiveData: MutableLiveData<LoginRequest>? = null
+
+    fun getUser(): MutableLiveData<LoginRequest>? {
+        if (userMutableLiveData == null) {
+            userMutableLiveData = MutableLiveData<LoginRequest>()
+        }
+        return userMutableLiveData
+    }
+
+    fun onClick(view: View?) {
+        val loginUser = LoginRequest(UserName.value.toString(), Password.value.toString(), Constants.CLIENT_ID, Constants.PASSWROD)
+        userMutableLiveData!!.setValue(loginUser)
+    }
 
     fun login(loginRequest: LoginRequest) {
         subscribe(mLoginRepository.login(loginRequest)

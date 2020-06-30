@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="LoginViewModel"
+            type="com.tekmindz.covidhealthcare.ui.login.LoginViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/img_login_bg">
@@ -23,6 +32,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/msg_email"
+            android:text="@={LoginViewModel.UserName}"
             android:inputType="textWebEmailAddress"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -49,6 +59,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/msg_password"
+            android:text="@={LoginViewModel.Password}"
             android:inputType="textWebPassword"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -67,6 +78,7 @@
         android:gravity="center"
         android:padding="@dimen/text_size_15sp"
         android:text="@string/action_login"
+        android:onClick="@{(v) -> LoginViewModel.onClick(v)}"
         android:textColor="@color/drawer_bg"
         android:textSize="@dimen/button_text_size"
 
@@ -90,3 +102,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

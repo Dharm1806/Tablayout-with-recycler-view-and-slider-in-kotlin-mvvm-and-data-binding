@@ -20,4 +20,7 @@
     <color name="legend_text_color">#333333</color>
     <color name="dashboard_text_color">#555555</color>
     <color name="tab_background">#f7f7ff</color>
+    <color name="white_10">#10ffffff</color>
+    <color name="black">#000000</color>
+
 </resources>

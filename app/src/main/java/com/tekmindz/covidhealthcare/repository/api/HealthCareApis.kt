@@ -3,8 +3,10 @@ package com.tekmindz.covidhealthcare.repository.api
 
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_COUNTS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_OBSERVATIONS
+import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_END_POINTS
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
+import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
@@ -41,6 +43,15 @@ interface HealthCareApis {
         @Body dashBoardObservations: DashBoardObservations,
         @Header("Authorization") access_token: String
     ): Observable<Response<DashboardCounts>>
+
+    /*  call the patient details from  patient observations api api*/
+
+
+    @GET(GET_PATIENT_DETAILS)
+    fun getPatientDetails(
+        @Path("patientId")  patientId:String,
+        @Header("Authorization") access_token: String
+    ): Observable<Response<PatientDetails>>
 
 
 }

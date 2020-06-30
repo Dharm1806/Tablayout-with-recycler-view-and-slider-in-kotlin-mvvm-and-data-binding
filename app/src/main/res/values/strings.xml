@@ -32,5 +32,19 @@
     <string name="under_control">Under Control</string>
     <string name="msg_ward_no">Ward No. </string>
     <string name="msg_bed_no">Bed No. </string>
+    <string name="msg_ward_number">Ward Number</string>
+    <string name="msg_addmitted_since">Addmitted Since</string>
+    <string name="msg_biosensor_id">Biosensor ID</string>
+    <string name="msg_bed_number">Bed Number</string>
+    <string name="msg_gender">Gender</string>
+    <string name="msg_relay_id">Relay ID</string>
+    <string name="msg_respiration_rate">Respiration Rate</string>
+    <string name="unit_bpm">BPM</string>
+    <string name="msg_heart_rate">Heart Rate</string>
+    <string name="unit_heart_rate">BPM</string>
+    <string name="unit_respiration">BrPM</string>
+    <string name="msg_body_temperature">Body Temperature</string>
+    <string name="unit_body_temp">°C</string>
+    <string name="patient_details">Patient Details</string>
 
 </resources>

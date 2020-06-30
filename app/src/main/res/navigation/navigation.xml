@@ -69,8 +69,12 @@
     <fragment
         android:id="@+id/patient_details"
         android:name="com.tekmindz.covidhealthcare.ui.patientDetails.PatientDetailFragment"
-        android:label="@string/app_name"
+        android:label="@string/patient_details"
         tools:layout="@layout/patient_detail_fragment">
+        <argument
+            android:name="patientId"
+            app:argType="integer"
+            android:defaultValue="0" />
         <action
             android:id="@+id/pDetailsToUpdateReadings"
             app:destination="@id/home"
@@ -81,10 +85,7 @@
             app:destination="@id/home"
             app:popUpTo="@id/login"
             app:popUpToInclusive="true"/>
-        <argument
-            android:name="patientId"
-            app:argType="integer"
-            android:defaultValue="0" />
+
     </fragment>
 
 

@@ -8,32 +8,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
+import com.tekmindz.covidhealthcare.databinding.FragmentTabItemBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.ResponseList
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_tab_item.*
-import kotlinx.android.synthetic.main.item_critical_patient_list.*
+
 
 
 class TabItemFragment : Fragment() ,OnItemClickListener{
+    private lateinit var binding: FragmentTabItemBinding
 
+    //  private lateinit var binding: TabItemFragmentBinding
     private lateinit var mDashboardViewModel: DashboardViewModel
     private var mProgressDialog: ProgressDialog? = null
     private lateinit var mObservationAdapter: ObaserVationsAdapter
@@ -44,14 +44,21 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_tab_item, container, false)
-    }
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_tab_item, container, false
+        )
+        val view: View = binding.getRoot()
+        binding.setLifecycleOwner(this);
+
+        return view    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
 
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+
+        binding.dashboardViewModel = (mDashboardViewModel);
 
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
             val hours = getInt(ARG_TIME)
@@ -63,7 +70,7 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
                     ), Utills.getCurrentDate()
                 )
             )
-            text1.text = getString(R.string.app_name) + " " + getInt(ARG_TIME).toString()
+
             mDashboardViewModel.getDashBoardCounts(
                 DashBoardObservations(
                     Utills.getStartDate(hours),
@@ -73,9 +80,9 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
 
         }
 
-        list_patient.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+       // binding.listPatient.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         mObservationAdapter = ObaserVationsAdapter(mObservationList, this, requireActivity())
-        list_patient.adapter = mObservationAdapter
+        binding.listPatient.adapter = mObservationAdapter
 
         mDashboardViewModel.response().observe(requireActivity()!!, Observer {
             when (it) {
@@ -129,20 +136,20 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         pieDataSet.setDrawIcons(false)
 
         val pieData = PieData(pieDataSet)
-        graph_total_patient.data = pieData
-        graph_total_patient.setDrawEntryLabels(false)
-        graph_total_patient.setDrawCenterText(true)
-        graph_total_patient.isDrawHoleEnabled = true
-        graph_total_patient.holeRadius =60f
-        graph_total_patient.centerText = "Total\n" +
+        binding.graphTotalPatient.data = pieData
+        binding.graphTotalPatient.setDrawEntryLabels(false)
+        binding.graphTotalPatient.setDrawCenterText(true)
+        binding.graphTotalPatient.isDrawHoleEnabled = true
+        binding.graphTotalPatient.holeRadius =60f
+        binding.graphTotalPatient.centerText = "Total\n" +
                 " ${data.total}"
-        graph_total_patient.setCenterTextSize(21f)
-        graph_total_patient.setCenterTextColor(R.color.dashboard_text_color)
+        binding.graphTotalPatient.setCenterTextSize(21f)
+        binding.graphTotalPatient.setCenterTextColor(R.color.dashboard_text_color)
 
-        graph_total_patient.animateXY(500, 500)
-        graph_total_patient.description.isEnabled  = false
+        binding.graphTotalPatient.animateXY(500, 500)
+        binding.graphTotalPatient.description.isEnabled  = false
 
-        val legend: Legend = graph_total_patient.getLegend()
+        val legend: Legend =  binding.graphTotalPatient.getLegend()
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
         legend.orientation = Legend.LegendOrientation.HORIZONTAL

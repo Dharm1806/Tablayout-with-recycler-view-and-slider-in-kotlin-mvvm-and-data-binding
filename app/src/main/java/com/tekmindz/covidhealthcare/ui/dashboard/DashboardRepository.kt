@@ -7,11 +7,8 @@ import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceMa
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
-import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
-import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
-import com.tekmindz.covidhealthcare.utills.ResponseList
 import io.reactivex.Observable
 import retrofit2.Response
 

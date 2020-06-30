@@ -19,5 +19,9 @@
     <dimen name="text_size_12.5sp">12.5sp</dimen>
     <dimen name="imf_profile_dimen">120dp</dimen>
     <dimen name="status_text_size">13sp</dimen>
+    <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen_25dp">25dp</dimen>
+    <dimen name="readings_text_size">17sp</dimen>
+    <dimen name="dimen_100dp">100dp</dimen>
 
 </resources>
