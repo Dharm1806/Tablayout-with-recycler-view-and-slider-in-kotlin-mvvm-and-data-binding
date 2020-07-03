@@ -5,6 +5,8 @@
 
     <data>
 
+
+
         <variable
             name="PatientDetailsBind"
             type="com.tekmindz.covidhealthcare.ui.patientDetails.PatientDetailViewModel" />
@@ -13,6 +15,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/tab_background"
         tools:context=".ui.patientDetails.PatientDetailFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +36,6 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="@dimen/padding_20dp"
-
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -46,11 +48,11 @@
                     android:background="@drawable/critical_bg"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
-                    android:text="@{PatientDetailsBind.patientDetails.data.wardNo}"
-
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/status_text_size"
+                    android:translationY="-20dp"
+
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/img_patient_profile" />
@@ -59,10 +61,8 @@
                     android:id="@+id/tv_patient_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
                     android:fontFamily="@font/roboto_medium"
                     android:gravity="center"
-                    android:text="@{PatientDetailsBind.patientDetails.data.firstName}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_15sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -77,10 +77,8 @@
                     android:layout_marginBottom="@dimen/padding_20dp"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
-                    android:text="@{PatientDetailsBind.patientDetails.data.dob}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_15sp"
-
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_patient_name" />
@@ -127,8 +125,6 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="@dimen/text_size_15sp"
                             android:fontFamily="@font/roboto_black"
-                            android:text="@{PatientDetailsBind.patientDetails.data.admittedDate}"
-
                             android:textColor="@color/white"
                             android:textSize="@dimen/readings_text_size" />
 

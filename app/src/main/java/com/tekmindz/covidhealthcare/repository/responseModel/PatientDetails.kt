@@ -12,5 +12,16 @@ data class PatientDetails(
     val relayId: String,
     val wearableIdentifier: String,
     val wearableName: String,
+    val heartRate:String,
+    val respirationRate :String,
+    val bodyTemprature:String,
+    val status:String,
     val imageUrl: String
+)
+
+data class PatientObservations(
+    val heartRate:String,
+    val respirationRate :String,
+    val bodyTemprature:String,
+    val patientStatus:String
 )

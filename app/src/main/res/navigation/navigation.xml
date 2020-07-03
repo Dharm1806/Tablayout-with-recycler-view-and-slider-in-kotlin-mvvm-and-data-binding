@@ -46,6 +46,11 @@
              android:id="@+id/homeToPatientDetails"
              app:destination="@id/patient_details"
              />
+
+         <action
+             android:id="@+id/homeToSearch"
+             app:destination="@id/search"
+             />
          <action
              android:id="@+id/homeToObservations"
              app:destination="@id/observations"
@@ -64,6 +69,7 @@
             app:destination="@id/patient_details"
            />
     </fragment>
+
 
 
     <fragment
@@ -85,6 +91,20 @@
             app:destination="@id/home"
             app:popUpTo="@id/login"
             app:popUpToInclusive="true"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/search"
+        android:name="com.tekmindz.covidhealthcare.ui.search.SearchFragment"
+        android:label=""
+        tools:layout="@layout/search_fragment">
+
+        <action
+        android:id="@+id/homeToPatientDetails"
+        app:destination="@id/patient_details"
+        />
 
     </fragment>
 

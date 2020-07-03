@@ -26,7 +26,7 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
     lateinit var navigationView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        setTheme(R.style.AppTheme1)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setupNavigation()

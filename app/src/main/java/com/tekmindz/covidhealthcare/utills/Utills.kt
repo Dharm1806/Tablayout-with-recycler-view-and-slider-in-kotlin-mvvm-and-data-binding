@@ -8,10 +8,12 @@ import android.util.Base64
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants.APP_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
+import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -133,6 +135,13 @@ object Utills {
         return "2020-06-26T06:32:37Z"
     }
 
+    fun getDate( milis:Long): String {
+
+        val date = Date(milis)
+        return formatDateIntoFilterFormat(date)
+       // return "2020-06-26T06:32:37Z"
+    }
+
     fun getStartDate(hours: Int): String {
 
         val date = Date(System.currentTimeMillis() - hours * 60 * 60 * 1000)
@@ -163,6 +172,38 @@ object Utills {
         val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.ENGLISH)
         return formatter.format(date)
 
+    }
+
+
+    fun parseDate(date: String): String {
+        val parser = SimpleDateFormat(SERVER_DOB_DATE_FORMAT)
+        val formatter = SimpleDateFormat(APP_DATE_FORMAT)
+        return formatter.format(parser.parse(date))
+    }
+
+    fun getTabTitile(position: Int, context: Context): String {
+
+        var tabTitle = "3"
+        if (position == 0) tabTitle = context.getString(R.string.hours_3)
+        else if (position == 1) tabTitle = context.getString(R.string.hours_6)
+        else if (position == 2) tabTitle = context.getString(R.string.hours_12)
+        else if (position == 3) tabTitle = context.getString(R.string.hours_24)
+        else if (position == 4) tabTitle = context.getString(R.string.date_range)
+        return tabTitle
+
+    }
+
+    fun getHours(position: Int): Int {
+
+        var hours = 3
+
+        if (position == 0) hours = 3
+        else if (position == 1) hours = 6
+        else if (position == 2) hours = 12
+        else if (position == 3) hours = 24
+        else if (position == 4) hours = 0
+
+        return hours
     }
 
 

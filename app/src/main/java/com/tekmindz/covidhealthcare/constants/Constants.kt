@@ -12,15 +12,20 @@ object Constants {
     const val LOGIN_END_POINTS = "auth/realms/ctms/protocol/openid-connect/token"
     const val GET_DASHBOARD_OBSERVATIONS = "dashboard/observations"
     const val GET_DASHBOARD_COUNTS = "dashboard/ragstatus/count"
-    const val GET_PATIENT_DETAILS = "dashBoard/patientDetails/{patientId}"
+    const val GET_PATIENT_DETAILS = "dashboard/patientDetails/{patientId}"
+    const val GET_PATIENT_OBSERVATIONS = "dashboard/mobile/patientDetails/{patientId}"
 
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
 
      const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-    private const val APP_DATE_FORMAT = "dd-MM-yyyy HH:mm"
+    const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"
+
+    const val APP_DATE_FORMAT = "dd/MM/yyyy"
     const val BASIC = "Basic "
     val ARG_TIME = "time"
-    val PATIENT_ID = "patient_id"
+    val ARG_FROM_TIME = "from_time"
+    val ARG_TO_TIME = "to_time"
+    val PATIENT_ID = "patientId"
 
 
     var isLoginRequired: Boolean = true

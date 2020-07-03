@@ -181,9 +181,7 @@ class LoginFragment : Fragment() {
 
             mProgressDialog?.show()
 
-            mLoginViewModel.login(
-                loginUser
-            )
+            mLoginViewModel.login(loginUser)
         }
     }
 

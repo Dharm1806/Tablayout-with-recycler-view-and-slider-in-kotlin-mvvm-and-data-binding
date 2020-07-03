@@ -17,8 +17,10 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.databinding.FragmentTabItemBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
@@ -27,17 +29,19 @@ import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservatio
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.ResponseList
 import com.tekmindz.covidhealthcare.utills.Utills
+import kotlinx.android.synthetic.main.fragment_tab_item.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-
-class TabItemFragment : Fragment() ,OnItemClickListener{
+class TabItemFragment : Fragment(), OnItemClickListener {
     private lateinit var binding: FragmentTabItemBinding
 
     //  private lateinit var binding: TabItemFragmentBinding
     private lateinit var mDashboardViewModel: DashboardViewModel
     private var mProgressDialog: ProgressDialog? = null
     private lateinit var mObservationAdapter: ObaserVationsAdapter
-    private  var mObservationList = ArrayList<DashboardObservationsResponse>()
+    private var mObservationList = ArrayList<DashboardObservationsResponse>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +54,8 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         val view: View = binding.getRoot()
         binding.setLifecycleOwner(this);
 
-        return view    }
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,28 +64,34 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
         binding.dashboardViewModel = (mDashboardViewModel);
+        binding.selectDate.setOnClickListener { showDateRangePicker() }
 
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
             val hours = getInt(ARG_TIME)
+            Log.e("hours", "$hours")
+            if (hours == 0) {
+                binding.selectDate.visibility = View.VISIBLE
+                showDateRangePicker()
 
-            mDashboardViewModel.getDashboardObservations(
-                DashBoardObservations(
+            } else {
+                binding.selectDate.visibility = View.GONE
+
+                getDashboardCount(DashBoardObservations(
+                    Utills.getStartDate(hours),
+                    Utills.getCurrentDate()
+                ))
+
+                getDashBoardObservation( DashBoardObservations(
                     Utills.getStartDate(
                         hours
                     ), Utills.getCurrentDate()
-                )
-            )
-
-            mDashboardViewModel.getDashBoardCounts(
-                DashBoardObservations(
-                    Utills.getStartDate(hours),
-                    Utills.getCurrentDate()
-                )
-            )
-
+                ))
+            }
         }
 
-       // binding.listPatient.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+
+
+        // binding.listPatient.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         mObservationAdapter = ObaserVationsAdapter(mObservationList, this, requireActivity())
         binding.listPatient.adapter = mObservationAdapter
 
@@ -100,8 +111,50 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
                 }
             }
         })
+
+        binding.searchPatient.setOnClickListener { findNavController().navigate(R.id.homeToSearch) }
     }
 
+    private fun showDateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val now = Calendar.getInstance()
+        builder.setSelection(androidx.core.util.Pair(now.timeInMillis, now.timeInMillis))
+        val picker = builder.build()
+        picker.show(activity?.supportFragmentManager!!, picker.toString())
+        picker.addOnNegativeButtonClickListener {
+            picker.dismiss()
+
+            Log.e("NegativeBUttonCLicked", "yes")
+        }
+        picker.addOnPositiveButtonClickListener {
+            Log.e("date", "The selected date range is ${it.first} - ${it.second}")
+            val fromDate = Utills.getDate(it.first!!)
+            val toDate = Utills.getDate(it.second!!)
+            select_date.text = Constants.parseDate(fromDate) +" - "+ Constants.parseDate(toDate)
+            getDashBoardObservation( DashBoardObservations(
+               fromDate, toDate
+            ))
+            getDashboardCount(DashBoardObservations(
+                fromDate,
+                toDate
+            ))
+
+        }
+
+    }
+
+    fun getDashBoardObservation(dashBoardObservations: DashBoardObservations){
+        mDashboardViewModel.getDashboardObservations(
+           dashBoardObservations
+        )
+
+
+    }
+    fun getDashboardCount(dashBoardObservations: DashBoardObservations){
+        mDashboardViewModel.getDashBoardCounts(
+            dashBoardObservations
+        )
+    }
     private fun handleObservations(it: ResponseList<DashboardObservationsResponse>) {
 
         when (it.status) {
@@ -130,7 +183,7 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         mCasesList.add(PieEntry(data.underControl.toFloat(), getString(R.string.under_control)))
         mCasesList.add(PieEntry(data.recovered.toFloat(), getString(R.string.msg_receovered)))
         val pieDataSet = PieDataSet(mCasesList, "")
-        pieDataSet.setColors(intArrayOf(R.color.red,R.color.amber, R.color.green), context)
+        pieDataSet.setColors(intArrayOf(R.color.red, R.color.amber, R.color.green), context)
         pieDataSet.setDrawValues(false)
         pieDataSet.sliceSpace = 2f
         pieDataSet.setDrawIcons(false)
@@ -140,16 +193,16 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
         binding.graphTotalPatient.setDrawEntryLabels(false)
         binding.graphTotalPatient.setDrawCenterText(true)
         binding.graphTotalPatient.isDrawHoleEnabled = true
-        binding.graphTotalPatient.holeRadius =60f
+        binding.graphTotalPatient.holeRadius = 60f
         binding.graphTotalPatient.centerText = "Total\n" +
                 " ${data.total}"
         binding.graphTotalPatient.setCenterTextSize(21f)
         binding.graphTotalPatient.setCenterTextColor(R.color.dashboard_text_color)
 
         binding.graphTotalPatient.animateXY(500, 500)
-        binding.graphTotalPatient.description.isEnabled  = false
+        binding.graphTotalPatient.description.isEnabled = false
 
-        val legend: Legend =  binding.graphTotalPatient.getLegend()
+        val legend: Legend = binding.graphTotalPatient.getLegend()
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
         legend.orientation = Legend.LegendOrientation.HORIZONTAL
@@ -162,13 +215,13 @@ class TabItemFragment : Fragment() ,OnItemClickListener{
 
 
     private fun showObservations(data: List<DashboardObservationsResponse>) {
+        Log.e("observation", "${data.size}")
         if (!data.isNullOrEmpty()) {
             mObservationList.clear()
             mObservationList.addAll(data)
             mObservationAdapter.notifyDataSetChanged()
         }
-        }
-
+    }
 
 
     private fun showProgressBar() {

@@ -2,18 +2,19 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -32,8 +33,8 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var demoCollectionAdapter: HomeTabAdapter
-
+    private lateinit var mTabAdapter: HomeTabAdapter
+    private var positionItem = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,30 +56,38 @@ class HomeFragment : Fragment() {
 
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
-        demoCollectionAdapter =
-            HomeTabAdapter(this)
-        pager.adapter = demoCollectionAdapter
-        setDividers()
-        TabLayoutMediator(tab_layout, pager) { tab, position ->
-           var tabTitle = "3"
-            if (position==0){
-                tabTitle = getString(R.string.hours_3)
-            }else if (position ==1){
-                tabTitle=getString(R.string.hours_6)
-            }else if (position == 2){
-                tabTitle =getString(R.string.hours_12)
-            }
-            else if (position ==3){
-                tabTitle = getString(R.string.hours_24)
-            }else{
-                tabTitle = getString(R.string.date_range);
+        mTabAdapter =
+            HomeTabAdapter(this, requireActivity())
+
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Log.e("tabselected pos", "${tab?.position}")
+                pager.setCurrentItem(tab?.position!!, false)
+
             }
 
-            tab.text = tabTitle
-            pager.setCurrentItem(tab.position, true)
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+               // pager.setCurrentItem(tab?.position!!, false)
+
+                Log.e("tabReselected pos", "${tab?.position}")
+
+            }
+        })
+        pager.adapter = mTabAdapter
+        setDividers()
+
+        TabLayoutMediator(tab_layout, pager) { tab, position ->
+            tab.text =  Utills.getTabTitile(position, requireActivity())
+            //adapter.getItem(myViewPager.getCurrentItem());
+          //  Log.e("tab position",""+tab.position)
+            pager.setCurrentItem(tab.position, false)
 
         }.attach()
-        pager.setUserInputEnabled(false);
+
+       pager.setUserInputEnabled(false);
 
         if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
