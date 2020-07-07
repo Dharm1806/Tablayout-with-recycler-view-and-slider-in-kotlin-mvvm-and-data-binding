@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,10 +12,11 @@ import com.tekmindz.covidhealthcare.constants.Constants.STATE_CRITICAL
 import com.tekmindz.covidhealthcare.constants.Constants.STATE_RECOVERED
 import com.tekmindz.covidhealthcare.constants.Constants.STATE_UNDER_CONTROL
 import com.tekmindz.covidhealthcare.databinding.ItemCriticalPatientListBinding
+import com.tekmindz.covidhealthcare.databinding.ItemSearchListBinding
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 
 
-class SearchHolder(val binding :ItemCriticalPatientListBinding) : RecyclerView.ViewHolder(binding.root) {
+class SearchHolder(val binding :ItemSearchListBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(observation: DashboardObservationsResponse, clickListener: OnItemClickListener, mContext: Context) {
         //load the patient profile image
@@ -44,10 +46,12 @@ class SearchHolder(val binding :ItemCriticalPatientListBinding) : RecyclerView.V
         binding.badNo.text = bedNo
 
 
+
         //handle patient click event
         binding.itemLayoutObservations.setOnClickListener {
             clickListener.onItemClicked(observation)
         }
+
     }
 
 }
@@ -59,9 +63,9 @@ class SearchAdapter(private var searchResults: List<DashboardObservationsRespons
     @Override
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): SearchHolder {
         //inflate the view
-        val mBinding:ItemCriticalPatientListBinding = DataBindingUtil.inflate(
+        val mBinding:ItemSearchListBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.getContext()),
-            R.layout.item_critical_patient_list, parent, false
+            R.layout.item_search_list, parent, false
         )
        return SearchHolder(mBinding)
     }

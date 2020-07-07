@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools">
 
 
@@ -9,11 +10,19 @@
             name="dashboardViewModel"
             type="com.tekmindz.covidhealthcare.ui.dashboard.DashboardViewModel"/>
     </data>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+<ScrollView
     android:layout_width="match_parent"
     android:background="@color/tab_background"
     android:layout_height="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center|top">
 
     <TextView
         android:id="@+id/select_date"
@@ -82,15 +91,25 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="@dimen/dimen_30dp"
-        android:id="@+id/searchPatient"
-        android:backgroundTint="@color/colorPrimary"
-        android:theme="@style/TextInputLayoutAppearance"
-        android:src="@drawable/ic_search"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="@dimen/dimen_30dp"
+            android:id="@+id/searchPatient"
+            android:tint="@color/white"
+            android:padding="@dimen/padding_20dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/ic_search_bg"
+            android:layout_gravity="bottom|end"
+            android:foregroundTint="@color/white"
+            app:srcCompat="@drawable/ic_search"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -3,10 +3,13 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
+import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.ResponseList
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,6 +28,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
     private var responseCounts: MutableLiveData<Resource<DashboardCounts>> =
         MutableLiveData<Resource<DashboardCounts>>()
 
+    private var dateRange:MutableLiveData<DateRange> =MutableLiveData<DateRange>()
+
     var mDashboardRepository: DashboardRepository = DashboardRepository()
 
     override fun onCleared() {
@@ -35,8 +40,14 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
         return response
     }
 
+    fun dateRange(dateRangeValue: String) {
+        Log.e("date", "$dateRangeValue")
+        this.dateRange.value = DateRange(dateRangeValue)}
 
-    fun dashBoardCounts():MutableLiveData<Resource<DashboardCounts>>{
+
+    fun getDateRangeValue(): MutableLiveData<DateRange> = this.dateRange
+
+    fun dashBoardCounts(): MutableLiveData<Resource<DashboardCounts>> {
         return responseCounts
     }
 
@@ -53,8 +64,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = ResponseList.loading()
             }
             .subscribe({
-                    Log.e("size", "${it.size}")
-                    response.value = (ResponseList.success(it))
+                Log.e("size", "${it.size}")
+                response.value = (ResponseList.success(it))
 
             }, {
                 Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
@@ -64,9 +75,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
     }
 
 
-
-    fun getDashBoardCounts(dashBoardObservations: DashBoardObservations) {
-        subscribe(mDashboardRepository.getDashBoardCount(dashBoardObservations)
+    fun getDashBoardCounts(dateFilter: DateFilter) {
+        subscribe(mDashboardRepository.getDashBoardCount(dateFilter)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -81,11 +91,14 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                     responseCounts.value = Resource.error(it.message())
                 }
             }, {
-                Log.e("error Counts", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+                Log.e(
+                    "error Counts",
+                    "${it.message} , ${it.localizedMessage} , ${it.stackTrace} "
+                )
                 responseCounts.value = Resource.error(it.localizedMessage)
             })
         )
     }
 
-    fun getIsLogin() :Boolean= mDashboardRepository.getIsLogin()
+    fun getIsLogin(): Boolean = mDashboardRepository.getIsLogin()
 }

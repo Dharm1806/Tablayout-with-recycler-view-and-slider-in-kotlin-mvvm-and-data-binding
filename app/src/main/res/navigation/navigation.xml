@@ -83,14 +83,13 @@
             android:defaultValue="0" />
         <action
             android:id="@+id/pDetailsToUpdateReadings"
-            app:destination="@id/home"
+            app:destination="@id/updatePatientDetails"
             />
 
         <action
             android:id="@+id/pDetailsToAnalytics"
-            app:destination="@id/home"
-            app:popUpTo="@id/login"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/analytics"
+            />
 
     </fragment>
 
@@ -105,7 +104,34 @@
         android:id="@+id/homeToPatientDetails"
         app:destination="@id/patient_details"
         />
+        <action
+            android:id="@+id/searchToHome"
+            app:destination="@id/home"
+            app:popUpTo="@id/search"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
+
+    <fragment
+        android:id="@+id/analytics"
+        android:name="com.tekmindz.covidhealthcare.ui.patientAnalytics.AnalyticsFragment"
+        android:label="@string/title_view_statics"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/homeToPatientDetails"
+            app:destination="@id/patient_details"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updatePatientDetails"
+        android:name="com.tekmindz.covidhealthcare.ui.updatePatientDetails.UpdatePatientDetailsFragment"
+        android:label="@string/b_p_reading"
+        tools:layout="@layout/fragment_update_patient">
+        <action
+            android:id="@+id/homeToPatientDetails"
+            app:destination="@id/patient_details"
+            />
     </fragment>
 
 

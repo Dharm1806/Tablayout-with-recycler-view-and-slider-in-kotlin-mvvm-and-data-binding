@@ -20,10 +20,8 @@ class App : Application() {
     companion object {
         private lateinit var retrofitAll: Retrofit
         lateinit var healthCareApi: HealthCareApis
-
         private lateinit var retrofit: Retrofit
         lateinit var healthCareApiLogin: HealthCareApis
-
         lateinit var mSharedPrefrenceManager:SharedPreference
     }
 

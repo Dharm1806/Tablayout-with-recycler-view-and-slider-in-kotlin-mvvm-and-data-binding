@@ -28,6 +28,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/SplashTheme">
         <activity android:name=".HomeActivity"
+            android:windowSoftInputMode="stateHidden"
           >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +49,9 @@
             android:name="com.tekmindz.lifesignals.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_lib"
+            android:windowSoftInputMode="stateHidden"
             android:exported="true"/>
+
         <service android:name="com.tekmindz.lifesignals.util.DataReceiverService"/>
 
     </application>

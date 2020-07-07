@@ -1,23 +1,31 @@
 package com.tekmindz.covidhealthcare
 
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.*
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.utills.SharedPreference
 import com.tekmindz.lifesignals.MainActivity
+
 
 class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
     lateinit var toolbar: Toolbar
@@ -68,18 +76,37 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
             }
 
 
-            R.id.selfAssesment -> {
-             val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+            R.id.selfAssesment -> {/*App.mSharedPrefrenceManager.getValueString(
+                Constants.PREF_ACCESS_TOKEN))*/
+                val bundle = bundleOf("patientId" to 3)
+                navController.navigate(R.id.homeToPatientDetails, bundle)
+             /*val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)*/
             }
 
         }
         return true
     }
+    @Override
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val findMenuItems = menuInflater
+        findMenuItems.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.notifications -> {
+                /*val aboutIntent = Intent(this@MainActivity, AboutActivity::class.java)
+                startActivity(aboutIntent)*/
+            }
 
+        }
+        return super.onOptionsItemSelected(item)
+    }
     private fun showMessage(message:String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 
     private fun setupNavigation(){
         setTheme(R.style.AppTheme)
@@ -94,7 +121,7 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         NavigationUI.setupWithNavController(navigationView, navController)
        navigationView.setNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.login) {
+            if(destination.id == R.id.login || destination.id == R.id.search) {
                 toolbar.visibility = View.GONE
                 navigationView.visibility = View.GONE
                 drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)

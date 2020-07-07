@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
+import android.content.ContentValues.TAG
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
+import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
+import com.tekmindz.covidhealthcare.utills.Resource
+import com.tekmindz.covidhealthcare.utills.ResponseList
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -74,6 +83,15 @@ class HomeFragment : Fragment() {
 
                 Log.e("tabReselected pos", "${tab?.position}")
 
+            }
+        })
+
+        mDashboardViewModel.getDateRangeValue().observe(requireActivity()!!, Observer {
+            when (it) {
+                is DateRange -> {
+                    Log.e("TAG", Gson().toJson(it))
+                    tab_layout.getTabAt(4)?.text = it.dateRange.toString()
+                }
             }
         })
         pager.adapter = mTabAdapter

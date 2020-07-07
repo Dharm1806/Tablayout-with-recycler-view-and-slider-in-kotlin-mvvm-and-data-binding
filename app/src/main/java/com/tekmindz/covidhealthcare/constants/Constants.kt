@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 object Constants {
     //base url for apis
     const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    const val BASE_URL = "http://54.191.180.13:8081/api/"
+    const val BASE_URL = "http://34.216.159.69:8081/api/"
 
        //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/ctms/protocol/openid-connect/token"
@@ -14,6 +14,8 @@ object Constants {
     const val GET_DASHBOARD_COUNTS = "dashboard/ragstatus/count"
     const val GET_PATIENT_DETAILS = "dashboard/patientDetails/{patientId}"
     const val GET_PATIENT_OBSERVATIONS = "dashboard/mobile/patientDetails/{patientId}"
+    const val GET_PATIENT_ANALYTICS = "dashboard/patient/observations"
+    const val UPDATE_PATIENT_DETAILS = "dashboard/observations"
 
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
 
@@ -54,6 +56,7 @@ object Constants {
     const val STATE_UNDER_CONTROL = "underControl"
     const val STATE_RECOVERED = "recovered"
 
+    const val DATE_RANGE = "Date Range"
     //parse server date to app format
 
     fun parseDate(date: String): String {

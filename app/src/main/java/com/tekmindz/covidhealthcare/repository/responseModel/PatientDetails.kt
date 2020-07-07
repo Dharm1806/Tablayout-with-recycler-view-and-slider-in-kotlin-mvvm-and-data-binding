@@ -23,5 +23,5 @@ data class PatientObservations(
     val heartRate:String,
     val respirationRate :String,
     val bodyTemprature:String,
-    val patientStatus:String
+    val status:String
 )

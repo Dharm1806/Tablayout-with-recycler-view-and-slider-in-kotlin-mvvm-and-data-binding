@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -76,7 +77,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // initializing progress dailog
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
+        mProgressDialog = activity?.let { Utills.initializeProgressBar(it,R.style.AppTheme_WhiteAccent) }
 
         mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         binding.setLoginViewModel(mLoginViewModel);

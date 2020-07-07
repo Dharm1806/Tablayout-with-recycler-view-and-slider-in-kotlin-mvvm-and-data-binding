@@ -1,17 +1,98 @@
-<resources>
+<resources xmlns:ns2="http://schemas.android.com/apk/res-auto">
     <!-- Base application theme. -->
-    <style name="AppTheme1" parent="Theme.MaterialComponents">
+    <!--parent="Theme.MaterialComponents"
+
+ <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
+        <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
+
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    -->
+    <style name="AppTheme1" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorControlHighlight">#d50000</item>
+        <item name="materialCalendarTheme">@style/ThemeMaterialCalendar</item>
+
+
+    </style>
+
+    <style name="ThemeMaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="buttonBarPositiveButtonStyle">@style/ThemeMaterialCalendarButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ThemeMaterialCalendarButton</item>
+        <item name="materialButtonStyle">@style/ThemeMaterialCalendarTextButton</item>
+    </style>
+
+    <style name="ThemeMaterialCalendarButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="ThemeMaterialCalendarTextButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog.Flush">
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="iconTint">?colorPrimary</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/red</item>
+        <item name="colorOnPrimary">@color/colorPrimary</item>
+        <item name="android:background">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.MaterialComponents1" parent="Base.Theme.MaterialComponents1"/>
+    <style name="Base.Theme.MaterialComponents1" parent="Base.V21.Theme.MaterialComponents1"/>
+    <style name="Base.V21.Theme.MaterialComponents1" parent="Base.V14.Theme.MaterialComponents1">
+        <item name="android:alertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert.Framework</item>
+    </style>
+    <style name="Base.V14.Theme.MaterialComponents1" parent="Base.V14.Theme.MaterialComponents.Bridge">
+        <item name="viewInflaterClass">com.google.android.material.theme.MaterialComponentsViewInflater</item>
+
+        <!-- Colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorError">@color/design_dark_default_color_error</item>
+
+        <!-- Action bar -->
+        <item name="actionBarSize">@dimen/mtrl_toolbar_default_height</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Surface</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar.Surface</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.MaterialComponents.PopupMenu.Overflow</item>
+
+        <!-- Widget styles -->
+
+        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="android:buttonBarButtonStyle">?attr/buttonBarButtonStyle</item>
+
+        <item name="borderlessButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="checkboxStyle">@style/Widget.MaterialComponents.CompoundButton.CheckBox</item>
+        <item name="listPopupWindowStyle">@style/Widget.MaterialComponents.PopupMenu.ListPopupWindow</item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+        <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton</item>
+        <item name="switchStyle">@style/Widget.MaterialComponents.CompoundButton.Switch</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar</item>
+
+        <!-- Dialog themes -->
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MaterialComponents.BottomSheetDialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog</item>
+        <item name="android:datePickerDialogTheme" ns2:ignore="NewApi">@style/ThemeOverlay.MaterialComponents.Dialog</item>
+        <item name="android:timePickerDialogTheme" ns2:ignore="NewApi">@style/ThemeOverlay.MaterialComponents.Dialog</item>
+
+        <!-- Type styles -->
+        <item name="textAppearanceLargePopupMenu">?attr/textAppearanceSubtitle1</item>
+        <item name="textAppearanceSmallPopupMenu">?attr/textAppearanceSubtitle1</item>
+
+        <!-- Picker styles and themes. -->
         <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
         <item name="materialCalendarFullscreenTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen</item>
         <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar</item>
     </style>
-
     <style name="ToolBarStyle" parent="ToolBarStyle.Base" />
 
     <style name="ToolBarStyle.Base" parent="">
@@ -34,7 +115,9 @@
     <style name="SplashTheme" parent="Theme.MaterialComponents">
         <item name="android:windowBackground">@drawable/title_bg</item>
     </style>
-
+    <style name="AppTheme.WhiteAccent" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/black</item>
+    </style>
     <style name="Widget.Design.TextInputLayout1" parent="android:Widget">
         <item name="materialThemeOverlay">@style/ThemeOverlay.Design.TextInputEditText</item>
         <item name="enforceMaterialTheme">false</item>
@@ -44,8 +127,7 @@
         <item name="boxStrokeColor">@color/white</item>
         <item name="passwordToggleDrawable">@drawable/design_password_eye</item>
         <item name="passwordToggleTint">@color/white</item>
-        <item name="passwordToggleContentDescription">@string/password_toggle_content_description
-        </item>
+        <item name="passwordToggleContentDescription">@string/password_toggle_content_description</item>
         <item name="errorIconDrawable">@null</item>
         <item name="endIconTint">@color/design_icon_tint</item>
         <item name="startIconTint">@color/design_icon_tint</item>
@@ -70,15 +152,62 @@
         <item name="shapeAppearanceOverlay">@null</item>
     </style>
 
+
+    <style name="Widget.Design.TextInputLayoutPD" parent="android:Widget">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Design.TextInputEditText</item>
+        <item name="enforceMaterialTheme">false</item>
+        <item name="enforceTextAppearance">false</item>
+
+        <item name="boxBackgroundMode">none</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="passwordToggleDrawable">@drawable/design_password_eye</item>
+        <item name="passwordToggleTint">@color/white</item>
+        <item name="passwordToggleContentDescription">@string/password_toggle_content_description</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="endIconTint">@color/design_icon_tint</item>
+        <item name="startIconTint">@color/design_icon_tint</item>
+
+        <item name="prefixTextAppearance">@style/TextAppearance.Design.Prefix</item>
+        <item name="suffixTextAppearance">@style/TextAppearance.Design.Suffix</item>
+
+        <item name="counterTextColor">@color/patient_details_text</item>
+        <item name="counterOverflowTextColor">@color/patient_details_text</item>
+        <item name="errorTextColor">@android:color/holo_red_dark</item>
+        <item name="helperTextTextColor">@color/patient_details_text</item>
+        <item name="hintTextColor">@color/patient_details_text</item>
+        <item name="placeholderTextColor">@color/patient_details_text</item>
+        <item name="prefixTextColor">@color/patient_details_text</item>
+        <item name="suffixTextColor">@color/patient_details_text</item>
+        <item name="android:textColorHint">@color/patient_details_text</item>
+        <item name="colorAccent">@color/patient_details_text</item>
+        <item name="colorControlNormal">@color/patient_details_text</item>
+        <item name="colorControlActivated">@color/patient_details_text</item>
+        <item name="colorControlHighlight">@color/patient_details_text</item>
+        <item name="shapeAppearance">@null</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+    </style>
+
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <!-- reference our hint & error styles -->
         <item name="hintTextAppearance">@color/white</item>
         <item name="errorTextAppearance">@android:color/holo_red_dark</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
-        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
         <item name="colorControlHighlight">@color/white</item>
+    </style>
+
+    <style name="TextInputLayoutAppearancePD" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="hintTextAppearance">@color/patient_details_text</item>
+        <item name="errorTextAppearance">@android:color/holo_red_dark</item>
+        <item name="android:textColor">@color/patient_details_text</item>
+        <item name="android:textColorHint">@color/patient_details_text</item>
+        <item name="colorControlNormal">@color/patient_details_text</item>
+        <item name="colorControlActivated">@color/patient_details_text</item>
+        <item name="colorControlHighlight">@color/patient_details_text</item>
     </style>
 
     <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">

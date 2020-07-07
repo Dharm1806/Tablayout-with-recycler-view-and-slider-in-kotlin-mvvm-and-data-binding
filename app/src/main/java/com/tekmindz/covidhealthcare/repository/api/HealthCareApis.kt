@@ -3,11 +3,12 @@ package com.tekmindz.covidhealthcare.repository.api
 
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_COUNTS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_OBSERVATIONS
+import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_ANALYTICS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_OBSERVATIONS
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_END_POINTS
-import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
-import com.tekmindz.covidhealthcare.repository.requestModels.SearchRequestModel
+import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_PATIENT_DETAILS
+import com.tekmindz.covidhealthcare.repository.requestModels.*
 import com.tekmindz.covidhealthcare.repository.responseModel.*
 import io.reactivex.Observable
 import retrofit2.Response
@@ -39,14 +40,14 @@ interface HealthCareApis {
 
     @POST(GET_DASHBOARD_COUNTS)
     fun getDashboardsCounts(
-        @Body dashBoardObservations: DashBoardObservations,
+        @Body dateFilter: DateFilter,
         @Header("Authorization") access_token: String
     ): Observable<Response<DashboardCounts>>
 
     /*  call the patient details from  patient observations api api*/
 
 
-    @GET(GET_PATIENT_OBSERVATIONS)
+    @GET(GET_PATIENT_DETAILS)
     fun getPatientDetails(
         @Path("patientId")  patientId:String,
         @Header("Authorization") access_token: String
@@ -64,6 +65,20 @@ interface HealthCareApis {
         @Body searchRequestModel: SearchRequestModel,
         @Header("Authorization") access_token: String
     ): Observable<List<DashboardObservationsResponse>>
+
+    @POST(GET_PATIENT_ANALYTICS)
+    fun getPatientAnalytics(
+        @Body patientAnalyticsRequest: PatientAnalyticsRequest,
+        @Header("Authorization") access_token: String
+    ): Observable<List<AnalyticsResponse>>
+
+    /* update the patient details from update api*/
+
+    @POST(UPDATE_PATIENT_DETAILS)
+    fun updatePatientDetails(
+        @Body updatePatientReadings: UpdatePatientReadings,
+        @Header("Authorization") access_token: String
+    ): Observable<Response<PatientDetails>>
 
 }
 

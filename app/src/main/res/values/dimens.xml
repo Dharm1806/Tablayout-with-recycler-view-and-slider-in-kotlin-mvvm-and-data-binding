@@ -24,5 +24,8 @@
     <dimen name="readings_text_size">17sp</dimen>
     <dimen name="dimen_100dp">100dp</dimen>
     <dimen name="dimen_30dp">30dp</dimen>
+    <dimen name="dimen_17sp">17sp</dimen>
+    <dimen name="dimen_150dp">150dp</dimen>
+    <dimen name="dimen_70">70dp</dimen>
 
 </resources>

@@ -48,5 +48,20 @@
     <string name="patient_details">Patient Details</string>
     <string name="title_search_patient">Search Patients</string>
     <string name="please_select_start_date_and_end_date_to_view_the_patient_data">Select Date Range</string>
+    <string name="title_view_statics">VIEW STATICS</string>
+    <string name="select_bed_number">Select Bed Number</string>
+    <string name="select_ward_no">Select Ward Number</string>
+    <string name="blood_pressure_reading">Blood Pressure Reading</string>
+    <string name="sys_mmhg">SYS(mmHg)</string>
+    <string name="b_p_reading">BP Reading</string>
+
+    <string name="error_valid_bed_number">Please enter valid bed number</string>
+    <string name="error_valid_ward_no">Please enter valid ward no</string>
+    <string name="error_valid_sys">Please enter valid SYS</string>
+    <string name="error_valid_dia">Please enter valid DIA</string>
+    <string name="action_submit">SUBMIT</string>
+    <string name="text_temprature">Temperature</string>
+    <string name="text_time">Time</string>
+    <string name="action_notification">Notifications</string>
 
 </resources>

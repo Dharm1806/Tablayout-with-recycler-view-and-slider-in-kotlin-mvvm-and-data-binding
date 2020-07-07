@@ -1,17 +1,21 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
@@ -24,6 +28,7 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.databinding.FragmentTabItemBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
+import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -35,6 +40,7 @@ import kotlin.collections.ArrayList
 
 
 class TabItemFragment : Fragment(), OnItemClickListener {
+    private var hours: Int = 3
     private lateinit var binding: FragmentTabItemBinding
 
     //  private lateinit var binding: TabItemFragmentBinding
@@ -59,7 +65,7 @@ class TabItemFragment : Fragment(), OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
+        mProgressDialog = activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
@@ -67,24 +73,23 @@ class TabItemFragment : Fragment(), OnItemClickListener {
         binding.selectDate.setOnClickListener { showDateRangePicker() }
 
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
-            val hours = getInt(ARG_TIME)
+             hours = getInt(ARG_TIME)
             Log.e("hours", "$hours")
-            if (hours == 0) {
+            if (hours == -1) {
                 binding.selectDate.visibility = View.VISIBLE
                 showDateRangePicker()
 
             } else {
+                mDashboardViewModel.dateRange(Constants.DATE_RANGE)
                 binding.selectDate.visibility = View.GONE
-
-                getDashboardCount(DashBoardObservations(
-                    Utills.getStartDate(hours),
-                    Utills.getCurrentDate()
-                ))
-
-                getDashBoardObservation( DashBoardObservations(
+                getDashBoardObservation( DashBoardObservations(true, DateFilter(
                     Utills.getStartDate(
                         hours
-                    ), Utills.getCurrentDate()
+                    ), Utills.getCurrentDate())
+                ))
+                getDashboardCount(DateFilter(
+                    Utills.getStartDate(hours),
+                    Utills.getCurrentDate()
                 ))
             }
         }
@@ -97,7 +102,6 @@ class TabItemFragment : Fragment(), OnItemClickListener {
 
         mDashboardViewModel.response().observe(requireActivity()!!, Observer {
             when (it) {
-
                 is ResponseList<DashboardObservationsResponse> -> {
                     handleObservations(it)
                 }
@@ -112,32 +116,48 @@ class TabItemFragment : Fragment(), OnItemClickListener {
             }
         })
 
-        binding.searchPatient.setOnClickListener { findNavController().navigate(R.id.homeToSearch) }
+        binding.searchPatient.setOnClickListener {
+           val bundle = bundleOf(Constants.ARG_TIME to hours)
+             findNavController().navigate(R.id.homeToSearch, bundle)
+
+          /*  findNavController().navigate(
+                R.id.homeToSearch, bundle, NavOptions.Builder()
+                    .setPopUpTo(
+                        R.id.home,
+                        true
+                    ).build()
+            )  */
+            }
+
     }
 
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
+
+       // builder.setTheme(R.style.DialogTheme)
+
         val now = Calendar.getInstance()
         builder.setSelection(androidx.core.util.Pair(now.timeInMillis, now.timeInMillis))
         val picker = builder.build()
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
             picker.dismiss()
-
-            Log.e("NegativeBUttonCLicked", "yes")
+            mDashboardViewModel.dateRange(Constants.DATE_RANGE)
         }
         picker.addOnPositiveButtonClickListener {
-            Log.e("date", "The selected date range is ${it.first} - ${it.second}")
             val fromDate = Utills.getDate(it.first!!)
             val toDate = Utills.getDate(it.second!!)
+            Log.e("date", "The selected date range is $fromDate - $toDate")
             select_date.text = Constants.parseDate(fromDate) +" - "+ Constants.parseDate(toDate)
-            getDashBoardObservation( DashBoardObservations(
-               fromDate, toDate
+            getDashBoardObservation( DashBoardObservations(true, DateFilter(
+               fromDate, toDate)
             ))
-            getDashboardCount(DashBoardObservations(
+            getDashboardCount(DateFilter(
                 fromDate,
                 toDate
             ))
+            mDashboardViewModel.dateRange(fromDate+"-"+toDate)
+
 
         }
 
@@ -150,9 +170,9 @@ class TabItemFragment : Fragment(), OnItemClickListener {
 
 
     }
-    fun getDashboardCount(dashBoardObservations: DashBoardObservations){
+    fun getDashboardCount(dateFilter: DateFilter){
         mDashboardViewModel.getDashBoardCounts(
-            dashBoardObservations
+            dateFilter
         )
     }
     private fun handleObservations(it: ResponseList<DashboardObservationsResponse>) {
@@ -245,4 +265,5 @@ class TabItemFragment : Fragment(), OnItemClickListener {
         val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }
+
 }

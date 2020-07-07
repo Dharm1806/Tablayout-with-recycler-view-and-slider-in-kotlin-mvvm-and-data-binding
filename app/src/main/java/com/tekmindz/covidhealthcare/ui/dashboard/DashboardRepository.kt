@@ -7,6 +7,7 @@ import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceMa
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
+import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import io.reactivex.Observable
@@ -31,9 +32,9 @@ class DashboardRepository {
     }
 
     /*request to get counts  from dashboard count api*/
-    fun getDashBoardCount(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardCounts>> =
+    fun getDashBoardCount(dateFilter: DateFilter): Observable<Response<DashboardCounts>> =
         App.healthCareApi.getDashboardsCounts(
-            dashBoardObservations,
+            dateFilter,
             "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
 }

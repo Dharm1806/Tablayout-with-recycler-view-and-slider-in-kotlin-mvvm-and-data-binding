@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="UpdatePatientReadings"
+            type="com.tekmindz.covidhealthcare.ui.updatePatientDetails.UpdatePatientViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tab_background"
+>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_bed_no"
+        style="@style/Widget.Design.TextInputLayoutPD"
+        android:theme="@style/TextInputLayoutAppearancePD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="@dimen/padding_20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@android:color/transparent"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/select_bed_number"
+            android:text="@={UpdatePatientReadings.bedNumber}"
+            android:inputType="textWebEmailAddress"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/field_text_size" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_ward_no"
+        style="@style/Widget.Design.TextInputLayoutPD"
+        android:theme="@style/TextInputLayoutAppearancePD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_20dp"
+        android:layout_marginEnd="@dimen/padding_20dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_bed_no"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/select_ward_no"
+            android:text="@={UpdatePatientReadings.wardNumber}"
+            android:inputType="textWebPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/field_text_size" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/lbl_bp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_20dp"
+        android:layout_marginEnd="@dimen/padding_20dp"
+        android:gravity="center|start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_ward_no"
+        android:text="@string/blood_pressure_reading"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="@dimen/dimen_17sp"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:layout_marginBottom="@dimen/padding_20dp"
+        android:textColor="@color/dashboard_text_color"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_Sys"
+        style="@style/Widget.Design.TextInputLayoutPD"
+        android:theme="@style/TextInputLayoutAppearancePD"
+        android:layout_width="@dimen/dimen_150dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_20dp"
+        android:layout_marginEnd="@dimen/padding_20dp"
+        android:gravity="start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_bp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/dimen_150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/sys_mmhg"
+            android:text="@={UpdatePatientReadings.sys}"
+            android:inputType="textWebPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/field_text_size" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_dia"
+        style="@style/Widget.Design.TextInputLayoutPD"
+
+        android:theme="@style/TextInputLayoutAppearancePD"
+        android:layout_width="@dimen/dimen_150dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_20dp"
+        android:layout_marginEnd="@dimen/padding_20dp"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lbl_bp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="@dimen/dimen_150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/sys_mmhg"
+            android:text="@={UpdatePatientReadings.dia}"
+            android:inputType="textWebPassword"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/field_text_size" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/button_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_20dp"
+        android:background="@drawable/title_bg"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:padding="@dimen/text_size_15sp"
+        android:text="@string/action_submit"
+        android:onClick="@{(v) -> UpdatePatientReadings.onClick(v)}"
+        android:textColor="@color/white"
+        android:textSize="@dimen/button_text_size"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

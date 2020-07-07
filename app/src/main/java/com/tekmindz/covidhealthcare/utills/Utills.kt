@@ -3,11 +3,21 @@ package com.tekmindz.covidhealthcare.utills
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.ConnectivityManager
 import android.util.Base64
+import android.view.Gravity
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.APP_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
@@ -21,7 +31,7 @@ import java.util.regex.Pattern
 
 object Utills {
 
-    //Email validation pattern
+    public var dateRange = Constants.DATE_RANGE
 
     //Email validation pattern
 
@@ -47,13 +57,63 @@ object Utills {
     /**initialize progressbar and @return progressbar instance
      */
 
-    fun initializeProgressBar(context: Context): ProgressDialog {
+    fun initializeProgressBar(context: Context, style:Int): ProgressDialog {
 
-        val progressDialog = ProgressDialog(context)
+      // return setProgressDialog(context, "Loading..")
+       val progressDialog = ProgressDialog(context)
+        progressDialog.setIndeterminateDrawable(context.getDrawable(R.drawable.bg_progress))
         progressDialog.setCancelable(false)
         progressDialog.setTitle(context.getString(R.string.msg_please_wait))
         return progressDialog
 
+    }
+
+    fun setProgressDialog(context:Context, message:String):AlertDialog {
+        val llPadding = 30
+        val ll = LinearLayout(context)
+        ll.orientation = LinearLayout.HORIZONTAL
+        ll.setPadding(llPadding, llPadding, llPadding, llPadding)
+        ll.gravity = Gravity.CENTER
+        var llParam = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT)
+        llParam.gravity = Gravity.CENTER
+        ll.layoutParams = llParam
+
+        val progressBar = ProgressBar(context)
+
+        progressBar.isIndeterminate = true
+        progressBar.setPadding(0, 0, llPadding, 0)
+        progressBar.layoutParams = llParam
+
+        llParam = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
+        llParam.gravity = Gravity.CENTER
+        val tvText = TextView(context)
+        tvText.text = message
+        tvText.setTextColor(Color.parseColor("#000000"))
+        tvText.textSize = 20.toFloat()
+        tvText.layoutParams = llParam
+
+        ll.addView(progressBar)
+        ll.addView(tvText)
+
+        val builder = AlertDialog.Builder(context)
+        builder.setCancelable(true)
+        builder.setView(ll)
+
+        val dialog = builder.create()
+        val window = dialog.window
+        if (window != null) {
+            val layoutParams = WindowManager.LayoutParams()
+            layoutParams.copyFrom(dialog.window?.attributes)
+            layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            dialog.window?.attributes = layoutParams
+        }
+
+        return dialog
     }
 
     /** show internet error
@@ -201,7 +261,7 @@ object Utills {
         else if (position == 1) hours = 6
         else if (position == 2) hours = 12
         else if (position == 3) hours = 24
-        else if (position == 4) hours = 0
+        else if (position == 4) hours = -1
 
         return hours
     }

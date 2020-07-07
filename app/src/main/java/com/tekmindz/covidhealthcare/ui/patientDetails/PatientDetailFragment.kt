@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -25,7 +28,7 @@ import com.tekmindz.covidhealthcare.utills.Utills
 class PatientDetailFragment : Fragment() {
     private lateinit var binding: PatientDetailFragmentBinding
     private var mProgressDialog: ProgressDialog? = null
-
+ lateinit var patientId:String
     companion object {
         fun newInstance() = PatientDetailFragment()
     }
@@ -45,16 +48,16 @@ class PatientDetailFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it) }
+        mProgressDialog = activity?.let { Utills.initializeProgressBar(it,R.style.AppTheme_WhiteAccent) }
 
         mPatientDetailViewModel = ViewModelProviders.of(this).get(PatientDetailViewModel::class.java)
 
         binding.patientDetailsBind = (mPatientDetailViewModel);
 
         arguments?.takeIf { it.containsKey(Constants.PATIENT_ID) }?.apply {
-            val patientId = getInt(Constants.PATIENT_ID)
+             patientId = getInt(Constants.PATIENT_ID).toString()
             mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
-           // mPatientDetailViewModel.getPatientObservations(patientId.toString())
+           mPatientDetailViewModel.getPatientObservations(patientId.toString())
         }
 
         mPatientDetailViewModel.getPatientDetails().observe(requireActivity()!!, Observer {
@@ -71,6 +74,15 @@ class PatientDetailFragment : Fragment() {
             }
         })
 
+        binding.viewAnalytics.setOnClickListener {
+            val bundle = bundleOf("patientId" to patientId.toString())
+            findNavController().navigate(R.id.pDetailsToAnalytics, bundle)
+        }
+
+        binding.updateBp.setOnClickListener {
+            val bundle = bundleOf("patientId" to patientId.toString())
+            findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
+        }
 
     }
 
@@ -78,7 +90,7 @@ class PatientDetailFragment : Fragment() {
     private fun handlePatientDetails(it: Resource<PatientDetails>) {
 
         when (it.status) {
-            Resource.Status.LOADING -> showProgressBar()
+            //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> showPatientDeatils(it.data!!)
             Resource.Status.ERROR -> showError(it.exception!!)
         }
@@ -94,11 +106,23 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientObserVations(data: PatientObservations) {
-      /*  binding.tvHeartRateValue.text = data.heartRate
+        binding.tvHeartRateValue.text = data.heartRate
         binding.tvRespirationRateValue.text = data.respirationRate
         binding.tvBodyTempratureValue.text = data.bodyTemprature
-        binding.tvPatientStatus.text = data.patientStatus
-*/
+
+        if (data.status.equals(Constants.STATE_RECOVERED)){
+            binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
+        }
+
+        if (data.status.equals(Constants.STATE_UNDER_CONTROL)){
+            binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.under_control_bg)
+        }
+
+        if(data.status.equals(Constants.STATE_CRITICAL)){
+        binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.critical_bg) }
+
+        binding.tvPatientStatus.text = data.status
+
     }
 
     private fun showPatientDeatils(data: PatientDetails) {
@@ -111,10 +135,10 @@ class PatientDetailFragment : Fragment() {
         binding.tvRelayId.text = data.relayId
         binding.tvAddmittedSince.text = mPatientDetailViewModel.parseDate(data.admittedDate)
         binding.tvBioSensorId.text  = data.wearableIdentifier
-        binding.tvHeartRateValue.text = data.heartRate
-        binding.tvRespirationRateValue.text = data.respirationRate
+      //  binding.tvHeartRateValue.text = data.heartRate
+       /* binding.tvRespirationRateValue.text = data.respirationRate
         binding.tvBodyTempratureValue.text = data.bodyTemprature
-        binding.tvPatientStatus.text = data.status
+        binding.tvPatientStatus.text = data.status*/
         hideProgressbar()
     }
 
