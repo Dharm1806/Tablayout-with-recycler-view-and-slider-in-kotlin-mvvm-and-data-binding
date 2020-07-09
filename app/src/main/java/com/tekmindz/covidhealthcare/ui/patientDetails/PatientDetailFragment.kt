@@ -1,34 +1,34 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
+
 import android.app.ProgressDialog
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
+import com.tekmindz.covidhealthcare.repository.responseModel.Details
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
+import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservation
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
 import com.tekmindz.covidhealthcare.utills.Resource
-
-
 import com.tekmindz.covidhealthcare.utills.Utills
 
 class PatientDetailFragment : Fragment() {
     private lateinit var binding: PatientDetailFragmentBinding
     private var mProgressDialog: ProgressDialog? = null
- lateinit var patientId:String
+    lateinit var patientId: String
+
     companion object {
         fun newInstance() = PatientDetailFragment()
     }
@@ -41,33 +41,39 @@ class PatientDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.patient_detail_fragment, container, false
         )
-        val view: View = binding.getRoot()
-        binding.setLifecycleOwner(this);
+        val view: View = binding.root
+        binding.lifecycleOwner = this
 
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it,R.style.AppTheme_WhiteAccent) }
+        mProgressDialog =
+            activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
-        mPatientDetailViewModel = ViewModelProviders.of(this).get(PatientDetailViewModel::class.java)
+        mPatientDetailViewModel =
+            ViewModelProviders.of(this).get(PatientDetailViewModel::class.java)
 
-        binding.patientDetailsBind = (mPatientDetailViewModel);
+        binding.patientDetailsBind = (mPatientDetailViewModel)
 
         arguments?.takeIf { it.containsKey(Constants.PATIENT_ID) }?.apply {
-             patientId = getInt(Constants.PATIENT_ID).toString()
-            mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
-           mPatientDetailViewModel.getPatientObservations(patientId.toString())
+            patientId = getInt(Constants.PATIENT_ID).toString()
+            if (Utills.verifyAvailableNetwork(requireActivity())) {
+                showProgressBar()
+                mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
+                mPatientDetailViewModel.getPatientObservations(patientId.toString())
+            }
         }
 
-        mPatientDetailViewModel.getPatientDetails().observe(requireActivity()!!, Observer {
+        mPatientDetailViewModel.getPatientDetails().observe(requireActivity(), Observer {
             when (it) {
 
                 is Resource<PatientDetails> -> handlePatientDetails(it)
             }
         })
 
-        mPatientDetailViewModel.getPatientObservations().observe(requireActivity()!!, Observer {
+        mPatientDetailViewModel.getPatientObservations().observe(requireActivity(), Observer {
             when (it) {
 
                 is Resource<PatientObservations> -> handlePatientObservations(it)
@@ -91,7 +97,11 @@ class PatientDetailFragment : Fragment() {
 
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
-            Resource.Status.SUCCESS -> showPatientDeatils(it.data!!)
+            Resource.Status.SUCCESS -> {
+                if (it.data?.statusCode == 200 && it.data.body != null) showPatientDeatils(it.data.body)
+                else showError(it.data?.message!!)
+
+            }
             Resource.Status.ERROR -> showError(it.exception!!)
         }
     }
@@ -100,45 +110,46 @@ class PatientDetailFragment : Fragment() {
 
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
-            Resource.Status.SUCCESS -> showPatientObserVations(it.data!!)
+            Resource.Status.SUCCESS -> {
+                if (it.data?.statusCode == 200 && it.data.body != null) showPatientObserVations(it.data.body)
+                else showError(it.data?.message!!)
+
+            }
             Resource.Status.ERROR -> showError(it.exception!!)
         }
     }
 
-    private fun showPatientObserVations(data: PatientObservations) {
+    private fun showPatientObserVations(data: PatientObservation) {
         binding.tvHeartRateValue.text = data.heartRate
         binding.tvRespirationRateValue.text = data.respirationRate
         binding.tvBodyTempratureValue.text = data.bodyTemprature
 
-        if (data.status.equals(Constants.STATE_RECOVERED)){
+        if (data.status.equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
         }
 
-        if (data.status.equals(Constants.STATE_UNDER_CONTROL)){
+        if (data.status.equals(Constants.STATE_UNDER_CONTROL)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.under_control_bg)
         }
 
-        if(data.status.equals(Constants.STATE_CRITICAL)){
-        binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.critical_bg) }
+        if (data.status.equals(Constants.STATE_CRITICAL)) {
+            binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.critical_bg)
+        }
 
         binding.tvPatientStatus.text = data.status
 
     }
 
-    private fun showPatientDeatils(data: PatientDetails) {
+    private fun showPatientDeatils(data: Details) {
         Glide.with(requireActivity()).load(data.imageUrl).into(binding.imgPatientProfile)
-        binding.tvPatientName.text = data.firstName+" "+data.lastName
+        binding.tvPatientName.text = data.firstName + " " + data.lastName
         binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)
         binding.tvGenderId.text = data.gender.toUpperCase()
         binding.tvBedNo.text = data.bedNumber
         binding.tvWardNo.text = data.wardNo
         binding.tvRelayId.text = data.relayId
         binding.tvAddmittedSince.text = mPatientDetailViewModel.parseDate(data.admittedDate)
-        binding.tvBioSensorId.text  = data.wearableIdentifier
-      //  binding.tvHeartRateValue.text = data.heartRate
-       /* binding.tvRespirationRateValue.text = data.respirationRate
-        binding.tvBodyTempratureValue.text = data.bodyTemprature
-        binding.tvPatientStatus.text = data.status*/
+        binding.tvBioSensorId.text = data.wearableIdentifier
         hideProgressbar()
     }
 
@@ -152,7 +163,7 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun hideProgressbar() {
-         mProgressDialog?.hide()
+        mProgressDialog?.hide()
     }
 
     private fun showMessage(message: String) {

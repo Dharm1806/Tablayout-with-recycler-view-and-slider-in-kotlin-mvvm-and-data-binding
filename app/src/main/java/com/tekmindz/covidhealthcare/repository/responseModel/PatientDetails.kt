@@ -1,6 +1,11 @@
 package com.tekmindz.covidhealthcare.repository.responseModel
 
 data class PatientDetails(
+    val body: Details
+):BaseResponse()
+
+
+data class Details(
     val firstName: String,
     val lastName: String,
     val gender: String,
@@ -12,16 +17,20 @@ data class PatientDetails(
     val relayId: String,
     val wearableIdentifier: String,
     val wearableName: String,
-    val heartRate:String,
-    val respirationRate :String,
-    val bodyTemprature:String,
-    val status:String,
+    val heartRate: String,
+    val respirationRate: String,
+    val bodyTemprature: String,
+    val status: String,
     val imageUrl: String
 )
 
 data class PatientObservations(
-    val heartRate:String,
-    val respirationRate :String,
-    val bodyTemprature:String,
-    val status:String
+    val body: PatientObservation
+):BaseResponse()
+
+data class PatientObservation(
+    val heartRate: String,
+    val respirationRate: String,
+    val bodyTemprature: String,
+    val status: String
 )

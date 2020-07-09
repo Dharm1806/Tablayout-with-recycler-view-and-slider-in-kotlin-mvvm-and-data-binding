@@ -7,6 +7,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_ANALYTICS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_OBSERVATIONS
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_END_POINTS
+import com.tekmindz.covidhealthcare.constants.Constants.REFRESH_TOKEN_END_POINTS
 import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.repository.requestModels.*
 import com.tekmindz.covidhealthcare.repository.responseModel.*
@@ -23,9 +24,21 @@ interface HealthCareApis {
         @Field("client_id") client_id: String,
         @Field("username") username: String,
         @Field("password") password: String,
+        @Field("grant_type") grant_type: String,
+        @Field("client_secret") client_secret: String
+
+    ): Observable<Response<UserModel>>
+
+    /*  call the login api*/
+    @FormUrlEncoded
+    @POST(REFRESH_TOKEN_END_POINTS)
+    fun refreshToken(
+        @Field("client_id") client_id: String,
+        @Field("refresh_token") username: String,
         @Field("grant_type") grant_type: String
 
     ): Observable<Response<UserModel>>
+
 
     /*  call the patient list dashboard observations api*/
 
@@ -33,7 +46,7 @@ interface HealthCareApis {
     fun getDashboardPatientList(
         @Body dashBoardObservations: DashBoardObservations,
         @Header("Authorization") access_token: String
-    ): Observable<List<DashboardObservationsResponse>>
+    ): Observable<Response<DashboardObservationsResponse>>
 
 
     /*  call the patient count dashboard observations api*/
@@ -49,14 +62,14 @@ interface HealthCareApis {
 
     @GET(GET_PATIENT_DETAILS)
     fun getPatientDetails(
-        @Path("patientId")  patientId:String,
+        @Path("patientId") patientId: String,
         @Header("Authorization") access_token: String
     ): Observable<Response<PatientDetails>>
 
 
     @GET(GET_PATIENT_OBSERVATIONS)
     fun getPatientObservations(
-        @Path("patientId")  patientId:String,
+        @Path("patientId") patientId: String,
         @Header("Authorization") access_token: String
     ): Observable<Response<PatientObservations>>
 
@@ -64,13 +77,13 @@ interface HealthCareApis {
     fun getSearchResults(
         @Body searchRequestModel: SearchRequestModel,
         @Header("Authorization") access_token: String
-    ): Observable<List<DashboardObservationsResponse>>
+    ): Observable<Response<DashboardObservationsResponse>>
 
     @POST(GET_PATIENT_ANALYTICS)
     fun getPatientAnalytics(
         @Body patientAnalyticsRequest: PatientAnalyticsRequest,
         @Header("Authorization") access_token: String
-    ): Observable<List<AnalyticsResponse>>
+    ): Observable<Response<AnalyticsResponse>>
 
     /* update the patient details from update api*/
 

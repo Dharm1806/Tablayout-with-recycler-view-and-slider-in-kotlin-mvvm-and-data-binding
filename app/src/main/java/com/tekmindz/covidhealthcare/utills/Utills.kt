@@ -1,12 +1,15 @@
 package com.tekmindz.covidhealthcare.utills
 
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.net.ConnectivityManager
+import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -16,14 +19,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.APP_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
+import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -31,7 +37,15 @@ import java.util.regex.Pattern
 
 object Utills {
 
-    public var dateRange = Constants.DATE_RANGE
+    var dateRange: MutableLiveData<DateRange> = MutableLiveData<DateRange>()
+
+    fun dateRange(dateRangeValue: String) {
+        Log.e("date", "$dateRangeValue")
+        this.dateRange.value = DateRange(dateRangeValue)
+    }
+
+
+    fun getDateRangeValue(): MutableLiveData<DateRange> = this.dateRange
 
     //Email validation pattern
 
@@ -57,10 +71,10 @@ object Utills {
     /**initialize progressbar and @return progressbar instance
      */
 
-    fun initializeProgressBar(context: Context, style:Int): ProgressDialog {
+    fun initializeProgressBar(context: Context, style: Int): ProgressDialog {
 
-      // return setProgressDialog(context, "Loading..")
-       val progressDialog = ProgressDialog(context)
+        // return setProgressDialog(context, "Loading..")
+        val progressDialog = ProgressDialog(context)
         progressDialog.setIndeterminateDrawable(context.getDrawable(R.drawable.bg_progress))
         progressDialog.setCancelable(false)
         progressDialog.setTitle(context.getString(R.string.msg_please_wait))
@@ -68,7 +82,7 @@ object Utills {
 
     }
 
-    fun setProgressDialog(context:Context, message:String):AlertDialog {
+    fun setProgressDialog(context: Context, message: String): AlertDialog {
         val llPadding = 30
         val ll = LinearLayout(context)
         ll.orientation = LinearLayout.HORIZONTAL
@@ -76,7 +90,8 @@ object Utills {
         ll.gravity = Gravity.CENTER
         var llParam = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT)
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
         llParam.gravity = Gravity.CENTER
         ll.layoutParams = llParam
 
@@ -88,7 +103,8 @@ object Utills {
 
         llParam = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         llParam.gravity = Gravity.CENTER
         val tvText = TextView(context)
         tvText.text = message
@@ -135,13 +151,16 @@ object Utills {
      * check device is connected to internet or not
      */
 
-    fun verifyAvailableNetwork(activity: AppCompatActivity): Boolean {
+    fun verifyAvailableNetwork(activity: FragmentActivity): Boolean {
 
         val connectivityManager =
             activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-
+        val isInternet = networkInfo != null && networkInfo.isConnected
+        if (!isInternet) {
+            showInternetAlertDailog(activity)
+        }
+        return isInternet
     }
 
     /**
@@ -195,11 +214,18 @@ object Utills {
         return "2020-06-26T06:32:37Z"
     }
 
-    fun getDate( milis:Long): String {
+    fun getRealCurrentDate(): String {
+
+        val date = Date()
+        return formatDateIntoFilterFormat(date)
+        //  return "2020-06-26T06:32:37Z"
+    }
+
+    fun getDate(milis: Long): String {
 
         val date = Date(milis)
         return formatDateIntoFilterFormat(date)
-       // return "2020-06-26T06:32:37Z"
+        // return "2020-06-26T06:32:37Z"
     }
 
     fun getStartDate(hours: Int): String {
@@ -264,6 +290,21 @@ object Utills {
         else if (position == 4) hours = -1
 
         return hours
+    }
+
+    fun showInternetAlertDailog(context: Activity) {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
+
+        builder.setTitle(context.getString(R.string.no_internet))
+        builder.setMessage(context.getString(R.string.msg_please_connect))
+        builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+            val intent = Intent(Settings.ACTION_SETTINGS)
+            context.startActivity(intent)
+        }
+
+        builder.setCancelable(false)
+
+        builder.show()
     }
 
 

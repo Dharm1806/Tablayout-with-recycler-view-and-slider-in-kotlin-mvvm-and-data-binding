@@ -1,6 +1,5 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
-import android.content.ContentValues.TAG
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
@@ -15,14 +14,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
-import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
+import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
-import com.tekmindz.covidhealthcare.utills.ResponseList
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -42,7 +37,7 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var mTabAdapter: HomeTabAdapter
+    private lateinit var mTabAdapter: DashBoardTabAdapter
     private var positionItem = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +61,7 @@ class HomeFragment : Fragment() {
         mDashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
 
         mTabAdapter =
-            HomeTabAdapter(this, requireActivity())
+            DashBoardTabAdapter(this, requireActivity())
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -79,33 +74,26 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-               // pager.setCurrentItem(tab?.position!!, false)
+                // pager.setCurrentItem(tab?.position!!, false)
 
                 Log.e("tabReselected pos", "${tab?.position}")
 
             }
         })
 
-        mDashboardViewModel.getDateRangeValue().observe(requireActivity()!!, Observer {
-            when (it) {
-                is DateRange -> {
-                    Log.e("TAG", Gson().toJson(it))
-                    tab_layout.getTabAt(4)?.text = it.dateRange.toString()
-                }
-            }
-        })
+
         pager.adapter = mTabAdapter
         setDividers()
 
         TabLayoutMediator(tab_layout, pager) { tab, position ->
-            tab.text =  Utills.getTabTitile(position, requireActivity())
+            tab.text = Utills.getTabTitile(position, requireActivity())
             //adapter.getItem(myViewPager.getCurrentItem());
-          //  Log.e("tab position",""+tab.position)
+            //  Log.e("tab position",""+tab.position)
             pager.setCurrentItem(tab.position, false)
 
         }.attach()
 
-       pager.setUserInputEnabled(false);
+        pager.isUserInputEnabled = false
 
         if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
@@ -117,17 +105,43 @@ class HomeFragment : Fragment() {
             )
         }
 
+        Utills.getDateRangeValue().observe(requireActivity(), Observer {
+            when (it) {
+                is DateRange -> {
+                    if (tab_layout != null && tab_layout.tabCount == 5) {
+                        tab_layout.getTabAt(4)?.text = it.dateRange.toString()
+                    }
+                }
+            }
+        })
+        if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
+            // mDashboardViewModel.refreshToken()
+        }
+
+        mDashboardViewModel.getRefreshToken().observe(requireActivity(), Observer {
+            when (it) {
+                is Resource<UserModel> -> {
+                    when (it.status) {
+
+                        Resource.Status.SUCCESS -> mDashboardViewModel.saveAccessToke(it.data!!)
+                        //    ResponseList.Status.ERROR -> showError(it.exception!!)
+
+                    }
+                }
+            }
+        })
+
     }
 
     fun setDividers() {
         val root: View = tab_layout.getChildAt(0)
         if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_NONE
+            root.showDividers = LinearLayout.SHOW_DIVIDER_NONE
             val drawable = GradientDrawable()
             drawable.setColor(resources.getColor(R.color.colorAccent))
             drawable.setSize(2, 1)
-            (root as LinearLayout).dividerPadding = 5
-            (root as LinearLayout).dividerDrawable = drawable
+            root.dividerPadding = 5
+            root.dividerDrawable = drawable
         }
     }
 

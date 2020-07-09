@@ -2,7 +2,6 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +10,31 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.utils.EntryXComparator
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
-import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
-import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
+import com.tekmindz.covidhealthcare.repository.responseModel.Analytics
 import com.tekmindz.covidhealthcare.repository.responseModel.AnalyticsResponse
-import com.tekmindz.covidhealthcare.utills.ResponseList
+import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_tab_item.*
+import kotlinx.android.synthetic.main.fragment_analytics_tab.*
+import kotlinx.android.synthetic.main.fragment_tab_item.select_date
+import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
@@ -33,10 +43,15 @@ class AnalyticsTabFragment : Fragment() {
     private var hours: Int = 3
     private lateinit var binding: FragmentAnalyticsTabBinding
 
-    //  private lateinit var binding: TabItemFragmentBinding
+    var posture: ArrayList<String>? = null
+    var tempGraphEntry: ArrayList<Entry>? = null
+    var helthGraphEntry: ArrayList<Entry>? = null
+    var heartGraphEntry: ArrayList<Entry>? = null
+    var respirationGraphEntry: ArrayList<Entry>? = null
+
     private lateinit var mAnalyticsViewModel: AnalyticsViewModel
     private var mProgressDialog: ProgressDialog? = null
-    private var mAnalyticsList = ArrayList<AnalyticsResponse>()
+    private var mAnalyticsList = ArrayList<Analytics>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,25 +61,32 @@ class AnalyticsTabFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_analytics_tab, container, false
         )
-        val view: View = binding.getRoot()
-        binding.setLifecycleOwner(this);
+        val view: View = binding.root
+        binding.lifecycleOwner = this
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
+        mProgressDialog =
+            activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
         mAnalyticsViewModel = ViewModelProviders.of(this).get(AnalyticsViewModel::class.java)
 
-        binding.patientAnalytics = (mAnalyticsViewModel);
+        binding.patientAnalytics = (mAnalyticsViewModel)
+        posture = ArrayList()
+        //for graph entry
+        tempGraphEntry = ArrayList()
+        helthGraphEntry = ArrayList()
+        heartGraphEntry = ArrayList()
+        respirationGraphEntry = ArrayList()
+
         binding.selectDate.setOnClickListener { showDateRangePicker() }
 
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
-             hours = getInt(ARG_TIME)
-            patientId  =getString(PATIENT_ID)!!
-            Log.e("hours", "$hours")
+            hours = getInt(ARG_TIME)
+            patientId = getString(PATIENT_ID)!!
             if (hours == 0) {
                 binding.selectDate.visibility = View.VISIBLE
                 showDateRangePicker()
@@ -72,28 +94,28 @@ class AnalyticsTabFragment : Fragment() {
             } else {
                 binding.selectDate.visibility = View.GONE
 
-                getPatientAnalytics(PatientAnalyticsRequest(
-                   patientId,
-                    Utills.getStartDate(hours),
-                    Utills.getCurrentDate()
-                ))
+                getPatientAnalytics(
+                    PatientAnalyticsRequest(
+                        patientId,
+                        Utills.getStartDate(hours),
+                        Utills.getCurrentDate()
+                    )
+                )
 
             }
         }
 
 
-
         // binding.listPatient.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
 
-        mAnalyticsViewModel.response().observe(requireActivity()!!, Observer {
+        mAnalyticsViewModel.response().observe(requireActivity(), Observer {
             when (it) {
 
-                is ResponseList<AnalyticsResponse> -> {
+                is Resource<AnalyticsResponse> -> {
                     handleObservations(it)
                 }
             }
         })
-
 
 
     }
@@ -109,50 +131,195 @@ class AnalyticsTabFragment : Fragment() {
             picker.dismiss()
         }
         picker.addOnPositiveButtonClickListener {
-            Log.e("date", "The selected date range is ${it.first} - ${it.second}")
             val fromDate = Utills.getDate(it.first!!)
             val toDate = Utills.getDate(it.second!!)
-            select_date.text = Constants.parseDate(fromDate) +" - "+ Constants.parseDate(toDate)
-            getPatientAnalytics(PatientAnalyticsRequest(
-                patientId,
+            select_date.text = Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate)
+            getPatientAnalytics(
+                PatientAnalyticsRequest(
+                    patientId,
                     fromDate,
-                   toDate
-            ))
+                    toDate
+                )
+            )
 
         }
 
     }
 
-    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest){
-        mAnalyticsViewModel.getPatientAnalytics(
-           patientAnalyticsRequest
-        )
-
-
+    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest) {
+        if (Utills.verifyAvailableNetwork(requireActivity()))
+            mAnalyticsViewModel.getPatientAnalytics(
+                patientAnalyticsRequest
+            )
     }
 
-    private fun handleObservations(it: ResponseList<AnalyticsResponse>) {
+    private fun handleObservations(it: Resource<AnalyticsResponse>) {
 
         when (it.status) {
-            ResponseList.Status.LOADING -> showProgressBar()
-            ResponseList.Status.SUCCESS -> showObservations(it.data!!)
-            ResponseList.Status.ERROR -> showError(it.exception!!)
+            Resource.Status.LOADING -> showProgressBar()
+            Resource.Status.SUCCESS -> {
+                if (it.data?.statusCode == 200 && it.data.body != null) showObservations(it.data.body)
+
+            }
+            Resource.Status.ERROR -> showError(it.exception!!)
 
         }
     }
 
 
+    private fun showObservations(data: List<Analytics>) {
 
-
-
-    private fun showObservations(data: List<AnalyticsResponse>) {
-        Log.e("observation", "${data.size}")
         if (!data.isNullOrEmpty()) {
             mAnalyticsList.clear()
             mAnalyticsList.addAll(data)
+            filterData(mAnalyticsList)
         }
     }
 
+    private fun filterData(mAnalyticsList: java.util.ArrayList<Analytics>) {
+        mAnalyticsList.forEach {
+            posture!!.add(it.posture)
+            var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
+            tempGraphEntry!!.add(Entry(time, it.bodyTemprature))
+            heartGraphEntry!!.add((Entry(time, it.heartRate)))
+            respirationGraphEntry!!.add(Entry(time, it.respirationRate))
+            helthGraphEntry!!.add(
+                Entry(
+                    time,
+                    mAnalyticsViewModel.getIntPosture(it.posture, requireActivity())
+                )
+            )
+
+        }
+        setTempGraph(temp_chart, tempGraphEntry!!)
+        setTempGraph(heart_rate_chart, heartGraphEntry!!)
+        setTempGraph(respiration_rate_chart, respirationGraphEntry!!)
+        settingYLevel(helthGraphEntry!!)
+
+    }
+
+
+    private fun setTempGraph(
+        mychart: LineChart,
+        graphEntry: ArrayList<Entry>
+    ) {
+
+        Collections.sort(graphEntry, EntryXComparator())
+        var lineDataSet = LineDataSet(graphEntry, "")
+        //setting draw values
+        lineDataSet.setDrawValues(false)
+        //setting line width
+        lineDataSet.lineWidth = 2f
+
+        // holo circle
+        lineDataSet.setDrawCircleHole(true)
+        //circle radius
+        lineDataSet.circleRadius = 5f
+        //circle holo radius
+        lineDataSet.circleHoleRadius = 3f
+        val color = getColorGraph(mychart)
+        //seting line color
+        lineDataSet.color = color
+        //crircle color
+        lineDataSet.setCircleColor(color)
+
+
+        var lineDataSetList = ArrayList<LineDataSet>()
+        lineDataSetList.add(lineDataSet)
+        var lineData = LineData(lineDataSetList as List<ILineDataSet>?)
+        mychart.data = lineData
+        //mychart.getAxisLeft().setDrawGridLines(false);
+        mychart.xAxis.setDrawGridLines(false)
+        mychart.axisRight.isEnabled = false
+        mychart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        mychart.description.isEnabled = false
+        mychart.legend.isEnabled = false
+        mychart.animate()
+
+        //formating x axis label
+        mychart.xAxis.valueFormatter = object : ValueFormatter() {
+
+            private val mFormat: SimpleDateFormat = SimpleDateFormat(getString(R.string.graph_time))
+
+            override fun getFormattedValue(value: Float): String? {
+
+                val millis: Long = TimeUnit.HOURS.toMillis(value.toLong())
+                mFormat.timeZone = TimeZone.getTimeZone(getString(R.string.timezone))
+                return mFormat.format(Date(millis))
+            }
+        }
+
+        mychart.invalidate()
+    }
+
+    private fun getColorGraph(mychart: LineChart): Int {
+        if (mychart.id == R.id.heart_rate_chart) {
+            return requireActivity().resources.getColor(R.color.heart_rate_color)
+        } else if (mychart.id == R.id.temp_chart) {
+            return requireActivity().resources.getColor(R.color.body_temp_color)
+        } else {
+            return requireActivity().resources.getColor(R.color.respiration_color)
+        }
+
+
+    }
+
+    private fun settingYLevel(heartEntry: ArrayList<Entry>) {
+
+        Collections.sort(heartEntry, EntryXComparator())
+        var lineDataSet = LineDataSet(heartEntry, "")
+        //setting draw values
+        lineDataSet.setDrawValues(false)
+        //setting line width
+        lineDataSet.lineWidth = 2f
+        //seting line color
+        lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        // holo circle
+        lineDataSet.setDrawCircleHole(true)
+        //circle radius
+        lineDataSet.circleRadius = 5f
+        //circle holo radius
+        lineDataSet.circleHoleRadius = 3f
+        //crircle color
+
+        lineDataSet.setCircleColor(requireActivity().resources.getColor(R.color.health_alert_color))
+
+
+        var lineDataSetList = ArrayList<LineDataSet>()
+        lineDataSetList.add(lineDataSet)
+        var lineData = LineData(lineDataSetList as List<ILineDataSet>?)
+        helth_chart.data = lineData
+        //mychart.getAxisLeft().setDrawGridLines(false);
+        helth_chart.xAxis.setDrawGridLines(false)
+        helth_chart.axisRight.isEnabled = false
+        //mychart.getAxisRight().setDrawGridLines(false);
+        //mychart.axisRight.setDrawGridLines(false);
+        //mychart.setDrawGridBackground(false)
+
+        //Uncomment to show Y axis lables in Text
+        var yAxis = helth_chart.axisLeft
+        yAxis.valueFormatter = IndexAxisValueFormatter(posture)
+//          yAxis.axisMaximum=posture!!.size.toFloat()
+//           yAxis.axisMinimum=0f
+//           yAxis.setLabelCount(3,true)
+
+        helth_chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        helth_chart.description.isEnabled = false
+        helth_chart.legend.isEnabled = false
+        helth_chart.xAxis.valueFormatter = object : ValueFormatter() {
+            private val mFormat: SimpleDateFormat =
+                SimpleDateFormat(getString(R.string.graph_time))
+
+            override fun getFormattedValue(value: Float): String? {
+                val millis: Long = TimeUnit.HOURS.toMillis(value.toLong())
+                mFormat.timeZone = TimeZone.getTimeZone(getString(R.string.timezone))
+
+                return mFormat.format(Date(millis))
+            }
+
+        }
+        helth_chart.invalidate()
+    }
 
     private fun showProgressBar() {
         //mProgressDialog?.show()
@@ -170,7 +337,6 @@ class AnalyticsTabFragment : Fragment() {
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
-
 
 
 }

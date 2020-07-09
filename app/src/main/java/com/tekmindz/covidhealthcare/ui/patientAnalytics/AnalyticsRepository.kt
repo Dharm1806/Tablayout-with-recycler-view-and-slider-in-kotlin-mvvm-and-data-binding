@@ -8,21 +8,24 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.AnalyticsResponse
 import io.reactivex.Observable
+import retrofit2.Response
 
 
 class AnalyticsRepository {
 
 
-
     /*request to get the analytics data from api of patient */
-    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest): Observable< List<AnalyticsResponse>> {
+    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest): Observable<Response<AnalyticsResponse>> {
 
         Log.e("time ", "${Gson().toJson(patientAnalyticsRequest)}")
-        Log.e("access_token", "${ mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}")
+        Log.e(
+            "access_token",
+            "${mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}"
+        )
 
-     return  App.healthCareApi.getPatientAnalytics(
-         patientAnalyticsRequest,
-            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+        return App.healthCareApi.getPatientAnalytics(
+            patientAnalyticsRequest,
+            "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
     }
 

@@ -37,8 +37,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
     }
 
     fun onClick(view: View?) {
-        val loginUser = LoginRequest(UserName.value.toString(), Password.value.toString(), Constants.CLIENT_ID, Constants.PASSWROD)
-        userMutableLiveData!!.setValue(loginUser)
+        val loginUser = LoginRequest(
+            UserName.value.toString(),
+            Password.value.toString(),
+            Constants.CLIENT_ID,
+            Constants.PASSWROD,
+            Constants.CLIENT_SECRET
+        )
+        userMutableLiveData!!.value = loginUser
     }
 
     fun login(loginRequest: LoginRequest) {
@@ -77,13 +83,13 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
     }
 
     fun isValidEmail(email: String): Boolean =
-        email.trim().isNotEmpty()
+        email.trim().isNullOrBlank()
 
 
     fun validPassword(password: String): Boolean =
-        password.trim().isNotEmpty()
+        password.trim().isNullOrBlank()
 
-    fun saveUserData(key:String, value:String) = mLoginRepository.saveUserDate(key, value)
+    fun saveUserData(key: String, value: String) = mLoginRepository.saveUserDate(key, value)
 
-    fun setIsLogin(isLogin:Boolean) = mLoginRepository.setISLogin(isLogin)
+    fun setIsLogin(isLogin: Boolean) = mLoginRepository.setISLogin(isLogin)
 }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,8 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
@@ -29,7 +28,6 @@ import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_login.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -64,11 +62,11 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_login, container, false
         )
-        val view: View = binding.getRoot()
-        binding.setLifecycleOwner(this);
+        val view: View = binding.root
+        binding.lifecycleOwner = this
 
         return view
 
@@ -77,14 +75,15 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // initializing progress dailog
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it,R.style.AppTheme_WhiteAccent) }
+        mProgressDialog =
+            activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
         mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        binding.setLoginViewModel(mLoginViewModel);
+        binding.loginViewModel = mLoginViewModel
 
-       /* button_login.setOnClickListener {
-            validateFields()
-        }*/
+        /* button_login.setOnClickListener {
+             validateFields()
+         }*/
 
         mLoginViewModel.response().observe(requireActivity(), Observer {
             when (it) {
@@ -160,8 +159,12 @@ class LoginFragment : Fragment() {
 
     private fun validateFields(loginUser: LoginRequest) {
 
-
-        if (!mLoginViewModel.isValidEmail(loginUser.username)) {
+        Log.e(
+            "validations",
+            "" + mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())
+                    + " " + mLoginViewModel.validPassword(binding.textPasswordLogin.editText?.text.toString())
+        )
+        if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())) {
 
             binding.textEmailLogin.error = getString(R.string.error_valid_email)
             binding.textEmailLogin.isErrorEnabled = true
@@ -170,19 +173,25 @@ class LoginFragment : Fragment() {
             binding.textEmailLogin.isErrorEnabled = false
         }
 
-        if (!mLoginViewModel.validPassword(loginUser.password)) {
-            binding.textPasswordLogin.error  = getString(R.string.error_valid_password)
+        if (mLoginViewModel.validPassword(binding.textPasswordLogin.editText?.text.toString())) {
+            binding.textPasswordLogin.error = getString(R.string.error_valid_password)
             binding.textPasswordLogin.isErrorEnabled = true
         } else {
 
             binding.textPasswordLogin.isErrorEnabled = false
         }
 
-        if (mLoginViewModel.isValidEmail(loginUser.username) && mLoginViewModel.validPassword(loginUser.password)) {
+        if (!mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())
+            && !mLoginViewModel.validPassword(binding.textPasswordLogin.editText?.text.toString())
+        ) {
 
-            mProgressDialog?.show()
+            if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
 
-            mLoginViewModel.login(loginUser)
+                mProgressDialog?.show()
+                mLoginViewModel.login(loginUser)
+                Log.e("loginuser", Gson().toJson(loginUser))
+
+            }
         }
     }
 

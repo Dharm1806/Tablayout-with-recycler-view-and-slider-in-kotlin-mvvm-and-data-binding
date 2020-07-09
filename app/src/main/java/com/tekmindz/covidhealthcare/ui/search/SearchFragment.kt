@@ -22,7 +22,8 @@ import com.tekmindz.covidhealthcare.databinding.SearchFragmentBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.requestModels.SearchRequestModel
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
-import com.tekmindz.covidhealthcare.utills.ResponseList
+import com.tekmindz.covidhealthcare.repository.responseModel.observations
+import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 
 class SearchFragment : Fragment(), OnItemClickListener {
@@ -35,7 +36,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
     private lateinit var mSearchViewModel: SearchViewModel
     private var mProgressDialog: ProgressDialog? = null
     private lateinit var mSearchAdapter: SearchAdapter
-    private var mSearchList = ArrayList<DashboardObservationsResponse>()
+    private var mSearchList = ArrayList<observations>()
     private var fromTime: String? = null
     private var toTime: String? = null
 
@@ -48,11 +49,10 @@ class SearchFragment : Fragment(), OnItemClickListener {
             inflater, R.layout.search_fragment, container, false
         )
 
-        val view: View = binding.getRoot()
-        binding.setLifecycleOwner(this);
+        val view: View = binding.root
+        binding.lifecycleOwner = this
 
         return view
-        // return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -94,10 +94,10 @@ class SearchFragment : Fragment(), OnItemClickListener {
                     ).build()
             )
         }
-        mSearchViewModel.response().observe(requireActivity()!!, Observer {
+        mSearchViewModel.response().observe(requireActivity(), Observer {
             when (it) {
 
-                is ResponseList<DashboardObservationsResponse> -> {
+                is Resource<DashboardObservationsResponse> -> {
                     handleObservations(it)
                 }
             }
@@ -108,25 +108,31 @@ class SearchFragment : Fragment(), OnItemClickListener {
     private fun searchQuery(query: String) {
         if (query.trim().length != 0) {
             Log.e("mark", "$query")
-            mSearchViewModel.getSearchPatientResults(
-                SearchRequestModel(
-                    true,
-                    DateFilter(fromDateTime = fromTime!!, toDateTime = toTime!!),
-                    query
+            if (Utills.verifyAvailableNetwork(requireActivity())) {
+                mSearchViewModel.getSearchPatientResults(
+                    SearchRequestModel(
+                        true,
+                        DateFilter(fromDateTime = fromTime!!, toDateTime = toTime!!),
+                        query
+                    )
                 )
-            )
+
+            }
         } else {
             mSearchList.clear()
             mSearchAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun handleObservations(it: ResponseList<DashboardObservationsResponse>) {
+    private fun handleObservations(it: Resource<DashboardObservationsResponse>) {
 
         when (it.status) {
             //ResponseList.Status.LOADING -> showProgressBar()
-            ResponseList.Status.SUCCESS -> showResults(it.data!!)
-            ResponseList.Status.ERROR -> showError(it.exception!!)
+            Resource.Status.SUCCESS ->
+                if (it.data?.statusCode == 200 && it.data.body != null) {
+                    showResults(it.data.body)
+                } else showError(it.data?.message!!)
+            Resource.Status.ERROR -> showError(it.exception!!)
 
         }
     }
@@ -139,7 +145,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun showResults(data: List<DashboardObservationsResponse>) {
+    private fun showResults(data: List<observations>) {
         if (!data.isNullOrEmpty()) {
             mSearchList.clear()
             mSearchList.addAll(data)
@@ -147,7 +153,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    override fun onItemClicked(mDashboardObservationsResponse: DashboardObservationsResponse) {
+    override fun onItemClicked(mDashboardObservationsResponse: observations) {
         val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }

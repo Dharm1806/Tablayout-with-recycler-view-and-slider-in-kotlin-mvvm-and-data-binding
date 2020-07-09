@@ -13,8 +13,10 @@ class UpdatePatientDetailsRepository {
 
     /*request to update the patient details from  api*/
     fun updatePatientDetails(updatePatientReadings: UpdatePatientReadings): Observable<Response<PatientDetails>> =
-        App.healthCareApi.updatePatientDetails(updatePatientReadings,
-            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!)
+        App.healthCareApi.updatePatientDetails(
+            updatePatientReadings,
+            "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+        )
 
 
 }

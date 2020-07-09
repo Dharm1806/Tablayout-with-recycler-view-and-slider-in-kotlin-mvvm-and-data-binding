@@ -38,9 +38,14 @@ class UpdatePatientViewModel(application: Application) : AndroidViewModel(Applic
     }
 
     fun onClick(view: View?) {
-        val loginUser = UpdatePatientReadings(patientId = patientId.value.toString(), bedNumber =  bedNumber.value.toString(), wardNumber = wardNumber.value.toString(),
-            sys = sys.value.toString(), dia = dia.value.toString())
-        updatePDetailsMutableLiveData!!.setValue(loginUser)
+        val loginUser = UpdatePatientReadings(
+            patientId = patientId.value.toString(),
+            bedNumber = bedNumber.value.toString(),
+            wardNumber = wardNumber.value.toString(),
+            sys = sys.value.toString(),
+            dia = dia.value.toString()
+        )
+        updatePDetailsMutableLiveData!!.value = loginUser
     }
 
     fun updatePatientDetails(updatePatientReadings: UpdatePatientReadings) {
@@ -85,8 +90,8 @@ class UpdatePatientViewModel(application: Application) : AndroidViewModel(Applic
     fun isValidBedNumber(bedNumber: String): Boolean =
         bedNumber.trim().isNotEmpty()
 
-    fun  isValidSys(sys:String):Boolean =sys.trim().isNotEmpty()
+    fun isValidSys(sys: String): Boolean = sys.trim().isNotEmpty()
 
-    fun isValidDia(dia:String):Boolean = dia.trim().isNotEmpty()
+    fun isValidDia(dia: String): Boolean = dia.trim().isNotEmpty()
 
 }

@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tekmindz.covidhealthcare.R
@@ -36,7 +34,6 @@ class AnalyticsFragment : Fragment() {
     private var param2: String? = null
     private lateinit var mAnalyticsTabAdapter: AnalyticsTabAdapter
     private var positionItem = 0
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +75,7 @@ class AnalyticsFragment : Fragment() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-               // pager.setCurrentItem(tab?.position!!, false)
+                // pager.setCurrentItem(tab?.position!!, false)
 
                 Log.e("tabReselected pos", "${tab?.position}")
 
@@ -88,14 +85,14 @@ class AnalyticsFragment : Fragment() {
         setDividers()
 
         TabLayoutMediator(tab_layout, pager) { tab, position ->
-            tab.text =  Utills.getTabTitile(position, requireActivity())
+            tab.text = Utills.getTabTitile(position, requireActivity())
             //adapter.getItem(myViewPager.getCurrentItem());
-          //  Log.e("tab position",""+tab.position)
+            //  Log.e("tab position",""+tab.position)
             pager.setCurrentItem(tab.position, false)
 
         }.attach()
 
-       pager.setUserInputEnabled(false);
+        pager.isUserInputEnabled = false
 
 
     }
@@ -103,12 +100,12 @@ class AnalyticsFragment : Fragment() {
     fun setDividers() {
         val root: View = tab_layout.getChildAt(0)
         if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_NONE
+            root.showDividers = LinearLayout.SHOW_DIVIDER_NONE
             val drawable = GradientDrawable()
             drawable.setColor(resources.getColor(R.color.colorAccent))
             drawable.setSize(2, 1)
-            (root as LinearLayout).dividerPadding = 5
-            (root as LinearLayout).dividerDrawable = drawable
+            root.dividerPadding = 5
+            root.dividerDrawable = drawable
         }
     }
 
@@ -122,6 +119,6 @@ class AnalyticsFragment : Fragment() {
          * @return A new instance of fragment HomeFragment.
          */
         // TODO: Rename and change types and number of parameters
-        public var patientId = "0"
+        var patientId = "0"
     }
 }

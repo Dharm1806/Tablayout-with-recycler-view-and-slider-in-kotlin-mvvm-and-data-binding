@@ -33,19 +33,16 @@ class PatientDetailViewModel : ViewModel() {
     }
 
 
-
-
     fun getPatientDetails(): MutableLiveData<Resource<PatientDetails>> = patientDetails
 
 
-    fun getPatientObservations(): MutableLiveData<Resource<PatientObservations>> = patientObserations
+    fun getPatientObservations(): MutableLiveData<Resource<PatientObservations>> =
+        patientObserations
 
     private fun subscribe(disposable: Disposable): Disposable {
         subscriptions.add(disposable)
         return disposable
     }
-
-
 
 
     fun getPatientDetails(patientId: String) {
@@ -56,7 +53,8 @@ class PatientDetailViewModel : ViewModel() {
                 patientDetails.value = Resource.loading()
             }
             .subscribe({
-                if (it.code() == 200 && it.isSuccessful) patientDetails.value = (Resource.success(it.body()))
+                if (it.code() == 200 && it.isSuccessful) patientDetails.value =
+                    (Resource.success(it.body()))
                 else patientDetails.value = Resource.error(it.message())
             }, {
                 patientDetails.value = Resource.error(it.localizedMessage)
@@ -72,7 +70,10 @@ class PatientDetailViewModel : ViewModel() {
                 patientDetails.value = Resource.loading()
             }
             .subscribe({
-                Log.e("requestREsponse", "${it.errorBody()}, ${it.isSuccessful}, ${it.code()} ${it.raw().request()}")
+                Log.e(
+                    "requestREsponse",
+                    "${it.errorBody()}, ${it.isSuccessful}, ${it.code()} ${it.raw().request()}"
+                )
                 if (it.code() == 200 && it.isSuccessful) {
                     patientObserations.value = (Resource.success(it.body()))
                 } else {
@@ -80,7 +81,10 @@ class PatientDetailViewModel : ViewModel() {
                     patientObserations.value = Resource.error(it.message())
                 }
             }, {
-                Log.e("error Counts", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+                Log.e(
+                    "error Counts",
+                    "${it.message} , ${it.localizedMessage} , ${it.stackTrace} "
+                )
                 patientObserations.value = Resource.error(it.localizedMessage)
             })
         )

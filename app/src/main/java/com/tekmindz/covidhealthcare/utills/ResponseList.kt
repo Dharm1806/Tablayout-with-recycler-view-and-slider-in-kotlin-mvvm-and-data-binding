@@ -1,7 +1,11 @@
 package com.tekmindz.covidhealthcare.utills
 
 
-class ResponseList<T> private constructor(val status: ResponseList.Status, val data: List<T>?, val exception: String?) {
+class ResponseList<T> private constructor(
+    val status: ResponseList.Status,
+    val data: List<T>?,
+    val exception: String?
+) {
     enum class Status {
         SUCCESS, ERROR, LOADING
     }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="patientAnalytics"
             type="com.tekmindz.covidhealthcare.ui.patientAnalytics.AnalyticsViewModel" />
@@ -55,13 +57,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <TextView
+                            android:id="@+id/health_alert_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:layout_marginStart="@dimen/padding_20dp"
+                            android:text="@string/title_health_alert"
+                            android:textColor="@color/analytics_title_color"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/helth_chart"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_200"
                             android:layout_margin="@dimen/padding_20dp"
                             android:background="@color/white"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/health_alert_title" />
 
                         <TextView
                             android:id="@+id/txt_xaxis_title3"
@@ -96,27 +111,44 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/tv_yaxis_title"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dimen_200"
-                            android:layout_weight=".1"
-                            android:foregroundGravity="center"
-                            android:gravity="center_vertical"
-                            android:rotation="270"
-                            android:text="@string/text_temprature"
-                            android:textColor="@color/black"
-                            app:layout_constraintRight_toRightOf="@+id/temp_chart"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/temp_chart"
+                            android:id="@+id/body_temp_title"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_200"
-                            android:layout_margin="@dimen/padding_20dp"
-                            android:background="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:layout_marginStart="@dimen/padding_20dp"
+                            android:text="@string/title_body_temp"
+                            android:textColor="@color/analytics_title_color"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/temp_layout"
+                            app:layout_constraintTop_toBottomOf="@+id/body_temp_title"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_yaxis_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:rotation="-90"
+                                android:text="@string/text_temprature"
+                                android:textColor="@color/black"
+                                app:layout_constraintRight_toRightOf="@+id/temp_chart"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/body_temp_title" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/temp_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_200"
+                                android:background="@color/white"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/tv_yaxis_title" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/txt_xaxis_title"
@@ -124,12 +156,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:gravity="center_horizontal"
-                            android:paddingBottom="@dimen/padding_20dp"
+                            android:paddingBottom="@dimen/margin_10dp"
                             android:text="@string/text_time"
                             android:textColor="@color/black"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/temp_chart" />
+                            app:layout_constraintTop_toBottomOf="@+id/temp_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -150,26 +182,45 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/tv_ht_yaxis_title"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dimen_200"
-                            android:foregroundGravity="center"
-                            android:gravity="center_vertical"
-                            android:rotation="270"
-                            android:text="@string/text_temprature"
-                            android:textColor="@color/black"
-                            app:layout_constraintRight_toRightOf="@+id/heart_rate_chart"
-                            app:layout_constraintStart_toStartOf="@+id/heart_rate_chart"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/heart_rate_chart"
+                            android:id="@+id/heart_rate_title"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_200"
-                            android:layout_margin="@dimen/padding_20dp"
-                            android:background="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:layout_marginStart="@dimen/padding_20dp"
+                            android:text="@string/title_heart_rate"
+                            android:textColor="@color/analytics_title_color"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/heart_rate_layout"
+                            app:layout_constraintTop_toBottomOf="@+id/heart_rate_title"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_ht_yaxis_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:foregroundGravity="center"
+                                android:gravity="center"
+                                android:rotation="270"
+                                android:text="@string/msg_heart_rate"
+                                android:textColor="@color/black"
+                                app:layout_constraintRight_toRightOf="@+id/heart_rate_chart"
+                                app:layout_constraintStart_toStartOf="@+id/heart_rate_chart"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/heart_rate_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_200"
+                                android:layout_margin="@dimen/margin_10dp"
+                                android:background="@color/white"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/txt_xaxis_title1"
@@ -177,12 +228,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:gravity="center_horizontal"
-                            android:paddingBottom="@dimen/padding_20dp"
+                            android:paddingBottom="@dimen/margin_10dp"
                             android:text="@string/text_time"
                             android:textColor="@color/black"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/heart_rate_chart" />
+                            app:layout_constraintTop_toBottomOf="@+id/heart_rate_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -203,27 +254,44 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/tv_rr_yaxis_title"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dimen_200"
-                            android:layout_weight=".1"
-                            android:foregroundGravity="center"
-                            android:gravity="center_vertical"
-                            android:rotation="270"
-                            android:text="@string/text_temprature"
-                            android:textColor="@color/black"
-                            app:layout_constraintRight_toRightOf="@+id/respiration_rate_chart"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.github.mikephil.charting.charts.LineChart
-                            android:id="@+id/respiration_rate_chart"
+                            android:id="@+id/respiration_rate_title"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_200"
-                            android:layout_margin="@dimen/padding_20dp"
-                            android:background="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:layout_marginStart="@dimen/padding_20dp"
+                            android:text="@string/title_respiration_rate"
+                            android:textColor="@color/analytics_title_color"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/respiration_rate_layout"
+                            app:layout_constraintTop_toBottomOf="@+id/respiration_rate_title"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_rr_yaxis_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:rotation="-90"
+                                android:gravity="fill_vertical"
+                                android:text="@string/msg_respiration_rate"
+                                android:textColor="@color/black"
+                                app:layout_constraintRight_toRightOf="@+id/respiration_rate_chart"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/respiration_rate_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_200"
+                                android:layout_margin="@dimen/margin_10dp"
+                                android:background="@color/white"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/txt_xaxis_title2"
@@ -232,12 +300,12 @@
                             android:layout_marginTop="20dp"
                             android:layout_marginBottom="@dimen/padding_20dp"
                             android:gravity="center_horizontal"
-                            android:paddingBottom="@dimen/padding_20dp"
+                            android:paddingBottom="@dimen/margin_10dp"
                             android:text="@string/text_time"
                             android:textColor="@color/black"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/respiration_rate_chart" />
+                            app:layout_constraintTop_toBottomOf="@+id/respiration_rate_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 

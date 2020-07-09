@@ -1,7 +1,6 @@
 package com.tekmindz.covidhealthcare
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,17 +16,13 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
-import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
-import com.tekmindz.covidhealthcare.utills.SharedPreference
-import com.tekmindz.lifesignals.MainActivity
 
 
-class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelectedListener{
+class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navController: NavController
@@ -43,7 +38,10 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
 
     @Override
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout)
+        return NavigationUI.navigateUp(
+            Navigation.findNavController(this, R.id.nav_host_fragment),
+            drawerLayout
+        )
     }
 
     @Override
@@ -52,27 +50,28 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
     else super.onBackPressed()
 
     @Override
-    override fun onNavigationItemSelected(p0: MenuItem):Boolean {
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
 
         p0.isChecked = true
         drawerLayout.closeDrawers()
 
-        when(p0.itemId){
-          //  R.id.email ->showMessage(getString(R.string.email_slected))
-           // *//* if(navController.currentDestination?.id != R.id.commentList){
-                // val action =
-                 //    IssuesListFragmentDirections.issuesListToComment("4996")
-                // navController.navigate(action)}*//*
+        when (p0.itemId) {
+            //  R.id.email ->showMessage(getString(R.string.email_slected))
+            // *//* if(navController.currentDestination?.id != R.id.commentList){
+            // val action =
+            //    IssuesListFragmentDirections.issuesListToComment("4996")
+            // navController.navigate(action)}*//*
 
-        //    R.id.favourites -> showMessage(getString(R.string.fav_selected))
+            //    R.id.favourites -> showMessage(getString(R.string.fav_selected))
             R.id.logout -> {
-                App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN,false)
+                App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
                 navController.navigate(
                     R.id.homeTologin, null, NavOptions.Builder()
                         .setPopUpTo(
                             R.id.home,
                             true
-                        ).build())
+                        ).build()
+                )
             }
 
 
@@ -80,19 +79,21 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
                 Constants.PREF_ACCESS_TOKEN))*/
                 val bundle = bundleOf("patientId" to 3)
                 navController.navigate(R.id.homeToPatientDetails, bundle)
-             /*val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)*/
+                /*val intent = Intent(this, MainActivity::class.java)
+                   startActivity(intent)*/
             }
 
         }
         return true
     }
+
     @Override
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val findMenuItems = menuInflater
         findMenuItems.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.notifications -> {
@@ -103,14 +104,15 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         }
         return super.onOptionsItemSelected(item)
     }
-    private fun showMessage(message:String){
+
+    private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 
-    private fun setupNavigation(){
+    private fun setupNavigation() {
         setTheme(R.style.AppTheme)
-        toolbar  = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -119,9 +121,9 @@ class HomeActivity : AppCompatActivity() , NavigationView.OnNavigationItemSelect
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         NavigationUI.setupWithNavController(navigationView, navController)
-       navigationView.setNavigationItemSelectedListener(this)
+        navigationView.setNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.login || destination.id == R.id.search) {
+            if (destination.id == R.id.login || destination.id == R.id.search) {
                 toolbar.visibility = View.GONE
                 navigationView.visibility = View.GONE
                 drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)

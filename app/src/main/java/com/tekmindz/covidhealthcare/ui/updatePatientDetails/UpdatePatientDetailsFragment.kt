@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,24 +15,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_SCOPE
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
-import com.tekmindz.covidhealthcare.databinding.FragmentLoginBinding
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePatientBinding
-import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePatientReadings
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
-import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_login.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,7 +29,8 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private lateinit var mUpdatePatientViewModel: UpdatePatientViewModel
 private var mProgressDialog: ProgressDialog? = null
-private lateinit var patientId:String
+private lateinit var patientId: String
+
 /**
  * A simple [Fragment] subclass.
  * Use the [LoginFragment.newInstance] factory method to
@@ -69,11 +57,11 @@ class UpdatePatientDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_update_patient, container, false
         )
-        val view: View = binding.getRoot()
-        binding.setLifecycleOwner(this);
+        val view: View = binding.root
+        binding.lifecycleOwner = this
 
         return view
 
@@ -82,14 +70,16 @@ class UpdatePatientDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // initializing progress dailog
-        mProgressDialog = activity?.let { Utills.initializeProgressBar(it,R.style.AppTheme_WhiteAccent) }
+        mProgressDialog =
+            activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
-        mUpdatePatientViewModel = ViewModelProviders.of(this).get(UpdatePatientViewModel::class.java)
-        binding.updatePatientReadings = (mUpdatePatientViewModel);
+        mUpdatePatientViewModel =
+            ViewModelProviders.of(this).get(UpdatePatientViewModel::class.java)
+        binding.updatePatientReadings = (mUpdatePatientViewModel)
 
-       /* button_login.setOnClickListener {
-            validateFields()
-        }*/
+        /* button_login.setOnClickListener {
+             validateFields()
+         }*/
 
         mUpdatePatientViewModel.response().observe(requireActivity(), Observer {
             when (it) {
@@ -98,10 +88,11 @@ class UpdatePatientDetailsFragment : Fragment() {
                 }
             }
         })
-        mUpdatePatientViewModel.getUpdatedPatientDetails()?.observe(requireActivity(), Observer<UpdatePatientReadings> { updateDetails ->
+        mUpdatePatientViewModel.getUpdatedPatientDetails()
+            ?.observe(requireActivity(), Observer<UpdatePatientReadings> { updateDetails ->
 
-            validateFields(updateDetails)
-        })
+                validateFields(updateDetails)
+            })
     }
 
     private fun handlePatientDetails(it: Resource<PatientDetails>) {
@@ -154,7 +145,7 @@ class UpdatePatientDetailsFragment : Fragment() {
     private fun validateFields(updatePatientReadings: UpdatePatientReadings) {
 
 
-        if (!mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)) {
+        if (mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)) {
 
             binding.textBedNo.error = getString(R.string.error_valid_bed_number)
             binding.textBedNo.isErrorEnabled = true
@@ -163,37 +154,39 @@ class UpdatePatientDetailsFragment : Fragment() {
             binding.textBedNo.isErrorEnabled = false
         }
 
-        if (!mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)) {
-            binding.textWardNo.error  = getString(R.string.error_valid_ward_no)
+        if (mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)) {
+            binding.textWardNo.error = getString(R.string.error_valid_ward_no)
             binding.textWardNo.isErrorEnabled = true
         } else {
 
             binding.textWardNo.isErrorEnabled = false
         }
 
-        if (!mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)) {
-            binding.textSys.error  = getString(R.string.error_valid_sys)
+        if (mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)) {
+            binding.textSys.error = getString(R.string.error_valid_sys)
             binding.textSys.isErrorEnabled = true
         } else {
 
             binding.textSys.isErrorEnabled = false
         }
 
-        if (!mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)) {
-            binding.textDia.error  = getString(R.string.error_valid_dia)
+        if (mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)) {
+            binding.textDia.error = getString(R.string.error_valid_dia)
             binding.textDia.isErrorEnabled = true
         } else {
 
             binding.textDia.isErrorEnabled = false
         }
 
-        if (mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)
-            && mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)
-            &&  mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)
-            && mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)) {
-            mProgressDialog?.show()
-
-            mUpdatePatientViewModel.updatePatientDetails(updatePatientReadings)
+        if (!mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)
+            && !mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)
+            && !mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)
+            && !mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)
+        ) {
+            if (Utills.verifyAvailableNetwork(requireActivity())) {
+                mProgressDialog?.show()
+                mUpdatePatientViewModel.updatePatientDetails(updatePatientReadings)
+            }
         }
     }
 

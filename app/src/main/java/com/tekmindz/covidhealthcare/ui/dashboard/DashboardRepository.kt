@@ -6,10 +6,12 @@ import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import io.reactivex.Observable
 import retrofit2.Response
 
@@ -17,17 +19,20 @@ import retrofit2.Response
 class DashboardRepository {
 
 
-    fun getIsLogin():Boolean = mSharedPrefrenceManager.getIsLogin(PREF_IS_LOGIN)
+    fun getIsLogin(): Boolean = mSharedPrefrenceManager.getIsLogin(PREF_IS_LOGIN)
 
     /*request to get the observation data from api */
-    fun getDashboardObservations(dashBoardObservations: DashBoardObservations): Observable< List<DashboardObservationsResponse>> {
+    fun getDashboardObservations(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardObservationsResponse>> {
 
         Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
-        Log.e("access_token", "${ mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}")
+        Log.e(
+            "access_token",
+            "${mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}"
+        )
 
-     return  App.healthCareApi.getDashboardPatientList(
+        return App.healthCareApi.getDashboardPatientList(
             dashBoardObservations,
-            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+            "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
     }
 
@@ -35,6 +40,34 @@ class DashboardRepository {
     fun getDashBoardCount(dateFilter: DateFilter): Observable<Response<DashboardCounts>> =
         App.healthCareApi.getDashboardsCounts(
             dateFilter,
-            "bearer "+mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+            "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
+
+/*request to get latest access_token  from dashboard count api*/
+
+    fun refreshToken(
+        clientID: String,
+        refreshGrantType: String,
+        valueString: String?
+    ): Observable<Response<UserModel>> =
+        App.healthCareApiLogin.refreshToken(clientID, valueString!!, refreshGrantType)
+
+    fun getRefreshToken(): String? {
+        return mSharedPrefrenceManager.getValueString(PREF_REFRESH_TOKEN)
+    }
+
+    fun saveRefreshToken(data: UserModel) {
+        mSharedPrefrenceManager.saveString(Constants.PREF_ACCESS_TOKEN, data.access_token)
+        mSharedPrefrenceManager.saveString(Constants.PREF_EXPIRES_IN, data.expires_in.toString())
+        mSharedPrefrenceManager.saveString(
+            Constants.PREF_REFRESH_EXPIRES_IN,
+            data.refresh_expires_in.toString()
+        )
+        mSharedPrefrenceManager.saveString(PREF_REFRESH_TOKEN, data.refresh_token)
+        mSharedPrefrenceManager.saveString(Constants.PREF_TOKEN_TYPE, data.token_type)
+        //mLoginViewModel.saveUserData(PREF_NOT_BEFORE_POLICY, userData.not_before_policy)
+        mSharedPrefrenceManager.saveString(Constants.PREF_SESSION_STATE, data.session_state)
+        mSharedPrefrenceManager.saveString(Constants.PREF_SCOPE, data.scope)
+    }
+
 }

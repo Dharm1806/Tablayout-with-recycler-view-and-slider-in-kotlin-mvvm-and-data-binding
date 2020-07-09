@@ -13,8 +13,12 @@ class AnalyticsTabAdapter(
     fragment: Fragment,
     requireActivity: FragmentActivity
 ) : FragmentStateAdapter(fragment) {
-     var  mContext:FragmentActivity
-    init{this.mContext = requireActivity}
+    var mContext: FragmentActivity
+
+    init {
+        this.mContext = requireActivity
+    }
+
     override fun getItemCount(): Int = 5
 
     override fun createFragment(position: Int): Fragment {
@@ -27,7 +31,7 @@ class AnalyticsTabAdapter(
             // Our object is just an integer :-P
 
             putInt(ARG_TIME, hours)
-            putString(PATIENT_ID,AnalyticsFragment.patientId)
+            putString(PATIENT_ID, AnalyticsFragment.patientId)
         }
         return fragment
     }

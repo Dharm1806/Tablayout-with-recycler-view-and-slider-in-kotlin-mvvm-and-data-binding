@@ -22,7 +22,7 @@ class App : Application() {
         lateinit var healthCareApi: HealthCareApis
         private lateinit var retrofit: Retrofit
         lateinit var healthCareApiLogin: HealthCareApis
-        lateinit var mSharedPrefrenceManager:SharedPreference
+        lateinit var mSharedPrefrenceManager: SharedPreference
     }
 
     override fun onCreate() {
@@ -31,11 +31,11 @@ class App : Application() {
         val gGson = GsonBuilder()
         //create the retrofit instance
         retrofit = Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gGson.create()))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-               .client(provideOkHttpClient()!!)
-                .baseUrl(LOGIN_BASE_URL)
-                .build()
+            .addConverterFactory(GsonConverterFactory.create(gGson.create()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .client(provideOkHttpClient()!!)
+            .baseUrl(LOGIN_BASE_URL)
+            .build()
 
         retrofitAll = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gGson.create()))
@@ -56,26 +56,28 @@ class App : Application() {
         val response: Response = chain.proceed(chain.request())
         // re-write response header to force use of cache
         val cacheControl = CacheControl.Builder()
-               // .maxAge(CACHE_TIME_IN_HOURS, TimeUnit.HOURS)
-                .build()
+            // .maxAge(CACHE_TIME_IN_HOURS, TimeUnit.HOURS)
+            .build()
         response.newBuilder()
-                .header("Cache-Control", cacheControl.toString())
-                .build()
+            .header("Cache-Control", cacheControl.toString())
+            .build()
     }
 
     //return okHttp client
     private fun provideOkHttpClient(): OkHttpClient? = OkHttpClient.Builder()
-            //.addNetworkInterceptor(provideCacheInterceptor()!!)
+        //.addNetworkInterceptor(provideCacheInterceptor()!!)
         //    .cache(provideCache())
-            .build()
+        .build()
 
     //return the cache object with properties
     private fun provideCache(): Cache? {
 
         var cache: Cache? = null
         try {
-            cache = Cache(File(applicationContext.cacheDir, "http-cache"),
-                    10 * 1024 * 1024) // 10 MB
+            cache = Cache(
+                File(applicationContext.cacheDir, "http-cache"),
+                10 * 1024 * 1024
+            ) // 10 MB
         } catch (e: Exception) {
         }
         return cache

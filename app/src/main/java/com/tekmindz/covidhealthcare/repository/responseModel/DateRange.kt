@@ -1,3 +1,3 @@
 package com.tekmindz.covidhealthcare.repository.responseModel
 
-data class DateRange(val dateRange:String)
+data class DateRange(val dateRange: String)

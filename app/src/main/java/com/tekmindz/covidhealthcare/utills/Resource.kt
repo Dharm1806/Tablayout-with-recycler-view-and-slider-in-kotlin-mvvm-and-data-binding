@@ -1,7 +1,11 @@
 package com.tekmindz.covidhealthcare.utills
 
 
-class Resource<T> private constructor(val status: Resource.Status, val data: T?, val exception: String?) {
+class Resource<T> private constructor(
+    val status: Resource.Status,
+    val data: T?,
+    val exception: String?
+) {
     enum class Status {
         SUCCESS, ERROR, LOADING
     }

@@ -1,6 +1,10 @@
 package com.tekmindz.covidhealthcare.repository.responseModel
 
 data class DashboardObservationsResponse(
+    val body: List<observations>
+):BaseResponse()
+
+data class observations(
     val firstName: String,
     val lastName: String,
     val bedNumber: String,
@@ -15,6 +19,10 @@ data class DashboardObservationsResponse(
 )
 
 data class DashboardCounts(
+    val body: Counts
+):BaseResponse()
+
+data class Counts(
     val recovered: String,
     val total: String,
     val critical: String,

@@ -6,491 +6,485 @@
     <data>
 
 
-
         <variable
             name="PatientDetailsBind"
             type="com.tekmindz.covidhealthcare.ui.patientDetails.PatientDetailViewModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/tab_background"
-        tools:context=".ui.patientDetails.PatientDetailFragment">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/dimen_100dp"
-            android:layout_marginBottom="@dimen/dimen_100dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/reading_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/title_bg"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_patient_profile"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginTop="@dimen/padding_20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_patient_status"
-                    android:layout_width="120dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="-20dp"
-                    android:background="@drawable/critical_bg"
-                    android:fontFamily="@font/roboto_medium"
-                    android:gravity="center"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/status_text_size"
-                    android:translationY="-20dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_patient_profile" />
-
-                <TextView
-                    android:id="@+id/tv_patient_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_15sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_patient_status" />
-
-                <TextView
-                    android:id="@+id/tv_patient_dob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10dp"
-                    android:layout_marginBottom="@dimen/padding_20dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_15sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_patient_name" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_20dp"
-                    android:background="@color/white_10"
-                    android:padding="@dimen/padding_20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_patient_dob"
-
-                    >
-
-                    <ImageView
-                        android:id="@+id/img_body_temp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/padding_20dp"
-                        android:src="@drawable/ic_body_temp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_body_temprature_value_layout"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <LinearLayout
-                        android:id="@+id/tv_body_temprature_value_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_body_temprature"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
-
-                        <TextView
-                            android:id="@+id/tv_body_temprature_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/text_size_15sp"
-                            android:fontFamily="@font/roboto_black"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size" />
-
-                        <TextView
-                            android:id="@+id/tv_body_temprature_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/dimen_5dp"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/unit_body_temp"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_body_temprature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_5dp"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="@string/msg_body_temperature"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12.5sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_heart_Rate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_20dp"
-                        android:src="@drawable/ic_heart_rate"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_heart_rate_value_layout"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                    <LinearLayout
-                        android:id="@+id/tv_heart_rate_value_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_heart_rate"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent">
-
-                        <TextView
-                            android:id="@+id/tv_heart_rate_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_black"
-                            android:text="110"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size" />
-
-                        <TextView
-                            android:id="@+id/tv_heart_rate_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/dimen_5dp"
-                            android:fontFamily="@font/roboto_regular"
-                            android:text="@string/unit_heart_rate"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size"
-                            app:layout_constraintStart_toEndOf="@id/tv_heart_rate_value" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_heart_rate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="@string/msg_heart_rate"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12.5sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_respiration_rate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_20dp"
-                        android:layout_marginEnd="@dimen/padding_20dp"
-                        android:src="@drawable/ic_respiration_rate"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_respiration_rate_value_layout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-
-
-                    <LinearLayout
-                        android:id="@+id/tv_respiration_rate_value_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/padding_20dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintBottom_toTopOf="@+id/tv_respirartion_rate"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent">
-
-                        <TextView
-                            android:id="@+id/tv_respiration_rate_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/roboto_black"
-                            android:text="110"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size"
-
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_respiration_rate_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/dimen_5dp"
-                            android:fontFamily="@font/roboto_regular"
-
-                            android:text="@string/unit_respiration"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/readings_text_size"
-
-                            />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_respirartion_rate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_regular"
-                        android:text="@string/msg_respiration_rate"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12.5sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reading_layout">
-
-                <TextView
-                    android:id="@+id/tv_relay_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="TC-RL-001"
-                    android:textColor="@color/dashboard_text_color"
-                    android:textSize="@dimen/text_size_15sp" />
-
-                <TextView
-                    android:id="@+id/lbl_relay_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:fontFamily="@font/roboto_regular"
-
-                    android:text="@string/msg_relay_id"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_15sp" />
-
-
-                <TextView
-                    android:id="@+id/tv_gender_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_20dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="MALE"
-                    android:textColor="@color/dashboard_text_color"
-                    android:textSize="@dimen/text_size_15sp" />
-
-                <TextView
-                    android:id="@+id/lbl_gender_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:fontFamily="@font/roboto_regular"
-
-                    android:text="@string/msg_gender"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_15sp" />
-
-                <TextView
-                    android:id="@+id/tv_bed_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/padding_20dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="112"
-                    android:textColor="@color/dashboard_text_color"
-                    android:textSize="@dimen/text_size_15sp" />
-
-                <TextView
-                    android:id="@+id/lbl_bed_no"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_5dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/msg_bed_number"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_15sp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_bio_sensor_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="TC-SM-001"
-                android:textColor="@color/dashboard_text_color"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reading_layout" />
-
-            <TextView
-                android:id="@+id/lbl_bio_sensor_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                android:fontFamily="@font/roboto_regular"
-                android:text="@string/msg_biosensor_id"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_bio_sensor_id" />
-
-            <TextView
-                android:id="@+id/tv_addmitted_since"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="02/05/2020"
-                android:textColor="@color/dashboard_text_color"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_bio_sensor_id" />
-
-            <TextView
-                android:id="@+id/lbl_admitted_since"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                android:fontFamily="@font/roboto_regular"
-                android:text="@string/msg_addmitted_since"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_addmitted_since" />
-
-
-            <TextView
-                android:id="@+id/tv_ward_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/padding_20dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="1120"
-                android:textColor="@color/dashboard_text_color"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lbl_admitted_since" />
-
-            <TextView
-                android:id="@+id/lbl_ward_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding_20dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                android:fontFamily="@font/roboto_regular"
-                android:text="@string/msg_ward_number"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_15sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_ward_no" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/viewAnalytics"
-        android:layout_margin="@dimen/dimen_30dp"
-        android:id="@+id/update_bp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:tint="@color/white"
-        android:layout_gravity="bottom|end"
-        android:foregroundTint="@color/white"
-        app:srcCompat="@drawable/ic_bp"
-        android:padding="@dimen/padding_20dp"
-        app:backgroundTint="@color/colorPrimary"
-        android:background="@drawable/ic_search_bg"
-        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/title_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/viewAnalytics"
+        android:layout_height="match_parent">
 
-        >
-        <TextView
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tab_background"
+            tools:context=".ui.patientDetails.PatientDetailFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/dimen_100dp"
+                android:layout_marginBottom="@dimen/dimen_100dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/reading_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/title_bg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_patient_profile"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="@dimen/padding_20dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_patient_status"
+                        android:layout_width="120dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="-20dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/status_text_size"
+                        android:translationY="-20dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/img_patient_profile" />
+
+                    <TextView
+                        android:id="@+id/tv_patient_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_15sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_patient_status" />
+
+                    <TextView
+                        android:id="@+id/tv_patient_dob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_10dp"
+                        android:layout_marginBottom="@dimen/padding_20dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_15sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_patient_name" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20dp"
+                        android:background="@color/white_10"
+                        android:padding="@dimen/padding_20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_patient_dob"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <ImageView
+                                android:id="@+id/img_body_temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_body_temp"
+                                android:layout_gravity="center"
+                                android:foregroundGravity="center" />
+
+                            <LinearLayout
+                                android:id="@+id/tv_body_temprature_value_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tv_body_temprature_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/roboto_black"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size" />
+
+                                <TextView
+                                    android:id="@+id/tv_body_temprature_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/dimen_5dp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:text="@string/unit_body_temp"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_body_temprature"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="@string/msg_body_temperature"
+                                android:textColor="@color/white"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textSize="@dimen/text_size_12.5sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent">
+
+                            <ImageView
+                                android:id="@+id/img_heart_Rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_heart_rate"
+                                android:foregroundGravity="center" />
+
+                            <LinearLayout
+                                android:id="@+id/tv_heart_rate_value_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tv_heart_rate_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+
+                                    android:fontFamily="@font/roboto_black"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size" />
+
+                                <TextView
+                                    android:id="@+id/tv_heart_rate_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/dimen_5dp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:text="@string/unit_heart_rate"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size"
+                                    app:layout_constraintStart_toEndOf="@id/tv_heart_rate_value" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_heart_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="@string/msg_heart_rate"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12.5sp"
+                                android:layout_gravity="center"
+                                android:gravity="center" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:layout_marginEnd="@dimen/dimen_5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent">
+
+                            <ImageView
+                                android:id="@+id/img_respiration_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:src="@drawable/ic_respiration_rate"
+                                android:layout_gravity="center"
+                                android:foregroundGravity="center" />
+
+
+                            <LinearLayout
+                                android:id="@+id/tv_respiration_rate_value_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:id="@+id/tv_respiration_rate_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/roboto_black"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size"
+
+                                    />
+
+                                <TextView
+                                    android:id="@+id/tv_respiration_rate_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/dimen_5dp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:text="@string/unit_respiration"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/readings_details_text_size"
+
+                                    />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_respirartion_rate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/roboto_regular"
+                                android:text="@string/msg_respiration_rate"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_size_12.5sp"
+                                android:layout_gravity="center"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_100dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/reading_layout">
+
+                    <TextView
+                        android:id="@+id/tv_relay_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:textColor="@color/dashboard_text_color"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <TextView
+                        android:id="@+id/lbl_relay_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:fontFamily="@font/roboto_regular"
+
+                        android:text="@string/msg_relay_id"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_15sp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_gender_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20dp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:textColor="@color/dashboard_text_color"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <TextView
+                        android:id="@+id/lbl_gender_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:fontFamily="@font/roboto_regular"
+
+                        android:text="@string/msg_gender"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_bed_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20dp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:textColor="@color/dashboard_text_color"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <TextView
+                        android:id="@+id/lbl_bed_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/msg_bed_number"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_15sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_bio_sensor_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/dashboard_text_color"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/reading_layout" />
+
+                <TextView
+                    android:id="@+id/lbl_bio_sensor_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/msg_biosensor_id"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_bio_sensor_id" />
+
+                <TextView
+                    android:id="@+id/tv_addmitted_since"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/dashboard_text_color"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_bio_sensor_id" />
+
+                <TextView
+                    android:id="@+id/lbl_admitted_since"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/msg_addmitted_since"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_addmitted_since" />
+
+
+                <TextView
+                    android:id="@+id/tv_ward_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/dashboard_text_color"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbl_admitted_since" />
+
+                <TextView
+                    android:id="@+id/lbl_ward_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/msg_ward_number"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_ward_no" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_view_statics"
-            android:padding="@dimen/text_size_15sp"
-            android:textAllCaps="true"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_15sp"
-            android:fontFamily="@font/roboto_bold"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:drawablePadding="@dimen/padding_20dp"
-            android:textColor="@color/white"
-            android:drawableStart="@drawable/ic_stats"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintBottom_toTopOf="@+id/viewAnalytics"
+            android:layout_margin="@dimen/dimen_30dp"
+            android:id="@+id/update_bp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:tint="@color/white"
+            android:layout_gravity="bottom|end"
+            android:foregroundTint="@color/white"
+            app:srcCompat="@drawable/ic_bp"
+            android:padding="@dimen/padding_20dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/ic_search_bg" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/viewAnalytics"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_view_statics"
+                android:padding="@dimen/text_size_15sp"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_15sp"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:drawablePadding="@dimen/padding_20dp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/ic_stats"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

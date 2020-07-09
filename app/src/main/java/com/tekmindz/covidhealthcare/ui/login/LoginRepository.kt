@@ -17,9 +17,20 @@ class LoginRepository {
             loginRequestModel.client_id,
             loginRequestModel.username,
             loginRequestModel.password,
-            loginRequestModel.grant_type
+            loginRequestModel.grant_type,
+            loginRequestModel.client_secret
 
         )
+
+    /*request to get counts  from dashboard count api*/
+
+    fun refreshToken(
+        clientID: String,
+        refreshGrantType: String,
+        valueString: String?
+    ): Observable<Response<UserModel>> =
+        App.healthCareApi.refreshToken(clientID, valueString!!, refreshGrantType)
+
 
     fun saveUserDate(key: String, value: String) = mSharedPrefrenceManager.saveString(key, value)
 
