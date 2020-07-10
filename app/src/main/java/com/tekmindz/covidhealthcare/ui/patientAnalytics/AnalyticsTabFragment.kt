@@ -2,6 +2,8 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.utils.EntryXComparator
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
@@ -39,11 +42,13 @@ import kotlin.collections.ArrayList
 
 
 class AnalyticsTabFragment : Fragment() {
+    private lateinit var patientAnalyticsRequest: PatientAnalyticsRequest
     private var patientId: String = "0"
     private var hours: Int = 3
     private lateinit var binding: FragmentAnalyticsTabBinding
 
     var posture: ArrayList<String>? = null
+    var postureYaxis: ArrayList<String>? = null
     var tempGraphEntry: ArrayList<Entry>? = null
     var helthGraphEntry: ArrayList<Entry>? = null
     var heartGraphEntry: ArrayList<Entry>? = null
@@ -75,7 +80,13 @@ class AnalyticsTabFragment : Fragment() {
         mAnalyticsViewModel = ViewModelProviders.of(this).get(AnalyticsViewModel::class.java)
 
         binding.patientAnalytics = (mAnalyticsViewModel)
-        posture = ArrayList()
+        posture = ArrayList<String>()
+        postureYaxis = ArrayList<String>()
+        postureYaxis?.add(getString(R.string.posture_sitting).capitalize())
+        postureYaxis?.add(getString(R.string.posture_sleeping).capitalize())
+        postureYaxis?.add(getString(R.string.posture_standing).capitalize())
+        postureYaxis?.add(getString(R.string.posture_lying).capitalize())
+        postureYaxis?.add(getString(R.string.posture_motion).capitalize())
         //for graph entry
         tempGraphEntry = ArrayList()
         helthGraphEntry = ArrayList()
@@ -83,24 +94,27 @@ class AnalyticsTabFragment : Fragment() {
         respirationGraphEntry = ArrayList()
 
         binding.selectDate.setOnClickListener { showDateRangePicker() }
-
+        Log.e("patientNAme", "${arguments?.getString(ARG_PATIENT_NAME)}")
+        binding.patientName.text = arguments?.getString(ARG_PATIENT_NAME)
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
             hours = getInt(ARG_TIME)
+
             patientId = getString(PATIENT_ID)!!
-            if (hours == 0) {
+            if (hours == -1) {
                 binding.selectDate.visibility = View.VISIBLE
                 showDateRangePicker()
 
             } else {
+                Utills.dateRange(Constants.DATE_RANGE)
+
                 binding.selectDate.visibility = View.GONE
 
-                getPatientAnalytics(
-                    PatientAnalyticsRequest(
-                        patientId,
-                        Utills.getStartDate(hours),
-                        Utills.getCurrentDate()
-                    )
+                patientAnalyticsRequest = PatientAnalyticsRequest(
+                    patientId,
+                    Utills.getStartDate(hours),
+                    Utills.getCurrentDate()
                 )
+                getPatientAnalytics()
 
             }
         }
@@ -128,25 +142,27 @@ class AnalyticsTabFragment : Fragment() {
         val picker = builder.build()
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
+           // Utills.dateRange(Constants.DATE_RANGE)
             picker.dismiss()
         }
         picker.addOnPositiveButtonClickListener {
             val fromDate = Utills.getDate(it.first!!)
             val toDate = Utills.getDate(it.second!!)
             select_date.text = Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate)
-            getPatientAnalytics(
-                PatientAnalyticsRequest(
-                    patientId,
-                    fromDate,
-                    toDate
-                )
-            )
+           patientAnalyticsRequest = PatientAnalyticsRequest(
+               patientId,
+               fromDate,
+               toDate
+           )
+            Utills.dateRange(Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate))
+
+            getPatientAnalytics()
 
         }
 
     }
 
-    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest) {
+    fun getPatientAnalytics() {
         if (Utills.verifyAvailableNetwork(requireActivity()))
             mAnalyticsViewModel.getPatientAnalytics(
                 patientAnalyticsRequest
@@ -159,7 +175,14 @@ class AnalyticsTabFragment : Fragment() {
             Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showObservations(it.data.body)
+                else if (it.data?.statusCode ==401){
+                    mAnalyticsViewModel.refreshToken()
 
+                    Handler().postDelayed({
+                        getPatientAnalytics()
+                    }, Constants.DELAY_IN_API_CALL)
+
+                }
             }
             Resource.Status.ERROR -> showError(it.exception!!)
 
@@ -171,6 +194,11 @@ class AnalyticsTabFragment : Fragment() {
 
         if (!data.isNullOrEmpty()) {
             mAnalyticsList.clear()
+            posture?.clear()
+            tempGraphEntry?.clear()
+            heartGraphEntry?.clear()
+            respirationGraphEntry?.clear()
+            helthGraphEntry?.clear()
             mAnalyticsList.addAll(data)
             filterData(mAnalyticsList)
         }
@@ -178,7 +206,10 @@ class AnalyticsTabFragment : Fragment() {
 
     private fun filterData(mAnalyticsList: java.util.ArrayList<Analytics>) {
         mAnalyticsList.forEach {
-            posture!!.add(it.posture)
+            if (posture!=null && posture?.size!=0 && it.posture in posture!!){
+            }else{
+                posture?.add(it.posture)
+            }
             var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
             tempGraphEntry!!.add(Entry(time, it.bodyTemprature))
             heartGraphEntry!!.add((Entry(time, it.heartRate)))
@@ -292,16 +323,22 @@ class AnalyticsTabFragment : Fragment() {
         //mychart.getAxisLeft().setDrawGridLines(false);
         helth_chart.xAxis.setDrawGridLines(false)
         helth_chart.axisRight.isEnabled = false
+
         //mychart.getAxisRight().setDrawGridLines(false);
         //mychart.axisRight.setDrawGridLines(false);
         //mychart.setDrawGridBackground(false)
 
         //Uncomment to show Y axis lables in Text
-        var yAxis = helth_chart.axisLeft
-        yAxis.valueFormatter = IndexAxisValueFormatter(posture)
-//          yAxis.axisMaximum=posture!!.size.toFloat()
-//           yAxis.axisMinimum=0f
-//           yAxis.setLabelCount(3,true)
+        val yAxis = helth_chart.axisLeft
+        yAxis.labelCount = 5
+        yAxis.axisMinimum = 0f
+        yAxis.mAxisMaximum = 5f
+
+
+        yAxis.valueFormatter = IndexAxisValueFormatter(postureYaxis)
+        // yAxis.axisMaximum=posture!!.size.toFloat()
+          //yAxis.axisMinimum=0f
+         // yAxis.mAxisRange = 5f
 
         helth_chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         helth_chart.description.isEnabled = false

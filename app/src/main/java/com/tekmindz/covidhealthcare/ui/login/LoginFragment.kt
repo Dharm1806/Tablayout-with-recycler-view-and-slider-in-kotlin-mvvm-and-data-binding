@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.login
 
+import android.app.Application
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
@@ -26,8 +27,10 @@ import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
 import com.tekmindz.covidhealthcare.databinding.FragmentLoginBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
+import com.tekmindz.covidhealthcare.utills.Presenter
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
+import com.tekmindz.covidhealthcare.utills.Utills.hideKeyboard
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -120,7 +123,7 @@ class LoginFragment : Fragment() {
             val navController =
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             val id = navController.currentDestination!!.id
-            Log.e("id", "$id")
+            //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
             mLoginViewModel.saveUserData(PREF_EXPIRES_IN, userData.expires_in.toString())
             mLoginViewModel.saveUserData(
@@ -133,8 +136,9 @@ class LoginFragment : Fragment() {
             mLoginViewModel.saveUserData(PREF_SESSION_STATE, userData.session_state)
             mLoginViewModel.saveUserData(PREF_SCOPE, userData.scope)
             mLoginViewModel.setIsLogin(true)
-
+           mLoginViewModel.refreshToken()
             if (id == R.id.login) {
+                hideKeyboard(requireActivity())
                 findNavController().navigate(
                     R.id.loginToHome, null, NavOptions.Builder()
                         .setPopUpTo(
@@ -159,11 +163,7 @@ class LoginFragment : Fragment() {
 
     private fun validateFields(loginUser: LoginRequest) {
 
-        Log.e(
-            "validations",
-            "" + mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())
-                    + " " + mLoginViewModel.validPassword(binding.textPasswordLogin.editText?.text.toString())
-        )
+
         if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())) {
 
             binding.textEmailLogin.error = getString(R.string.error_valid_email)
@@ -189,7 +189,6 @@ class LoginFragment : Fragment() {
 
                 mProgressDialog?.show()
                 mLoginViewModel.login(loginUser)
-                Log.e("loginuser", Gson().toJson(loginUser))
 
             }
         }

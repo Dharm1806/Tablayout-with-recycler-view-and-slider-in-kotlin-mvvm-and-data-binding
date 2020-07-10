@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.search
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
     private var mSearchList = ArrayList<observations>()
     private var fromTime: String? = null
     private var toTime: String? = null
+    lateinit var mQuery:String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,12 +73,14 @@ class SearchFragment : Fragment(), OnItemClickListener {
         }
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                searchQuery(query.toString())
+                mQuery = query.toString()
+                searchQuery()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                searchQuery(newText.toString())
+              mQuery = newText.toString()
+                searchQuery()
                 return true
             }
 
@@ -105,15 +109,15 @@ class SearchFragment : Fragment(), OnItemClickListener {
 
     }
 
-    private fun searchQuery(query: String) {
-        if (query.trim().length != 0) {
-            Log.e("mark", "$query")
+    private fun searchQuery() {
+        if (mQuery.trim().length != 0) {
+            Log.e("mark", "$mQuery")
             if (Utills.verifyAvailableNetwork(requireActivity())) {
                 mSearchViewModel.getSearchPatientResults(
                     SearchRequestModel(
                         true,
                         DateFilter(fromDateTime = fromTime!!, toDateTime = toTime!!),
-                        query
+                        mQuery
                     )
                 )
 
@@ -131,7 +135,15 @@ class SearchFragment : Fragment(), OnItemClickListener {
             Resource.Status.SUCCESS ->
                 if (it.data?.statusCode == 200 && it.data.body != null) {
                     showResults(it.data.body)
-                } else showError(it.data?.message!!)
+                }
+                else if (it.data?.statusCode == 401){
+                    mSearchViewModel.refreshToken()
+                    Handler().postDelayed({
+                        searchQuery()
+                    }, Constants.DELAY_IN_API_CALL)
+
+                }
+            else showError(it.data?.message!!)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
@@ -154,6 +166,8 @@ class SearchFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClicked(mDashboardObservationsResponse: observations) {
+        Utills.hideKeyboard(requireActivity())
+
         val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }

@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,8 +37,10 @@ import kotlin.collections.ArrayList
 
 
 class DashboardItemFragment : Fragment(), OnItemClickListener {
+    private lateinit var dashBoardObservations: DashBoardObservations
+    private lateinit var dateFiltervalue: DateFilter
     private var hours: Int = 3
-    private lateinit var binding: FragmentTabItemBinding
+    private lateinit var binding:FragmentTabItemBinding
 
     private lateinit var mDashboardViewModel: DashboardViewModel
     private var mProgressDialog: ProgressDialog? = null
@@ -78,21 +81,20 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
             } else {
                 Utills.dateRange(Constants.DATE_RANGE)
                 binding.selectDate.visibility = View.GONE
-                getDashBoardObservation(
-                    DashBoardObservations(
-                        false, DateFilter(
-                            Utills.getStartDate(
-                                hours
-                            ), Utills.getCurrentDate()
-                        )
+                dashBoardObservations = DashBoardObservations(
+                    false, DateFilter(
+                        Utills.getStartDate(
+                            hours
+                        ), Utills.getCurrentDate()
                     )
                 )
-                getDashboardCount(
-                    DateFilter(
-                        Utills.getStartDate(hours),
-                        Utills.getCurrentDate()
-                    )
+                getDashBoardObservation()
+                dateFiltervalue =DateFilter(
+                    Utills.getStartDate(hours),
+                    Utills.getCurrentDate()
                 )
+
+                getDashboardCount()
             }
         }
 
@@ -102,7 +104,6 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         mDashboardViewModel.response().observe(requireActivity(), Observer {
             when (it) {
                 is Resource<DashboardObservationsResponse> -> {
-                    Log.e("it", "${Gson().toJson(it.data)}")
                     handleObservations(it)
                 }
             }
@@ -131,31 +132,30 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
             picker.dismiss()
-            Utills.dateRange(Constants.DATE_RANGE)
+            //Utills.dateRange(Constants.DATE_RANGE)
         }
         picker.addOnPositiveButtonClickListener {
             val fromDate = Utills.getDate(it.first!!)
             val toDate = Utills.getDate(it.second!!)
             select_date.text = Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate)
-            getDashBoardObservation(
-                DashBoardObservations(
-                    false, DateFilter(
-                        fromDate, toDate
-                    )
-                )
+            dashBoardObservations = DashBoardObservations(
+               false, DateFilter(
+                   fromDate, toDate
+               )
+           )
+            getDashBoardObservation()
+            dateFiltervalue =  DateFilter(
+                fromDate,
+                toDate
             )
-            getDashboardCount(
-                DateFilter(
-                    fromDate,
-                    toDate
-                )
-            )
+            getDashboardCount()
             Utills.dateRange(Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate))
         }
 
     }
 
-    fun getDashBoardObservation(dashBoardObservations: DashBoardObservations) {
+    fun getDashBoardObservation() {
+       //showProgressBar()
         if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
             mDashboardViewModel.getDashboardObservations(
                 dashBoardObservations
@@ -165,10 +165,10 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
     }
 
-    fun getDashboardCount(dateFilter: DateFilter) {
+    fun getDashboardCount() {
         if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
             mDashboardViewModel.getDashBoardCounts(
-                dateFilter
+                dateFiltervalue
             )
         }
     }
@@ -182,7 +182,13 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
                 if (it.data?.statusCode == 200) {
                     showObservations(it.data.body)
-                } else {
+                }else if (it.data?.statusCode == 401){
+                    mDashboardViewModel.refreshToken()
+                    Handler().postDelayed({
+                        getDashBoardObservation()
+                    }, Constants.DELAY_IN_API_CALL)
+                }
+                else {
                     showError(it.data?.message!!)
                 }
             }
@@ -198,7 +204,13 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode != 200 && it.data?.body != null) {
                     showError(it.data.message)
-                } else {
+                }else if (it.data?.statusCode == 401){
+                    mDashboardViewModel.refreshToken()
+                    Handler().postDelayed({
+                        getDashboardCount()
+                    }, Constants.DELAY_IN_API_CALL)
+                }
+                else {
                     showCounts(it.data!!)
                 }
             }
@@ -207,7 +219,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
     }
 
     private fun showCounts(data: DashboardCounts) {
-
+        hideProgressbar()
         val mCasesList: ArrayList<PieEntry> = ArrayList()
 
         mCasesList.add(PieEntry(data.body.critical.toFloat(), getString(R.string.msg_critical)))
@@ -252,6 +264,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
     private fun showObservations(data: List<observations>) {
         Log.e("size", "${data.size}")
+        hideProgressbar()
         if (!data.isNullOrEmpty()) {
             mObservationList.clear()
             mObservationList.addAll(data)
@@ -270,7 +283,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
     }
 
     private fun hideProgressbar() {
-        //  mProgressDialog?.hide()
+       //   mProgressDialog?.hide()
     }
 
     private fun showMessage(message: String) {
@@ -278,6 +291,8 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClicked(mDashboardObservationsResponse: observations) {
+        Utills.hideKeyboard(requireActivity())
+
         val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }

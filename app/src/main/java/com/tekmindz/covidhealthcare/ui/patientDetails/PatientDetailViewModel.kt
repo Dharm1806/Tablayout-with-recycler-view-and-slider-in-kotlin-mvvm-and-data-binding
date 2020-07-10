@@ -70,21 +70,13 @@ class PatientDetailViewModel : ViewModel() {
                 patientDetails.value = Resource.loading()
             }
             .subscribe({
-                Log.e(
-                    "requestREsponse",
-                    "${it.errorBody()}, ${it.isSuccessful}, ${it.code()} ${it.raw().request()}"
-                )
+
                 if (it.code() == 200 && it.isSuccessful) {
                     patientObserations.value = (Resource.success(it.body()))
                 } else {
-                    Log.e("response error", "${it.message()}")
                     patientObserations.value = Resource.error(it.message())
                 }
             }, {
-                Log.e(
-                    "error Counts",
-                    "${it.message} , ${it.localizedMessage} , ${it.stackTrace} "
-                )
                 patientObserations.value = Resource.error(it.localizedMessage)
             })
         )
@@ -92,5 +84,8 @@ class PatientDetailViewModel : ViewModel() {
 
 
     fun parseDate(dob: String): String? = Utills.parseDate(dob)
+    fun refreshToken() {
+        mPatientDetailsRepository.refreshToken()
+    }
 
 }

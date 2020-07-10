@@ -51,7 +51,6 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = (Resource.success(it.body()))
 
             }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
                 response.value = Resource.error(it.localizedMessage)
             })
         )
@@ -67,12 +66,18 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
     fun getIntPosture(posture: String, context: Context): Float {
         var value = 0f
         when (posture) {
-            context.getString(R.string.posture_sleeping) -> value = 1f
-            context.getString(R.string.posture_sitting) -> value = 2f
-            context.getString(R.string.posture_standing) -> value = 3f
-            context.getString(R.string.posture_lying) -> value = 4f
+            context.getString(R.string.posture_sleeping) -> value = 0f
+            context.getString(R.string.posture_sitting) -> value = 1f
+            context.getString(R.string.posture_standing) -> value =2f
+            context.getString(R.string.posture_lying) -> value = 3f
+            context.getString(R.string.posture_motion) -> value = 4f
+
         }
         return value
+    }
+
+    fun refreshToken() {
+        mAnalyticsRepository.refreshToken()
     }
 
 

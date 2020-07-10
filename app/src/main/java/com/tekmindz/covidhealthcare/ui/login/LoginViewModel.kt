@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
+import com.tekmindz.covidhealthcare.utills.Presenter
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -57,11 +58,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
             .subscribe({
                 if (it.code() == 200 && it.isSuccessful) {
                     response.value = (Resource.success(it.body()))
+
                 } else {
                     response.value = Resource.error(it.message())
                 }
             }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+             //   Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
                 response.value = Resource.error(it.localizedMessage)
             })
         )
@@ -92,4 +94,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
     fun saveUserData(key: String, value: String) = mLoginRepository.saveUserDate(key, value)
 
     fun setIsLogin(isLogin: Boolean) = mLoginRepository.setISLogin(isLogin)
+    fun refreshToken() {
+        mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
+      /*  val presenter = Presenter(Application())
+        presenter.schedule(userData.expires_in)*/
+    }
 }

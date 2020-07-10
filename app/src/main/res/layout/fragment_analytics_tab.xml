@@ -23,6 +23,21 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center|top"
                 android:background="@color/tab_background">
+                <TextView
+
+                    android:id="@+id/patient_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_20dp"
+                    android:fontFamily="@font/roboto_light"
+                    android:gravity="center|start"
+                    android:padding="@dimen/margin_10dp"
+                    android:textColor="@color/analytics_title_color"
+                    android:textSize="@dimen/dimen_17sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
                 <TextView
                     android:id="@+id/select_date"
@@ -37,17 +52,19 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_16"
                     android:textStyle="bold"
-                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/patient_name"
+                    />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/health_alert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_20dp"
-                    android:padding="@dimen/width_40dp"
+                    android:paddingTop="@dimen/width_40dp"
+                    android:paddingBottom="@dimen/width_40dp"
+                    android:paddingEnd="@dimen/width_40dp"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -74,6 +91,7 @@
                             android:layout_height="@dimen/dimen_200"
                             android:layout_margin="@dimen/padding_20dp"
                             android:background="@color/white"
+                            android:paddingStart="@dimen/padding_20dp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/health_alert_title" />

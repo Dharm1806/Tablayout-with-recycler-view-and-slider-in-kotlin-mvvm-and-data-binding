@@ -47,7 +47,7 @@ class Presenter(mApplication: Application) :
         job.cancel()
     }
 
-    fun schedule(miliseconds: Long, mContext: Activity) = launch {
+    fun schedule(miliseconds: Long) = launch {
 
         // launching the coroutine
         while (true) {
@@ -63,34 +63,11 @@ class Presenter(mApplication: Application) :
      */
 
     fun refreshToken() {
-        val loginRepository = LoginRepository()
-
-        val refreshtoken = loginRepository.refreshToken(
+        LoginRepository().refreshToken(
             CLIENT_ID,
-            REFRESH_GRANT_TYPE,
-            App.mSharedPrefrenceManager.getValueString(PREF_REFRESH_TOKEN)
+            REFRESH_GRANT_TYPE
+
         )
-
-        subscribe(refreshtoken
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                response.value = Resource.loading()
-            }
-            .subscribe({
-                if (it.code() == 200 && it.isSuccessful) {
-                    response.value = (Resource.success(it.body()))
-                } else {
-                    response.value = Resource.error(it.message())
-                }
-            }, {
-
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
-                response.value = Resource.error(it.localizedMessage)
-
-            })
-        )
-
 
     }
 

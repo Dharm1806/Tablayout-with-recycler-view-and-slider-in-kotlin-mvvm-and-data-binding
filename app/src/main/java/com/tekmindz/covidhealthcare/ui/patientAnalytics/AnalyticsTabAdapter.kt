@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.utills.Utills
@@ -32,6 +33,8 @@ class AnalyticsTabAdapter(
 
             putInt(ARG_TIME, hours)
             putString(PATIENT_ID, AnalyticsFragment.patientId)
+            putString(ARG_PATIENT_NAME, AnalyticsFragment.patientName)
+
         }
         return fragment
     }

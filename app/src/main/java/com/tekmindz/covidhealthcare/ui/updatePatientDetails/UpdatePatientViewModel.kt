@@ -62,7 +62,6 @@ class UpdatePatientViewModel(application: Application) : AndroidViewModel(Applic
                     response.value = Resource.error(it.message())
                 }
             }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
                 response.value = Resource.error(it.localizedMessage)
             })
         )

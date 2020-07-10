@@ -15,7 +15,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:background="@color/tab_background"
-        android:layout_marginBottom="@dimen/padding_20dp"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -82,9 +81,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            android:layout_margin="@dimen/padding_20dp"
-            android:layout_marginBottom="@dimen/padding_20dp"
-            android:paddingBottom="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:layout_marginStart="@dimen/padding_20dp"
+            android:paddingBottom="@dimen/dimen_100dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_critical_patient_list" />
 

@@ -22,10 +22,12 @@ object Constants {
     const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"
     const val SERVER_GRAPH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
-
+    const val DELAY_IN_API_CALL = 10000L
     const val APP_DATE_FORMAT = "dd/MM/yyyy"
     const val BASIC = "Basic "
     val ARG_TIME = "time"
+    val ARG_PATIENT_NAME = "patientName"
+
     val ARG_FROM_TIME = "from_time"
     val ARG_TO_TIME = "to_time"
     val PATIENT_ID = "patientId"

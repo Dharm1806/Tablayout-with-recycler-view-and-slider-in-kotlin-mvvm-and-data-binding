@@ -3,6 +3,8 @@ package com.tekmindz.covidhealthcare.ui.patientDetails
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
 import com.tekmindz.covidhealthcare.repository.responseModel.Details
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
@@ -28,6 +31,7 @@ class PatientDetailFragment : Fragment() {
     private lateinit var binding: PatientDetailFragmentBinding
     private var mProgressDialog: ProgressDialog? = null
     lateinit var patientId: String
+    lateinit var patientName :String
 
     companion object {
         fun newInstance() = PatientDetailFragment()
@@ -61,6 +65,7 @@ class PatientDetailFragment : Fragment() {
             patientId = getInt(Constants.PATIENT_ID).toString()
             if (Utills.verifyAvailableNetwork(requireActivity())) {
                 showProgressBar()
+
                 mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
                 mPatientDetailViewModel.getPatientObservations(patientId.toString())
             }
@@ -81,7 +86,11 @@ class PatientDetailFragment : Fragment() {
         })
 
         binding.viewAnalytics.setOnClickListener {
-            val bundle = bundleOf("patientId" to patientId.toString())
+            val bundle = bundleOf(
+                "patientId" to patientId.toInt(),
+                "patientName" to patientName
+            )
+
             findNavController().navigate(R.id.pDetailsToAnalytics, bundle)
         }
 
@@ -99,6 +108,14 @@ class PatientDetailFragment : Fragment() {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientDeatils(it.data.body)
+                else if (it.data?.statusCode == 401 ){
+                    mPatientDetailViewModel.refreshToken()
+
+                    Handler().postDelayed({
+                        mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
+                    }, Constants.DELAY_IN_API_CALL)
+
+                }
                 else showError(it.data?.message!!)
 
             }
@@ -112,6 +129,14 @@ class PatientDetailFragment : Fragment() {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientObserVations(it.data.body)
+                else if (it.data?.statusCode == 401 ){
+                    mPatientDetailViewModel.refreshToken()
+
+                    Handler().postDelayed({
+                        mPatientDetailViewModel.getPatientObservations(patientId = patientId.toString())
+
+                    }, Constants.DELAY_IN_API_CALL)
+                }
                 else showError(it.data?.message!!)
 
             }
@@ -120,9 +145,9 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientObserVations(data: PatientObservation) {
-        binding.tvHeartRateValue.text = data.heartRate
-        binding.tvRespirationRateValue.text = data.respirationRate
-        binding.tvBodyTempratureValue.text = data.bodyTemprature
+        binding.tvHeartRateValue.text = Utills.formatString(data.heartRate)
+        binding.tvRespirationRateValue.text = Utills.formatString(data.respirationRate)
+        binding.tvBodyTempratureValue.text = Utills.formatString(data.bodyTemprature)
 
         if (data.status.equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
@@ -141,8 +166,10 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientDeatils(data: Details) {
+        patientName = data.firstName+" "+data.lastName
         Glide.with(requireActivity()).load(data.imageUrl).into(binding.imgPatientProfile)
-        binding.tvPatientName.text = data.firstName + " " + data.lastName
+
+        binding.tvPatientName.text = patientName
         binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)
         binding.tvGenderId.text = data.gender.toUpperCase()
         binding.tvBedNo.text = data.bedNumber

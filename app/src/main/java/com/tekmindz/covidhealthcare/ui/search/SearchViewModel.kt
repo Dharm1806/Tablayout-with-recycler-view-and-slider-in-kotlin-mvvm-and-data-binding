@@ -45,10 +45,13 @@ class SearchViewModel : ViewModel() {
                 response.value = (Resource.success(it.body()))
 
             }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
                 response.value = Resource.error(it.localizedMessage)
             })
         )
+    }
+
+    fun refreshToken() {
+        mSearchRepository.refreshToken()
     }
 
 

@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:name=".application.App"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/AppTheme1"
+        android:theme="@style/SplashTheme"
         tools:replace="android:icon">
         <activity android:name=".HomeActivity"
             android:windowSoftInputMode="stateHidden"

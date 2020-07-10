@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
+import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.application.App
@@ -12,6 +13,7 @@ import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
+import com.tekmindz.covidhealthcare.utills.Presenter
 import io.reactivex.Observable
 import retrofit2.Response
 
@@ -24,12 +26,12 @@ class DashboardRepository {
     /*request to get the observation data from api */
     fun getDashboardObservations(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardObservationsResponse>> {
 
-        Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
+      /*  Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
         Log.e(
             "access_token",
             "${mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}"
         )
-
+*/
         return App.healthCareApi.getDashboardPatientList(
             dashBoardObservations,
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
@@ -43,17 +45,11 @@ class DashboardRepository {
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
 
-/*request to get latest access_token  from dashboard count api*/
 
-    fun refreshToken(
-        clientID: String,
-        refreshGrantType: String,
-        valueString: String?
-    ): Observable<Response<UserModel>> =
-        App.healthCareApiLogin.refreshToken(clientID, valueString!!, refreshGrantType)
 
-    fun getRefreshToken(): String? {
-        return mSharedPrefrenceManager.getValueString(PREF_REFRESH_TOKEN)
+    fun refreshToken(){
+        val presenter = Presenter(Application())
+        presenter.refreshToken()
     }
 
     fun saveRefreshToken(data: UserModel) {

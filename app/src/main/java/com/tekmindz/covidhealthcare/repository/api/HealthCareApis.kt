@@ -12,6 +12,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.repository.requestModels.*
 import com.tekmindz.covidhealthcare.repository.responseModel.*
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -37,7 +38,7 @@ interface HealthCareApis {
         @Field("refresh_token") username: String,
         @Field("grant_type") grant_type: String
 
-    ): Observable<Response<UserModel>>
+    ): Call<UserModel>
 
 
     /*  call the patient list dashboard observations api*/

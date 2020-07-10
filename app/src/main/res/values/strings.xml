@@ -72,6 +72,8 @@
     <string name="posture_sitting">sitting</string>
     <string name="posture_standing">standing</string>
     <string name="posture_lying">lying</string>
+    <string name="posture_motion">motion</string>
+
     <string name="graph_time">HH:mm</string>
     <string name="timezone">UTC</string>
     <string name="msg_please_connect">Please connect to internet for continue</string>

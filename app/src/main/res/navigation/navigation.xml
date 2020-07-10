@@ -107,6 +107,14 @@
         android:name="com.tekmindz.covidhealthcare.ui.patientAnalytics.AnalyticsFragment"
         android:label="@string/title_view_statics"
         tools:layout="@layout/fragment_home">
+        <argument
+            android:name="patientId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="patientName"
+            app:argType="string"
+            android:defaultValue="Mark" />
         <action
             android:id="@+id/homeToPatientDetails"
             app:destination="@id/patient_details" />

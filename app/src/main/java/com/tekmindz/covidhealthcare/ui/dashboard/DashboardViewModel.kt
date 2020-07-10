@@ -49,6 +49,11 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
         return refreshTokenResponse
     }
 
+    fun refreshToken() {
+        mDashboardRepository.refreshToken()
+    }
+
+
     private fun subscribe(disposable: Disposable): Disposable {
         subscriptions.add(disposable)
         return disposable
@@ -62,11 +67,11 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
-                Log.e("requestREsponse", "${it.raw().request()}")
+               // Log.e("requestREsponse", "${it.raw().request()}")
                 response.value = (Resource.success(it.body()))
 
             }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
+               // Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
                 response.value = Resource.error(it.localizedMessage)
             })
         )
@@ -81,46 +86,23 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 responseCounts.value = Resource.loading()
             }
             .subscribe({
-                Log.e("requestREsponse", "${it.raw().request()}")
-
+                /*Log.e("requestREsponse", "${it.raw().request()}")*/
+                Log.e("response", "${it.code()}")
                 responseCounts.value = (Resource.success(it.body()))
 
 
                 //  responseCounts.value = Resource.error(it.message())
 
             }, {
-                Log.e(
+               /* Log.e(
                     "error Counts",
                     "${it.message} , ${it.localizedMessage} , ${it.stackTrace} "
-                )
+                )*/
                 responseCounts.value = Resource.error(it.localizedMessage)
             })
         )
     }
 
-    fun refreshToken() {
-        subscribe(mDashboardRepository.refreshToken(
-            Constants.CLIENT_ID,
-            Constants.REFRESH_GRANT_TYPE,
-            mDashboardRepository.getRefreshToken()
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                refreshTokenResponse.value = Resource.loading()
-            }
-            .subscribe({
-                if (it.code() == 200 && it.isSuccessful) {
-                    refreshTokenResponse.value = (Resource.success(it.body()))
-                } else {
-                    refreshTokenResponse.value = Resource.error(it.message())
-                }
-            }, {
-                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
-                refreshTokenResponse.value = Resource.error(it.localizedMessage)
-            })
-        )
-    }
 
     fun getIsLogin(): Boolean = mDashboardRepository.getIsLogin()
     fun saveAccessToke(data: UserModel) {

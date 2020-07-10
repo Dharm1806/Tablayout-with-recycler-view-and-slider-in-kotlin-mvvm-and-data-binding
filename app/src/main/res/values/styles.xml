@@ -136,7 +136,7 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.MaterialComponents">
-        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="android:windowBackground">@drawable/splash_icon</item>
     </style>
 
     <style name="AppTheme.WhiteAccent" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -188,8 +188,7 @@
         <item name="boxStrokeColor">@color/white</item>
         <item name="passwordToggleDrawable">@drawable/design_password_eye</item>
         <item name="passwordToggleTint">@color/white</item>
-        <item name="passwordToggleContentDescription">@string/password_toggle_content_description
-        </item>
+        <item name="passwordToggleContentDescription">@string/password_toggle_content_description</item>
         <item name="errorIconDrawable">@null</item>
         <item name="endIconTint">@color/design_icon_tint</item>
         <item name="startIconTint">@color/design_icon_tint</item>
