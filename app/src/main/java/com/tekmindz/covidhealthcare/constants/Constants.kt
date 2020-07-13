@@ -1,22 +1,23 @@
 package com.tekmindz.covidhealthcare.constants
 
+import com.tekmindz.covidhealthcare.application.App
 import java.text.SimpleDateFormat
 
 
 object Constants {
     //base url for apis
     const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    const val BASE_URL = "http://34.216.159.69:8081/api/"
+     var BASE_URL = "http://34.216.159.69:8081/"
 
     //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
     const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
-    const val GET_DASHBOARD_OBSERVATIONS = "dashboard/observations/"
-    const val GET_DASHBOARD_COUNTS = "dashboard/ragstatus/count"
-    const val GET_PATIENT_DETAILS = "dashboard/patientDetails/{patientId}"
-    const val GET_PATIENT_OBSERVATIONS = "dashboard/mobile/patientDetails/{patientId}"
-    const val GET_PATIENT_ANALYTICS = "dashboard/patient/observations"
-    const val UPDATE_PATIENT_DETAILS = "dashboard/observations"
+    const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
+    const val GET_DASHBOARD_COUNTS = "api/dashboard/ragstatus/count"
+    const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"
+    const val GET_PATIENT_OBSERVATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
+    const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
+    const val UPDATE_PATIENT_DETAILS = "api/dashboard/observations"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
 
     const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -47,6 +48,7 @@ object Constants {
 
 
     const val PREF_IS_LOGIN = "is_login"
+    const val PREF_BASE_URL= "base_url"
     const val PREF_ACCESS_TOKEN = "access_token"
     const val PREF_EXPIRES_IN = "expires_in"
     const val PREF_REFRESH_EXPIRES_IN = "refresh_expires_in"

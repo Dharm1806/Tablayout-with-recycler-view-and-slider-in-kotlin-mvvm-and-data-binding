@@ -47,7 +47,7 @@
 
                     <TextView
                         android:id="@+id/tv_patient_status"
-                        android:layout_width="120dp"
+                        android:layout_width="@dimen/dimen_150dp"
                         android:layout_height="30dp"
                         android:layout_marginTop="-20dp"
                         android:fontFamily="@font/roboto_medium"
@@ -103,7 +103,8 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:gravity="center"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                           app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent">
 
                             <ImageView
@@ -161,6 +162,7 @@
                             android:orientation="vertical"
                             android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent">
 
@@ -168,7 +170,6 @@
                                 android:id="@+id/img_heart_Rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/padding_20dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_heart_rate"
                                 android:foregroundGravity="center" />
@@ -223,13 +224,13 @@
                             android:gravity="center"
                             android:layout_marginEnd="@dimen/dimen_5dp"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent">
 
                             <ImageView
                                 android:id="@+id/img_respiration_rate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/padding_20dp"
                                 android:src="@drawable/ic_respiration_rate"
                                 android:layout_gravity="center"
                                 android:foregroundGravity="center" />
@@ -462,7 +463,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dimen_60"
             android:background="@drawable/title_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/viewAnalytics"
@@ -478,12 +479,14 @@
                 android:gravity="center"
                 android:textSize="@dimen/text_size_15sp"
                 android:fontFamily="@font/roboto_bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:drawablePadding="@dimen/padding_20dp"
                 android:textColor="@color/white"
                 android:drawableStart="@drawable/ic_stats"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

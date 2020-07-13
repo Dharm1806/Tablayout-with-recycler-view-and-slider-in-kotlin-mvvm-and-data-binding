@@ -11,18 +11,22 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/tab_background">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/tab_background">
+            android:background="@color/tab_background"
+
+            android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center|top"
                 android:background="@color/tab_background">
+
                 <TextView
 
                     android:id="@+id/patient_name"
@@ -31,13 +35,11 @@
                     android:layout_margin="@dimen/padding_20dp"
                     android:fontFamily="@font/roboto_light"
                     android:gravity="center|start"
-                    android:padding="@dimen/margin_10dp"
                     android:textColor="@color/analytics_title_color"
-                    android:textSize="@dimen/dimen_17sp"
+                    android:textSize="@dimen/dimen_23"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/select_date"
@@ -54,17 +56,16 @@
                     android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patient_name"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/patient_name" />
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/health_alert"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_20dp"
                     android:paddingTop="@dimen/width_40dp"
-                    android:paddingBottom="@dimen/width_40dp"
                     android:paddingEnd="@dimen/width_40dp"
+                    android:paddingBottom="@dimen/width_40dp"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -78,12 +79,14 @@
                             android:id="@+id/health_alert_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_20dp"
                             android:layout_marginStart="@dimen/padding_20dp"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="@string/title_health_alert"
                             android:textColor="@color/analytics_title_color"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/text_size_15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/helth_chart"
@@ -110,9 +113,9 @@
                             app:layout_constraintTop_toBottomOf="@+id/helth_chart" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/body_temp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -132,19 +135,21 @@
                             android:id="@+id/body_temp_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_20dp"
                             android:layout_marginStart="@dimen/padding_20dp"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="@string/title_body_temp"
                             android:textColor="@color/analytics_title_color"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/text_size_15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
+                            android:id="@+id/temp_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/temp_layout"
-                            app:layout_constraintTop_toBottomOf="@+id/body_temp_title"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@+id/body_temp_title">
 
                             <TextView
                                 android:id="@+id/tv_yaxis_title"
@@ -162,6 +167,7 @@
                                 android:id="@+id/temp_chart"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dimen_200"
+                                android:layout_margin="@dimen/padding_20dp"
                                 android:background="@color/white"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintRight_toRightOf="parent"
@@ -181,9 +187,9 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/temp_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/heart_rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -203,19 +209,21 @@
                             android:id="@+id/heart_rate_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_20dp"
                             android:layout_marginStart="@dimen/padding_20dp"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="@string/title_heart_rate"
                             android:textColor="@color/analytics_title_color"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/text_size_15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
+                            android:id="@+id/heart_rate_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/heart_rate_layout"
-                            app:layout_constraintTop_toBottomOf="@+id/heart_rate_title"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@+id/heart_rate_title">
 
                             <TextView
                                 android:id="@+id/tv_ht_yaxis_title"
@@ -253,15 +261,20 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/heart_rate_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/respiration_rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_20dp"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:layout_marginEnd="@dimen/padding_20dp"
                     android:background="@color/white_50"
-                    android:padding="@dimen/width_40dp"
+                    android:paddingStart="@dimen/width_40dp"
+                    android:paddingTop="@dimen/width_40dp"
+                    android:paddingEnd="@dimen/width_40dp"
+                    android:paddingBottom="@dimen/width_40dp"
                     app:cardBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -275,26 +288,28 @@
                             android:id="@+id/respiration_rate_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/padding_20dp"
                             android:layout_marginStart="@dimen/padding_20dp"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="@string/title_respiration_rate"
                             android:textColor="@color/analytics_title_color"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                            android:textSize="@dimen/text_size_15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
+                            android:id="@+id/respiration_rate_layout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/respiration_rate_layout"
-                            app:layout_constraintTop_toBottomOf="@+id/respiration_rate_title"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@+id/respiration_rate_title">
 
                             <TextView
                                 android:id="@+id/tv_rr_yaxis_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:rotation="-90"
                                 android:gravity="fill_vertical"
+                                android:rotation="-90"
                                 android:text="@string/msg_respiration_rate"
                                 android:textColor="@color/black"
                                 app:layout_constraintRight_toRightOf="@+id/respiration_rate_chart"
@@ -325,10 +340,17 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/respiration_rate_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_20dp"
+                    android:background="@color/tab_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/respiration_rate" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

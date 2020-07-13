@@ -26,6 +26,7 @@ import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservation
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
+import java.text.DecimalFormat
 
 class PatientDetailFragment : Fragment() {
     private lateinit var binding: PatientDetailFragmentBinding
@@ -145,9 +146,10 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientObserVations(data: PatientObservation) {
-        binding.tvHeartRateValue.text = Utills.formatString(data.heartRate)
-        binding.tvRespirationRateValue.text = Utills.formatString(data.respirationRate)
-        binding.tvBodyTempratureValue.text = Utills.formatString(data.bodyTemprature)
+       // formatString("103.012955")
+        binding.tvHeartRateValue.text =Utills.round(data.heartRate)
+        binding.tvRespirationRateValue.text =Utills.round(data.respirationRate)
+        binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemprature)
 
         if (data.status.equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
@@ -167,7 +169,7 @@ class PatientDetailFragment : Fragment() {
 
     private fun showPatientDeatils(data: Details) {
         patientName = data.firstName+" "+data.lastName
-        Glide.with(requireActivity()).load(data.imageUrl).into(binding.imgPatientProfile)
+        Glide.with(requireActivity()).load(data.imageUrl).placeholder(R.drawable.ic_placeholder).into(binding.imgPatientProfile)
 
         binding.tvPatientName.text = patientName
         binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)

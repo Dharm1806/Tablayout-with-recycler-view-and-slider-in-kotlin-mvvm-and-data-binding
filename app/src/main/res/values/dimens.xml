@@ -28,6 +28,9 @@
     <dimen name="dimen_150dp">150dp</dimen>
     <dimen name="dimen_70">70dp</dimen>
     <dimen name="readings_details_text_size">14sp</dimen>
+    <dimen name="dimen_70dp">70dp</dimen>
+    <dimen name="dimen_23">23sp</dimen>
+    <dimen name="dimen_60">60dp</dimen>
 
 
 </resources>

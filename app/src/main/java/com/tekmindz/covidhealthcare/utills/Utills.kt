@@ -31,6 +31,9 @@ import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
 import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -320,12 +323,7 @@ object Utills {
         }
     }
 
-fun formatString(value:String):String {
-  /*  if (value.contains(".")) {
-        return String.format(Locale.US, "%.2f", value)
-    }else{
-        return value
-    }*/
-    return value
-}
+    fun round(value :String): String? {
+         return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toString()
+    }
 }

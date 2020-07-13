@@ -1,6 +1,7 @@
 package com.tekmindz.covidhealthcare.application
 
 import android.app.Application
+import android.util.Log
 
 import com.google.gson.GsonBuilder
 import com.tekmindz.covidhealthcare.constants.Constants.BASE_URL
@@ -29,6 +30,7 @@ class App : Application() {
         super.onCreate()
         //create the gsonBuilder instance
         val gGson = GsonBuilder()
+        mSharedPrefrenceManager = SharedPreference(this)
         //create the retrofit instance
         retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gGson.create()))
@@ -37,6 +39,19 @@ class App : Application() {
             .baseUrl(LOGIN_BASE_URL)
             .build()
 
+
+        healthCareApiLogin = retrofit.create(HealthCareApis::class.java)
+       initalize()
+    }
+  public fun initalize(
+
+    ){
+        BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.216.159.69:8081/"
+      Log.e("base_url", "$BASE_URL")
+      if (!BASE_URL.contains("http")){
+          BASE_URL =    "http://34.216.159.69:8081/"
+      }
+        val gGson = GsonBuilder()
         retrofitAll = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gGson.create()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -46,8 +61,6 @@ class App : Application() {
 
         healthCareApi = retrofitAll.create(HealthCareApis::class.java)
 
-        healthCareApiLogin = retrofit.create(HealthCareApis::class.java)
-        mSharedPrefrenceManager = SharedPreference(this)
     }
 
     // function to return interCepter

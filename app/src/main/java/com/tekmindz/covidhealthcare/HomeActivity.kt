@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +21,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.utills.Utills
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +34,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setTheme(R.style.AppTheme1)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+      //  Log.e("format", "${Utills.round("103.232424267")}")
         setupNavigation()
     }
 
@@ -81,6 +84,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.homeToPatientDetails, bundle)
                 /*val intent = Intent(this, MainActivity::class.java)
                    startActivity(intent)*/
+            }
+
+            R.id.base_url ->{
+               // val bundle = bundleOf("patientId" to 3)
+                navController.navigate(R.id.homeToSetUrl, null)
             }
 
         }

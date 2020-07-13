@@ -27,6 +27,18 @@
             app:destination="@id/home"
             app:popUpTo="@+id/splash" />
     </fragment>
+    <fragment
+        android:id="@+id/setBaseUrl"
+        android:name="com.tekmindz.covidhealthcare.ui.setBaseUrl.SetBaseUrlFragment"
+        android:label="@string/set_base_url"
+        tools:layout="@layout/fragment_set_base_url_login">
+        <action
+            android:id="@+id/setBaseUrlToHome"
+            app:destination="@id/home"
+            app:popUpTo="@id/setBaseUrl"
+            app:popUpToInclusive="true" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/home"
@@ -46,6 +58,10 @@
         <action
             android:id="@+id/homeToSearch"
             app:destination="@id/search" />
+        <action
+            android:id="@+id/homeToSetUrl"
+            app:destination="@id/setBaseUrl"
+            />
         <action
             android:id="@+id/homeToObservations"
             app:destination="@id/observations"

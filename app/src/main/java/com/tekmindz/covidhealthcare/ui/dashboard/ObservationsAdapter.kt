@@ -19,7 +19,7 @@ class ObserVationHolder(val binding: ItemCriticalPatientListBinding) :
 
     fun bind(observation: observations, clickListener: OnItemClickListener, mContext: Context) {
         //load the patient profile image
-        Glide.with(mContext).load(observation.imageUrl).into(binding.imgProfile)
+        Glide.with(mContext).load(observation.imageUrl).placeholder((R.drawable.ic_placeholder)).into(binding.imgProfile)
 
         if (observation.status.equals(STATE_CRITICAL)) {
             binding.imgProfile.borderColor = mContext.resources.getColor(R.color.red)

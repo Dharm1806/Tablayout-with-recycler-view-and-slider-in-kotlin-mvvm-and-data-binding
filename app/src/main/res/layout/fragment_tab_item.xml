@@ -16,10 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:background="@color/tab_background"
-            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -44,12 +40,15 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/pateint_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_20dp"
-                    android:padding="@dimen/width_40dp"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginEnd="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:layout_marginBottom="@dimen/width_50dp"
+                    android:padding="@dimen/padding_20dp"
                     android:background="@color/white"
                     app:layout_constraintTop_toBottomOf="@+id/select_date"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -65,10 +64,10 @@
                         tools:listitem="@layout/item_critical_patient_list" />
 
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/padding_20dp"
@@ -89,12 +88,11 @@
                         android:background="@color/white"
                         android:id="@+id/graph_total_patient" />
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
 
         <ImageView
             android:layout_width="wrap_content"
