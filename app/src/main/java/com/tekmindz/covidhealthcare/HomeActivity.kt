@@ -1,6 +1,7 @@
 package com.tekmindz.covidhealthcare
 
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -17,14 +18,19 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.utills.Utills
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
     lateinit var navController: NavController
@@ -120,6 +126,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setupNavigation() {
         setTheme(R.style.AppTheme)
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -127,19 +134,31 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigationView)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+       NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+        //setupActionBarWithNavController(navController, appBarConfiguration)
+
         NavigationUI.setupWithNavController(navigationView, navController)
         navigationView.setNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.login || destination.id == R.id.search) {
+            var isDestination = false
+
+            if (Utills.userType().toString() == UserTypes.PATIENT.toString()){
+                isDestination = destination.id == R.id.login || destination.id == R.id.search// || destination.id== R.id.patient_details
+            }else{
+                isDestination = destination.id == R.id.login || destination.id == R.id.search
+            }
+            if (isDestination) {
                 toolbar.visibility = View.GONE
                 navigationView.visibility = View.GONE
                 drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
             } else {
                 toolbar.visibility = View.VISIBLE
                 navigationView.visibility = View.VISIBLE
+                //navigationView
                 drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             }
         }
     }
+
+
 }

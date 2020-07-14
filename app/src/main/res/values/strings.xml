@@ -79,5 +79,6 @@
     <string name="msg_please_connect">Please connect to internet for continue</string>
     <string name="msg_base_url">Base Url</string>
     <string name="set_base_url">Set Base Url</string>
+    <string name="action_sos">SOS</string>
 
 </resources>

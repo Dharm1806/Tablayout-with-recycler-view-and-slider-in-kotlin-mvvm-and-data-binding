@@ -6,7 +6,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.AnalyticsResponse
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -78,6 +81,10 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
 
     fun refreshToken() {
         mAnalyticsRepository.refreshToken()
+    }
+
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
     }
 
 

@@ -23,17 +23,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import com.auth0.android.jwt.Claim
+import com.auth0.android.jwt.JWT
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.APP_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
+import org.json.JSONObject
+import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -325,5 +331,61 @@ object Utills {
 
     fun round(value :String): String? {
          return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toString()
+    }
+
+    fun userType():String{
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.PATIENT.toString()
+
+    }
+  fun   decodeAccessToke(value :String):String{
+      val parsedJWT = JWT(value)
+      Log.e("parsed", "$parsedJWT")
+      val subscriptionMetaData: Map<String, Claim> = parsedJWT.getClaims()
+
+      Log.e("parsedVAlue", "$subscriptionMetaData")
+
+      return "String(decoded)"
+
+
+  }
+
+    @Throws(Exception::class)
+    fun decoded(JWTEncoded: String):String {
+        var usertYPE= ""
+        try {
+            val split =
+                JWTEncoded.split("\\.".toRegex()).toTypedArray()
+
+            val body = getJson(split[1])
+            val bodyObject = JSONObject(body.toString())
+            val realmAccess = bodyObject.getJSONObject("realm_access")
+            val roles = realmAccess.getJSONArray("roles")
+            for (i in 0.. roles.length()){
+                if (roles.get(i) =="supervisor"){
+                    usertYPE = UserTypes.HEALTH_WORKER.toString()
+                    break;
+                }
+                if (roles.get(i)== "patient"){
+                    usertYPE = UserTypes.PATIENT.toString()
+                }
+            }
+
+
+
+            Log.e("JWT_DECODED", "Body: " + getJson(split[1]))
+        } catch (e: UnsupportedEncodingException) {
+            e.printStackTrace()
+            //Error
+
+        }
+
+        return usertYPE
+    }
+
+    @Throws(UnsupportedEncodingException::class)
+    private fun getJson(strEncoded: String): String {
+        val decodedBytes =
+            Base64.decode(strEncoded, Base64.URL_SAFE)
+        return String(decodedBytes, Charsets.UTF_8)
     }
 }

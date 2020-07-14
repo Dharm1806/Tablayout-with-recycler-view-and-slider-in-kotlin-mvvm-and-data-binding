@@ -7,6 +7,18 @@
     <action
         android:id="@+id/navigateToLogin"
         app:destination="@id/login" />
+    <action
+        android:id="@+id/homeTologin"
+        app:destination="@id/login"
+        app:popUpTo="@id/home"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/homeToPatientDetails"
+        app:destination="@id/patient_details" />
+    <action
+        android:id="@+id/homeToSetUrl"
+        app:destination="@id/setBaseUrl"
+        />
 
     <fragment
         android:id="@+id/login"
@@ -46,22 +58,12 @@
         android:label="@string/dashboard"
         tools:layout="@layout/fragment_home">
 
-        <action
-            android:id="@+id/homeTologin"
-            app:destination="@id/login"
-            app:popUpTo="@id/home"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/homeToPatientDetails"
-            app:destination="@id/patient_details" />
+
 
         <action
             android:id="@+id/homeToSearch"
             app:destination="@id/search" />
-        <action
-            android:id="@+id/homeToSetUrl"
-            app:destination="@id/setBaseUrl"
-            />
+
         <action
             android:id="@+id/homeToObservations"
             app:destination="@id/observations"
@@ -79,8 +81,9 @@
             android:id="@+id/observationsToPatientDetails"
             app:destination="@id/patient_details" />
     </fragment>
-
-
+<!--
+    <navigation android:id="@+id/premium_flow"
+        app:startDestination="@id/patient_details">-->
     <fragment
         android:id="@+id/patient_details"
         android:name="com.tekmindz.covidhealthcare.ui.patientDetails.PatientDetailFragment"
@@ -99,7 +102,24 @@
             app:destination="@id/analytics" />
 
     </fragment>
-
+        <fragment
+            android:id="@+id/analytics"
+            android:name="com.tekmindz.covidhealthcare.ui.patientAnalytics.AnalyticsFragment"
+            android:label="@string/title_view_statics"
+            tools:layout="@layout/fragment_home">
+            <argument
+                android:name="patientId"
+                app:argType="integer"
+                android:defaultValue="0" />
+            <argument
+                android:name="patientName"
+                app:argType="string"
+                android:defaultValue="Mark" />
+            <action
+                android:id="@+id/homeToPatientDetails"
+                app:destination="@id/patient_details" />
+        </fragment>
+   <!-- </navigation>-->
 
     <fragment
         android:id="@+id/search"
@@ -118,23 +138,7 @@
     </fragment>
 
 
-    <fragment
-        android:id="@+id/analytics"
-        android:name="com.tekmindz.covidhealthcare.ui.patientAnalytics.AnalyticsFragment"
-        android:label="@string/title_view_statics"
-        tools:layout="@layout/fragment_home">
-        <argument
-            android:name="patientId"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <argument
-            android:name="patientName"
-            app:argType="string"
-            android:defaultValue="Mark" />
-        <action
-            android:id="@+id/homeToPatientDetails"
-            app:destination="@id/patient_details" />
-    </fragment>
+
 
     <fragment
         android:id="@+id/updatePatientDetails"
@@ -145,6 +149,7 @@
             android:id="@+id/homeToPatientDetails"
             app:destination="@id/patient_details" />
     </fragment>
+
 
 
 </navigation>

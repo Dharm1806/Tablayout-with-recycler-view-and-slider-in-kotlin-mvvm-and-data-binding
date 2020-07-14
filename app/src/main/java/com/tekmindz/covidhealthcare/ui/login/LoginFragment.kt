@@ -4,7 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.view.KeyEvent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +19,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
@@ -26,6 +28,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_SCOPE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.databinding.FragmentLoginBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
@@ -165,6 +168,12 @@ class LoginFragment : Fragment() {
             val id = navController.currentDestination!!.id
             //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
+           val userType =
+             Utills.decoded(userData.access_token)
+
+            Log.e("jwtToken", "$userType")
+            mLoginViewModel.saveUserData(
+                PREF_USER_TYPE, userType)
             mLoginViewModel.saveUserData(PREF_EXPIRES_IN, userData.expires_in.toString())
             mLoginViewModel.saveUserData(
                 PREF_REFRESH_EXPIRES_IN,

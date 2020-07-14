@@ -4,7 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
@@ -107,5 +110,14 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
     fun getIsLogin(): Boolean = mDashboardRepository.getIsLogin()
     fun saveAccessToke(data: UserModel) {
         mDashboardRepository.saveRefreshToken(data)
+    }
+
+    fun getUserType(value :Int): String {
+        return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+       /* if (value ==1) {
+            return UserTypes.PATIENT.toString()
+        }else{
+            return UserTypes.HEALTH_WORKER.toString()
+        }*/
     }
 }

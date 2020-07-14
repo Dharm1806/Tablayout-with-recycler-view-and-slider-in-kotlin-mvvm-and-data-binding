@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -84,8 +87,12 @@ class PatientDetailViewModel : ViewModel() {
 
 
     fun parseDate(dob: String): String? = Utills.parseDate(dob)
+
     fun refreshToken() {
         mPatientDetailsRepository.refreshToken()
     }
 
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+    }
 }

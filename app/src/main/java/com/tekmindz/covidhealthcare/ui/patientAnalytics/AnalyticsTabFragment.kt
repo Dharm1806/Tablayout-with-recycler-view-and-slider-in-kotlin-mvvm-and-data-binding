@@ -1,6 +1,11 @@
 package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
+import android.Manifest
 import android.app.ProgressDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -8,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +33,7 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.Analytics
@@ -130,7 +137,12 @@ class AnalyticsTabFragment : Fragment() {
                 }
             }
         })
-
+        if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()){
+            binding.btSos.visibility = View.VISIBLE
+        }else{
+            binding.btSos.visibility = View.GONE
+        }
+        binding.btSos.setOnClickListener { callPhoneNumber() }
 
     }
 
@@ -142,18 +154,18 @@ class AnalyticsTabFragment : Fragment() {
         val picker = builder.build()
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
-           // Utills.dateRange(Constants.DATE_RANGE)
+            // Utills.dateRange(Constants.DATE_RANGE)
             picker.dismiss()
         }
         picker.addOnPositiveButtonClickListener {
             val fromDate = Utills.getDate(it.first!!)
             val toDate = Utills.getDate(it.second!!)
             select_date.text = Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate)
-           patientAnalyticsRequest = PatientAnalyticsRequest(
-               patientId,
-               fromDate,
-               toDate
-           )
+            patientAnalyticsRequest = PatientAnalyticsRequest(
+                patientId,
+                fromDate,
+                toDate
+            )
             Utills.dateRange(Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate))
 
             getPatientAnalytics()
@@ -175,7 +187,7 @@ class AnalyticsTabFragment : Fragment() {
             Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showObservations(it.data.body)
-                else if (it.data?.statusCode ==401){
+                else if (it.data?.statusCode == 401) {
                     mAnalyticsViewModel.refreshToken()
 
                     Handler().postDelayed({
@@ -206,8 +218,8 @@ class AnalyticsTabFragment : Fragment() {
 
     private fun filterData(mAnalyticsList: java.util.ArrayList<Analytics>) {
         mAnalyticsList.forEach {
-            if (posture!=null && posture?.size!=0 && it.posture in posture!!){
-            }else{
+            if (posture != null && posture?.size != 0 && it.posture in posture!!) {
+            } else {
                 posture?.add(it.posture)
             }
             var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
@@ -337,8 +349,8 @@ class AnalyticsTabFragment : Fragment() {
 
         yAxis.valueFormatter = IndexAxisValueFormatter(postureYaxis)
         // yAxis.axisMaximum=posture!!.size.toFloat()
-          //yAxis.axisMinimum=0f
-         // yAxis.mAxisRange = 5f
+        //yAxis.axisMinimum=0f
+        // yAxis.mAxisRange = 5f
 
         helth_chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         helth_chart.description.isEnabled = false
@@ -375,5 +387,44 @@ class AnalyticsTabFragment : Fragment() {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    fun callPhoneNumber() {
+        try {
+            if (Build.VERSION.SDK_INT > 22) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireActivity(),
+                        Manifest.permission.CALL_PHONE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.CALL_PHONE),
+                        101
+                    )
+                    return
+                }
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
+                startActivity(callIntent)
+            } else {
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
+                startActivity(callIntent)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 101) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                callPhoneNumber()
+            }
+        }
+    }
 
 }

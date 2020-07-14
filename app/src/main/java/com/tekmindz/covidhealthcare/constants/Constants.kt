@@ -34,6 +34,7 @@ object Constants {
     val PATIENT_ID = "patientId"
     const val TIME_DIFFERENCE = 1800
 
+    const val SOS_NUMBER = 9717514944
 
     var isLoginRequired: Boolean = true
     const val HEADER_CONTENT_TYPE = "Content-Type: application/json"
@@ -57,6 +58,8 @@ object Constants {
     const val PREF_NOT_BEFORE_POLICY = "not_before_policy"
     const val PREF_SESSION_STATE = "session_state"
     const val PREF_SCOPE = "scope"
+    const val PREF_USER_TYPE = "user_type"
+    const val PREF_USER_ID = "user_id"
 
 
     const val STATE_CRITICAL = "critical"
@@ -71,6 +74,7 @@ object Constants {
         val formatter = SimpleDateFormat(APP_DATE_FORMAT)
         return formatter.format(parser.parse(date))
     }
+
 
 
 }
