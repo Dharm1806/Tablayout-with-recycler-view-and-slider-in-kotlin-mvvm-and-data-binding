@@ -5,6 +5,9 @@
     android:id="@+id/navigation"
     app:startDestination="@id/home">
     <action
+        android:id="@+id/navigateToHelp"
+        app:destination="@id/helpFragment" />
+    <action
         android:id="@+id/navigateToLogin"
         app:destination="@id/login" />
     <action
@@ -149,7 +152,11 @@
             android:id="@+id/homeToPatientDetails"
             app:destination="@id/patient_details" />
     </fragment>
-
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.tekmindz.covidhealthcare.ui.help.HelpFragment"
+        android:label="Help"
+        tools:layout="@layout/fragment_help"/>
 
 
 </navigation>

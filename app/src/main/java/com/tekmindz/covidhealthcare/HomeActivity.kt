@@ -65,6 +65,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.closeDrawers()
 
         when (p0.itemId) {
+
+            R.id.help->{
+                navController.navigate(R.id.navigateToHelp, null)
+            }
             //  R.id.email ->showMessage(getString(R.string.email_slected))
             // *//* if(navController.currentDestination?.id != R.id.commentList){
             // val action =
