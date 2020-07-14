@@ -25,6 +25,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.utills.Utills
 
@@ -42,6 +43,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_home)
       //  Log.e("format", "${Utills.round("103.232424267")}")
         setupNavigation()
+
     }
 
 
@@ -90,7 +92,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             R.id.selfAssesment -> {/*App.mSharedPrefrenceManager.getValueString(
                 Constants.PREF_ACCESS_TOKEN))*/
-                val bundle = bundleOf("patientId" to 3)
+                val bundle = bundleOf("patientId" to 8)
                 navController.navigate(R.id.homeToPatientDetails, bundle)
                 /*val intent = Intent(this, MainActivity::class.java)
                    startActivity(intent)*/
@@ -162,6 +164,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             }
         }
+
+        hideSelfAssesment()
+    }
+
+    private fun hideSelfAssesment() {
+        val userTypes = App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
+        val menu = navigationView.menu
+        if (userTypes!=null && userTypes.length!=0 && userTypes == UserTypes.PATIENT.toString()) menu.findItem(R.id.selfAssesment).setVisible(false)
+        else menu.findItem(R.id.selfAssesment).setVisible(true)
+       // selfAssesment
     }
 
 

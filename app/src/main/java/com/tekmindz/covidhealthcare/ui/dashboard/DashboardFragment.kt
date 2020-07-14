@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
         }else if(mDashboardViewModel.getUserType(1 ) == UserTypes.PATIENT.toString()){
             Utills.hideKeyboard(requireActivity())
 
-            val bundle = bundleOf("patientId" to 3)
+            val bundle = bundleOf("patientId" to 9)
             findNavController().navigate(
                 R.id.homeToPatientDetails, bundle, NavOptions.Builder()
                     .setPopUpTo(
