@@ -367,6 +367,8 @@ object Utills {
                 }
                 if (roles.get(i)== "patient"){
                     usertYPE = UserTypes.PATIENT.toString()
+                    break;
+
                 }
             }
 

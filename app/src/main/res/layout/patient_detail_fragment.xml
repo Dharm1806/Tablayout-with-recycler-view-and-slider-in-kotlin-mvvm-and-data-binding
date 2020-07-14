@@ -455,7 +455,7 @@
             android:text="@string/action_sos"
             android:tint="@color/white"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_17sp"
+            android:textSize="@dimen/text_size_15sp"
             android:fontFamily="@font/roboto_bold"
             android:layout_gravity="bottom|end"
             android:foregroundTint="@color/white"
