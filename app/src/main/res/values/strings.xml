@@ -81,4 +81,5 @@
     <string name="set_base_url">Set Base Url</string>
     <string name="action_sos">SOS</string>
     <string name="help">HELP</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 </resources>
