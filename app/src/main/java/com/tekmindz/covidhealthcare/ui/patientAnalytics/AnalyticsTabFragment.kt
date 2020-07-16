@@ -203,7 +203,7 @@ class AnalyticsTabFragment : Fragment() {
 
 
     private fun showObservations(data: List<Analytics>) {
-
+Log.e("data", "123 t ${data.size}")
         if (!data.isNullOrEmpty()) {
             mAnalyticsList.clear()
             posture?.clear()

@@ -220,8 +220,8 @@ object Utills {
     fun getCurrentDate(): String {
 
         val date = Date()
-        //return formatDateIntoFilterFormat(date)
-        return "2020-06-26T06:32:37Z"
+        return formatDateIntoFilterFormat(date)
+       // return "2020-06-26T06:32:37Z"
     }
 
     fun getRealCurrentDate(): String {
@@ -242,8 +242,8 @@ object Utills {
 
         val date = Date(System.currentTimeMillis() - hours * 60 * 60 * 1000)
 
-//        return formatDateIntoFilterFormat(date)
-        return "2019-06-26T09:32:37Z"
+       return formatDateIntoFilterFormat(date)
+        //return "2019-06-26T09:32:37Z"
     }
 
     /**

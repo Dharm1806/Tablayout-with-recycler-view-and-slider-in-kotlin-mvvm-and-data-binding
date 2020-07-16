@@ -51,6 +51,10 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
+                Log.e("request", "${it.raw().request()}")
+
+                Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
+
                 response.value = (Resource.success(it.body()))
 
             }, {
