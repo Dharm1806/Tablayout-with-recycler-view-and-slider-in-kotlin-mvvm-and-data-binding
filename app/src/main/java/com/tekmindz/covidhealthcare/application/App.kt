@@ -2,6 +2,10 @@ package com.tekmindz.covidhealthcare.application
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 
 import com.google.gson.GsonBuilder
 import com.tekmindz.covidhealthcare.constants.Constants.BASE_URL
@@ -15,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 
-class App : Application() {
+class App : Application(), LifecycleObserver {
 
     //For the sake of simplicity, for now we use this instead of Dagger
     companion object {
@@ -24,10 +28,14 @@ class App : Application() {
         private lateinit var retrofit: Retrofit
         lateinit var healthCareApiLogin: HealthCareApis
         lateinit var mSharedPrefrenceManager: SharedPreference
+        var isForeGround: Boolean = false
+
     }
 
     override fun onCreate() {
         super.onCreate()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
         //create the gsonBuilder instance
         val gGson = GsonBuilder()
         mSharedPrefrenceManager = SharedPreference(this)
@@ -95,5 +103,15 @@ class App : Application() {
         }
         return cache
     }
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    fun onAppBackgrounded() {
+        isForeGround = false
+        Log.d("MyApp", "App in background")
+    }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onAppForegrounded() {
+        isForeGround = true
+        Log.d("MyApp", "App in foreground")
+    }
 }

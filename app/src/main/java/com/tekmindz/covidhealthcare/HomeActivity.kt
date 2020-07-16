@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -170,6 +171,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         hideSelfAssesment()
+        //getCurrentFragment()
     }
 
     private fun hideSelfAssesment() {
@@ -177,8 +179,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val menu = navigationView.menu
         if (userTypes!=null && userTypes.length!=0 && userTypes == UserTypes.PATIENT.toString()) menu.findItem(R.id.selfAssesment).setVisible(false)
         else menu.findItem(R.id.selfAssesment).setVisible(true)
-       // selfAssesment
+
+       // getCurrentFragment()
+
+        // selfAssesment
     }
 
-
+    fun getCurrentFragment(): Fragment? {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+        return navHostFragment?.childFragmentManager?.fragments?.get(0)
+      /*  Log.e("fragment", "${fragment}")
+        return fragment*/
+    }
 }

@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
