@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "373769483340",
+    "firebase_url": "https://integrationexample-150519.firebaseio.com",
+    "project_id": "integrationexample-150519",
+    "storage_bucket": "integrationexample-150519.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373769483340:android:48f38f728a820c2c4af0e9",
+        "android_client_info": {
+          "package_name": "com.tekmindz.covidhealthcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373769483340-md5mc80ssdjgujd4sqpsrrgd54hsa7l7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcPqp2M_WKIcZkud36bAovcvR0-Ooh1hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373769483340-md5mc80ssdjgujd4sqpsrrgd54hsa7l7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

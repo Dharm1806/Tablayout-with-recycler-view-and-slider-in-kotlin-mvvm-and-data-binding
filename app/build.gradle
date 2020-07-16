@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 //apply plugin: "androidx.navigation.safeargs"
 
 android {
@@ -95,7 +96,7 @@ dependencies {
     implementation(name: 'lifesignals-release', ext: 'aar')
     //push notifications
     implementation 'com.google.firebase:firebase-core:17.4.3'
-    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
     implementation 'ch.acra:acra:4.9.2'
     implementation(name: 'lifesignals_api_V3.0.17', ext: 'aar')
