@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "373769483340",
-    "firebase_url": "https://integrationexample-150519.firebaseio.com",
-    "project_id": "integrationexample-150519",
-    "storage_bucket": "integrationexample-150519.appspot.com"
+    "project_number": "771656258074",
+    "firebase_url": "https://covidhealthcare-7355e.firebaseio.com",
+    "project_id": "covidhealthcare-7355e",
+    "storage_bucket": "covidhealthcare-7355e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373769483340:android:48f38f728a820c2c4af0e9",
+        "mobilesdk_app_id": "1:771656258074:android:471aa8ed2bc6e3d4d037a3",
         "android_client_info": {
           "package_name": "com.tekmindz.covidhealthcare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "373769483340-md5mc80ssdjgujd4sqpsrrgd54hsa7l7.apps.googleusercontent.com",
+          "client_id": "771656258074-8945scvuh8mvj3asbvbotam7biap5tfk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekmindz.covidhealthcare",
+            "certificate_hash": "db2471e8362f517de7523fd6f60eb4ba039d26b3"
+          }
+        },
+        {
+          "client_id": "771656258074-4qpnqitsf04648mtqrrb5u9k4f7eplgm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBcPqp2M_WKIcZkud36bAovcvR0-Ooh1hc"
+          "current_key": "AIzaSyD8zceqRV26oZY4gWbBNDohGSSTfJgUTkA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "373769483340-md5mc80ssdjgujd4sqpsrrgd54hsa7l7.apps.googleusercontent.com",
+              "client_id": "771656258074-4qpnqitsf04648mtqrrb5u9k4f7eplgm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

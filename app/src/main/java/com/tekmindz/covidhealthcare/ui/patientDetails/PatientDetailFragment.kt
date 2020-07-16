@@ -113,6 +113,10 @@ class PatientDetailFragment : Fragment() {
             requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 
         }else{
+            val appBarConfiguration = AppBarConfiguration(
+                setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout))
+            requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+
             binding.btSos.visibility = View.GONE
         }
 

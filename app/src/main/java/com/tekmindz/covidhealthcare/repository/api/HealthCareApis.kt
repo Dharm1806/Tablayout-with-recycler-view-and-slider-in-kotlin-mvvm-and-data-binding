@@ -3,6 +3,7 @@ package com.tekmindz.covidhealthcare.repository.api
 
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_COUNTS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_OBSERVATIONS
+import com.tekmindz.covidhealthcare.constants.Constants.GET_NOTIFICATIONS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_ANALYTICS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_OBSERVATIONS
@@ -15,6 +16,7 @@ import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
+import retrofit2.http.Body
 
 interface HealthCareApis {
 
@@ -93,6 +95,14 @@ interface HealthCareApis {
         @Body updatePatientReadings: UpdatePatientReadings,
         @Header("Authorization") access_token: String
     ): Observable<Response<PatientDetails>>
+
+    /* get the notifications from getNotifications api*/
+
+    @GET(GET_NOTIFICATIONS)
+    fun getNotifications(
+        @Header("Authorization") access_token: String
+    ): Observable<Response<NotificationResponse>>
+
 
 }
 

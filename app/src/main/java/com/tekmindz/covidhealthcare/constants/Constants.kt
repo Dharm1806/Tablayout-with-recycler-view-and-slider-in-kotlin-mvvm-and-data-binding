@@ -19,6 +19,7 @@ object Constants {
     const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
     const val UPDATE_PATIENT_DETAILS = "api/dashboard/observations"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
+    const val GET_NOTIFICATIONS= "api/dashboard/mobile/patientDetails/{patientId}"
 
     const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"

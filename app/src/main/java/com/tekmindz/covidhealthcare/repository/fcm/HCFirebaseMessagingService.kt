@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import java.util.*
 
@@ -50,7 +51,7 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.notification_icon)
             val mBuilder = NotificationCompat.Builder(this, channelId)
-            val intent = Intent() //add screen class name to move on when user click on notification
+            val intent = Intent(this, HomeActivity::class.java) //add screen class name to move on when user click on notification
             val pendingIntent = PendingIntent.getActivity(
                 this, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT

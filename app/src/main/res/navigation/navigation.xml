@@ -23,6 +23,11 @@
         app:destination="@id/setBaseUrl"
         />
 
+    <action
+        android:id="@+id/navigateToNotifications"
+        app:destination="@id/notification"
+        />
+
     <fragment
         android:id="@+id/login"
         android:name="com.tekmindz.covidhealthcare.ui.login.LoginFragment"
@@ -51,6 +56,18 @@
             android:id="@+id/setBaseUrlToHome"
             app:destination="@id/home"
             app:popUpTo="@id/setBaseUrl"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/notification"
+        android:name="com.tekmindz.covidhealthcare.ui.notifications.NotificationFragment"
+        android:label="@string/notification"
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/notificationToPatientDetails"
+            app:destination="@id/patient_details"
+            app:popUpTo="@id/notification"
             app:popUpToInclusive="true" />
 
     </fragment>

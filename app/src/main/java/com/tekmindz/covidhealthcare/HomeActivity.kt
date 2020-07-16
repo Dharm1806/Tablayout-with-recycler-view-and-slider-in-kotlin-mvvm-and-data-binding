@@ -1,7 +1,6 @@
 package com.tekmindz.covidhealthcare
 
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -20,9 +19,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
@@ -43,7 +42,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_home)
       //  Log.e("format", "${Utills.round("103.232424267")}")
         setupNavigation()
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(
+            this
+        ) { instanceIdResult: InstanceIdResult ->
+            val newToken = instanceIdResult.token
+            Log.e("newToken", newToken)
 
+        }
     }
 
 
@@ -117,8 +122,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.notifications -> {
-                /*val aboutIntent = Intent(this@MainActivity, AboutActivity::class.java)
-                startActivity(aboutIntent)*/
+                navController.navigate(R.id.navigateToNotifications, null)
             }
 
         }
