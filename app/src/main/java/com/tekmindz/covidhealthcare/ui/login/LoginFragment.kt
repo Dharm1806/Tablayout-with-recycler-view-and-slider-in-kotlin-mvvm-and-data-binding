@@ -159,16 +159,18 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginSuccess(userData: UserModel) {
-
+Log.e("loginSuccess", "$userData")
         hideProgressbar()
 
         if (this.activity != null) {
+
             val navController =
                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             val id = navController.currentDestination!!.id
             //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
-           val userType =
+            Log.e("userdeco", "fecd")
+        val userType =
              Utills.decoded(userData.access_token)
 
             Log.e("jwtToken", "$userType")

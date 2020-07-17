@@ -77,8 +77,11 @@ class SetBaseUrlFragment : Fragment() {
         mLoginViewModel = ViewModelProviders.of(this).get(SetBaseUrlViewModel::class.java)
         binding.loginViewModel = mLoginViewModel
 
+       /* val mBaseUrl =
+            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.216.159.69:8081/"*/
+
         val mBaseUrl =
-            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.216.159.69:8081/"
+            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.210.115.120:8081/"
     mLoginViewModel.Password.postValue(mBaseUrl)
         mLoginViewModel.getUser()?.observe(requireActivity(), Observer<LoginRequest> { loginUser ->
             validateFields(loginUser)

@@ -386,6 +386,7 @@ var destination:String = ""
 
     @Throws(UnsupportedEncodingException::class)
     private fun getJson(strEncoded: String): String {
+        Log.e("strEncoded", "$strEncoded")
         val decodedBytes =
             Base64.decode(strEncoded, Base64.URL_SAFE)
         return String(decodedBytes, Charsets.UTF_8)

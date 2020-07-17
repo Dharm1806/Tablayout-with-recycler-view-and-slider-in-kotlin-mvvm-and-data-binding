@@ -70,7 +70,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
-               // Log.e("requestREsponse", "${it.raw().request()}")
+                Log.e("requestREsponse", "${it.raw().request()}")
                 response.value = (Resource.success(it.body()))
 
             }, {
@@ -89,7 +89,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 responseCounts.value = Resource.loading()
             }
             .subscribe({
-                /*Log.e("requestREsponse", "${it.raw().request()}")*/
+                Log.e("requestREsponse", "${it.raw().request()}")
                 Log.e("response", "${it.code()}")
                 responseCounts.value = (Resource.success(it.body()))
 
@@ -112,7 +112,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
         mDashboardRepository.saveRefreshToken(data)
     }
 
-    fun getUserType(value :Int): String {
+    fun getUserType(): String {
         return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
        /* if (value ==1) {
             return UserTypes.PATIENT.toString()

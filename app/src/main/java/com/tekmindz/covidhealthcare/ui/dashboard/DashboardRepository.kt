@@ -42,7 +42,7 @@ class DashboardRepository {
     fun getDashBoardCount(dateFilter: DateFilter): Observable<Response<DashboardCounts>> =
         App.healthCareApi.getDashboardsCounts(
             dateFilter,
-            "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
+            "Bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
 
 

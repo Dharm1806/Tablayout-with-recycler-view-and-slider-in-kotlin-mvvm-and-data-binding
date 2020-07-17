@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
                         true
                     ).build()
             )
-        }else if(mDashboardViewModel.getUserType(1 ) == UserTypes.PATIENT.toString()){
+        }else if(mDashboardViewModel.getUserType( ) == UserTypes.PATIENT.toString()){
             Utills.hideKeyboard(requireActivity())
 
             val bundle = bundleOf("patientId" to 9)
