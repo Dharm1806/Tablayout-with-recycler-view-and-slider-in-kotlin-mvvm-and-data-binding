@@ -46,7 +46,7 @@ import java.util.regex.Pattern
 
 
 object Utills {
-
+var destination:String = ""
     var dateRange: MutableLiveData<DateRange> = MutableLiveData<DateRange>()
 
     fun dateRange(dateRangeValue: String) {

@@ -12,10 +12,16 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App.Companion.isForeGround
+import com.tekmindz.covidhealthcare.constants.Constants.BROADCAST_RECEIVER_NAME
+import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
+import com.tekmindz.covidhealthcare.utills.Utills
 import java.util.*
 
 class HCFirebaseMessagingService : FirebaseMessagingService() {
@@ -24,6 +30,11 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(p0)
         Log.d(TAG,"New Token : "+p0)
         //save locally or / send token to server
+    }
+    lateinit var mbroadCastreceiver: LocalBroadcastManager
+    @Override
+    override fun onCreate() {
+        mbroadCastreceiver = LocalBroadcastManager.getInstance(this)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -34,9 +45,20 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data != null) {
             if (remoteMessage.data.isNotEmpty()) {
                 Log.d(TAG, "Message data : " + remoteMessage.data)
-                val data = remoteMessage.data
-                sendNotification(data)
+                val data = remoteMessage.data//
+                if (isForeGround && Utills.destination == "Notifications" && remoteMessage.data.containsKey(PATIENT_ID) ){
+                    Log.e("patientId", "${remoteMessage.data.get(PATIENT_ID)}")
+                    val intent = Intent(BROADCAST_RECEIVER_NAME)
+                    intent.putExtra(PATIENT_ID, remoteMessage.data.get(PATIENT_ID))
+                   /* intent.putExtra(EXTRA_CO2_EMMISSION_SAVED, remoteMessage.data.get(CO2_EMMISSION_SAVED))
+                    intent.putExtra(EXTRA_DURATION, remoteMessage.data.get(DURATION))
+                    intent.putExtra(EXTRA_ENERGY_CONSUMED, remoteMessage.data.get(ENERGY_CONSUMED))
+                    intent.putExtra(EXTRA_NOTIFICATION_TYPE, remoteMessage.data.get(NOTIFICATION_TYPE))*/
+                    mbroadCastreceiver.sendBroadcast(intent)
 
+                }else {
+                    sendNotification(data)
+                }
             }
         }
         // Check if message contains a notification payload.

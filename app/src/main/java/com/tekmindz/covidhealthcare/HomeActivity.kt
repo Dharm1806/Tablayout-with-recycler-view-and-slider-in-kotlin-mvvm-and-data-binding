@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,7 +15,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -31,6 +31,9 @@ import com.tekmindz.covidhealthcare.utills.Utills
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var controller: NavController
+    private lateinit var listener: NavController.OnDestinationChangedListener
+    private lateinit var tvNotificationItemCount: TextView
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
@@ -41,7 +44,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setTheme(R.style.AppTheme1)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-      //  Log.e("format", "${Utills.round("103.232424267")}")
         setupNavigation()
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(
             this
@@ -74,16 +76,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (p0.itemId) {
 
-            R.id.help->{
+            R.id.help -> {
                 navController.navigate(R.id.navigateToHelp, null)
             }
-            //  R.id.email ->showMessage(getString(R.string.email_slected))
-            // *//* if(navController.currentDestination?.id != R.id.commentList){
-            // val action =
-            //    IssuesListFragmentDirections.issuesListToComment("4996")
-            // navController.navigate(action)}*//*
 
-            //    R.id.favourites -> showMessage(getString(R.string.fav_selected))
             R.id.logout -> {
                 App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
                 navController.navigate(
@@ -104,8 +100,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                    startActivity(intent)*/
             }
 
-            R.id.base_url ->{
-               // val bundle = bundleOf("patientId" to 3)
+            R.id.base_url -> {
+                // val bundle = bundleOf("patientId" to 3)
                 navController.navigate(R.id.homeToSetUrl, null)
             }
 
@@ -115,9 +111,34 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @Override
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val findMenuItems = menuInflater
-        findMenuItems.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        val menuItem = menu!!.findItem(R.id.notifications)
+
+        val actionView = menuItem.actionView
+        tvNotificationItemCount = actionView.findViewById<View>(R.id.notification_badge) as TextView
+
+        setupBadge()
+
+        actionView.setOnClickListener { onOptionsItemSelected(menuItem) }
+
+        return true
+    }
+
+    private fun setupBadge() {
+        val mNotificationCount = 0
+        if (tvNotificationItemCount != null) {
+            if (mNotificationCount == 0) {
+                if (tvNotificationItemCount.getVisibility() != View.GONE) {
+                    tvNotificationItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                tvNotificationItemCount.setText(mNotificationCount.toString());
+                if (tvNotificationItemCount.getVisibility() != View.VISIBLE) {
+                    tvNotificationItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -145,7 +166,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigationView)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-       NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
         //setupActionBarWithNavController(navController, appBarConfiguration)
 
         NavigationUI.setupWithNavController(navigationView, navController)
@@ -153,9 +174,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController.addOnDestinationChangedListener { _, destination, _ ->
             var isDestination = false
 
-            if (Utills.userType().toString() == UserTypes.PATIENT.toString()){
-                isDestination = destination.id == R.id.login || destination.id == R.id.search// || destination.id== R.id.patient_details
-            }else{
+            if (Utills.userType().toString() == UserTypes.PATIENT.toString()) {
+                isDestination =
+                    destination.id == R.id.login || destination.id == R.id.search// || destination.id== R.id.patient_details
+            } else {
                 isDestination = destination.id == R.id.login || destination.id == R.id.search
             }
             if (isDestination) {
@@ -169,6 +191,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 drawerLayout.setDrawerLockMode(LOCK_MODE_UNLOCKED)
             }
         }
+        listener =
+            NavController.OnDestinationChangedListener { controller, destination, arguments ->
+                Utills.destination = destination.label.toString()
+            }
 
         hideSelfAssesment()
         //getCurrentFragment()
@@ -177,19 +203,22 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun hideSelfAssesment() {
         val userTypes = App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
         val menu = navigationView.menu
-        if (userTypes!=null && userTypes.length!=0 && userTypes == UserTypes.PATIENT.toString()) menu.findItem(R.id.selfAssesment).setVisible(false)
+        if (userTypes != null && userTypes.length != 0 && userTypes == UserTypes.PATIENT.toString()) menu.findItem(
+            R.id.selfAssesment
+        ).setVisible(false)
         else menu.findItem(R.id.selfAssesment).setVisible(true)
 
-       // getCurrentFragment()
-
-        // selfAssesment
     }
 
-    fun getCurrentFragment(): Fragment? {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        return navHostFragment?.childFragmentManager?.fragments?.get(0)
-      /*  Log.e("fragment", "${fragment}")
-        return fragment*/
+
+    public override fun onResume() {
+        super.onResume()
+        navController.addOnDestinationChangedListener(listener)
+    }
+
+    public override fun onPause() {
+        navController.removeOnDestinationChangedListener(listener)
+        super.onPause()
+
     }
 }

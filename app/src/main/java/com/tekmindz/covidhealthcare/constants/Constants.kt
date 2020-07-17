@@ -66,8 +66,16 @@ object Constants {
     const val STATE_CRITICAL = "critical"
     const val STATE_UNDER_CONTROL = "underControl"
     const val STATE_RECOVERED = "recovered"
+    const val UNIT_HEART_RATE = "BPM"
+    const val UNIT_RESPIRATION = "BrPM"
+    const val UNIT_TEMPERATURE = "°C"
+
+
 
     const val DATE_RANGE = "Date Range"
+
+    const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
+
     //parse server date to app format
 
     fun parseDate(date: String): String {
