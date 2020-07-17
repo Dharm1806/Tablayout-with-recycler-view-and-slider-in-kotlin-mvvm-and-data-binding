@@ -56,6 +56,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
                 response.value = Resource.loading()
             }
             .subscribe({
+                Log.e("request", "${it.code()} , ${it.raw().request()}")
+                Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
                     response.value = (Resource.success(it.body()))
 
