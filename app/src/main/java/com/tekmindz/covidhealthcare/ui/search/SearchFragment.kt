@@ -73,13 +73,17 @@ class SearchFragment : Fragment(), OnItemClickListener {
         }
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.e("querytext submit", "$query")
+
                 mQuery = query.toString()
                 searchQuery()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                Log.e("querytext change", "$newText")
               mQuery = newText.toString()
+
                 searchQuery()
                 return true
             }
@@ -110,8 +114,9 @@ class SearchFragment : Fragment(), OnItemClickListener {
     }
 
     private fun searchQuery() {
+        Log.e("mark", "3434 $mQuery")
         if (mQuery.trim().length != 0) {
-            Log.e("mark", "$mQuery")
+
             if (Utills.verifyAvailableNetwork(requireActivity())) {
                 mSearchViewModel.getSearchPatientResults(
                     SearchRequestModel(
@@ -142,14 +147,23 @@ class SearchFragment : Fragment(), OnItemClickListener {
                         searchQuery()
                     }, Constants.DELAY_IN_API_CALL)
 
+                }else if(it.data?.body ==null){
+                    handleUi()
                 }
-            else showError(it.data?.message!!)
+                else showError(it.data?.message!!)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
     }
 
+    private fun handleUi() {
+        mSearchList.clear()
+        mSearchAdapter.notifyDataSetChanged()
+    }
+
     private fun showError(error: String) {
+        mSearchList.clear()
+        mSearchAdapter.notifyDataSetChanged()
         showMessage(error)
     }
 
@@ -161,6 +175,9 @@ class SearchFragment : Fragment(), OnItemClickListener {
         if (!data.isNullOrEmpty()) {
             mSearchList.clear()
             mSearchList.addAll(data)
+            mSearchAdapter.notifyDataSetChanged()
+        }else{
+            mSearchList.clear()
             mSearchAdapter.notifyDataSetChanged()
         }
     }

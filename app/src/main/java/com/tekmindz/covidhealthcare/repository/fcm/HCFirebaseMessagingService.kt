@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
@@ -45,7 +46,7 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data != null) {
             if (remoteMessage.data.isNotEmpty()) {
                 Log.d(TAG, "Message data : " + remoteMessage.data)
-                val data = remoteMessage.data//
+                val data = remoteMessage.data
                 if (isForeGround && Utills.destination == "Notifications" && remoteMessage.data.containsKey(PATIENT_ID) ){
                     Log.e("patientId", "${remoteMessage.data.get(PATIENT_ID)}")
                     val intent = Intent(BROADCAST_RECEIVER_NAME)
@@ -97,6 +98,7 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
                 .setGroupSummary(true)
                 .setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setAutoCancel(true)
+                .setLights(Color.RED, 300,300)
                 .setContentIntent(pendingIntent)
                 .setContentText(body)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

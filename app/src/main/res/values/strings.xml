@@ -64,7 +64,7 @@
     <string name="text_time">Time</string>
     <string name="action_notification">Notifications</string>
     <string name="title_health_alert">HEALTH ALERT</string>
-    <string name="title_body_temp">BODY TEMPERATURE (C)</string>
+    <string name="title_body_temp">BODY TEMPERATURE (°C)</string>
     <string name="title_heart_rate">HEART RATE(BPM)</string>
     <string name="title_respiration_rate">RESPIRATION RATE(BrPM)</string>
     <string name="no_internet">No Internet</string>
