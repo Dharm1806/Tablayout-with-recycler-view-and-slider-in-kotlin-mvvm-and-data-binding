@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_BASE_URL
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations

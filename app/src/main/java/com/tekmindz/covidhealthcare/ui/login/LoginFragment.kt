@@ -127,6 +127,7 @@ class LoginFragment : Fragment() {
             }
             false
         }
+
         binding.textPasswordLogin.editText?.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 if (validateEditText((v as EditText).text)) {
@@ -215,7 +216,7 @@ Log.e("loginSuccess", "$userData")
     private fun validateFields(loginUser: LoginRequest) {
 
 
-        if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())) {
+        if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString()) && binding.textEmailLogin.editText?.text.toString().trim().length>20) {
 
             binding.textEmailLogin.error = getString(R.string.error_valid_email)
             binding.textEmailLogin.isErrorEnabled = true
@@ -234,6 +235,7 @@ Log.e("loginSuccess", "$userData")
 
         if (!mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString())
             && !mLoginViewModel.validPassword(binding.textPasswordLogin.editText?.text.toString())
+            && binding.textEmailLogin.editText?.text.toString().trim().length<=20
         ) {
 
             if (Utills.verifyAvailableNetwork(activity = requireActivity())) {

@@ -8,9 +8,7 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -24,6 +22,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentNotificationsBinding
 import com.tekmindz.covidhealthcare.databinding.SearchFragmentBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
@@ -61,6 +60,7 @@ class NotificationFragment : Fragment(), OnItemClickListener {
 
         val view: View = binding.root
         binding.lifecycleOwner = this
+        setHasOptionsMenu(true);
 
         return view
     }
@@ -144,6 +144,12 @@ class NotificationFragment : Fragment(), OnItemClickListener {
             IntentFilter(Constants.BROADCAST_RECEIVER_NAME)
         )
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        item.isVisible = mNotificationViewModel.getUserType() == UserTypes.PATIENT.toString()
+    }
+
     @Override
     override fun onStop() {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mBroadCastReceiver)

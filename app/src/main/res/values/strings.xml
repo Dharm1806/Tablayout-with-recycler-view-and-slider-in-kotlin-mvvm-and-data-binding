@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Covid</string>
+    <string name="app_name">Smart4People</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_splash_fragment">Hello Splash Screen</string>
     <string name="hello_home_fragment">Home Screen</string>
@@ -51,9 +51,11 @@
     <string name="title_view_statics">VIEW STATISTICS</string>
     <string name="select_bed_number">Select Bed Number</string>
     <string name="select_ward_no">Select Ward Number</string>
+    <string name="sp02">Oxygen Saturation(Spo2) Reading</string>
+
     <string name="blood_pressure_reading">Blood Pressure Reading</string>
     <string name="sys_mmhg">SYS(mmHg)</string>
-    <string name="b_p_reading">BP Reading</string>
+    <string name="b_p_reading">CAPTURE VITALS</string>
 
     <string name="error_valid_bed_number">Please enter valid bed number</string>
     <string name="error_valid_ward_no">Please enter valid ward no</string>

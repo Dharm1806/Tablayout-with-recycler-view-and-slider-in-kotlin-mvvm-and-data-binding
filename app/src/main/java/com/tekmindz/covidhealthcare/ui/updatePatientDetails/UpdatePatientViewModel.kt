@@ -5,6 +5,9 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePatientReadings
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -92,5 +95,10 @@ class UpdatePatientViewModel(application: Application) : AndroidViewModel(Applic
     fun isValidSys(sys: String): Boolean = sys.trim().isNotEmpty()
 
     fun isValidDia(dia: String): Boolean = dia.trim().isNotEmpty()
+
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+    }
+
 
 }

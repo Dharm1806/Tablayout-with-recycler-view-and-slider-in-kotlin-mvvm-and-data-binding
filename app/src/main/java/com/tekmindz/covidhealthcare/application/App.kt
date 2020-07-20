@@ -39,7 +39,9 @@ class App : Application(), LifecycleObserver {
         //create the gsonBuilder instance
         val gGson = GsonBuilder()
         mSharedPrefrenceManager = SharedPreference(this)
+
         //create the retrofit instance
+
         retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gGson.create()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -54,12 +56,12 @@ class App : Application(), LifecycleObserver {
   public fun initalize(
 
     ){
-      BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.210.115.120:8081/"
-      // BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.216.159.69:8081/"
+    //  BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.210.115.120:8081/"
+       BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.216.159.69:8081/"
       Log.e("base_url", "$BASE_URL")
       if (!BASE_URL.contains("http")){
-          //BASE_URL =    "http://34.216.159.69:8081/"
-          BASE_URL = "http://34.210.115.120:8081/"
+          BASE_URL =    "http://34.216.159.69:8081/"
+         // BASE_URL = "http://34.210.115.120:8081/"
       }
         val gGson = GsonBuilder()
         retrofitAll = Retrofit.Builder()

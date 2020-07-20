@@ -3,9 +3,7 @@ package com.tekmindz.covidhealthcare.ui.updatePatientDetails
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePatientBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePatientReadings
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
@@ -62,7 +61,7 @@ class UpdatePatientDetailsFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-
+        setHasOptionsMenu(true);
         return view
 
     }
@@ -93,6 +92,10 @@ class UpdatePatientDetailsFragment : Fragment() {
 
                 validateFields(updateDetails)
             })
+    }
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        item.isVisible = mUpdatePatientViewModel.getUserType() == UserTypes.PATIENT.toString()
     }
 
     private fun handlePatientDetails(it: Resource<PatientDetails>) {

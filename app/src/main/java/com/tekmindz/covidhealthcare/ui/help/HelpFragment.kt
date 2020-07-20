@@ -1,14 +1,15 @@
 package com.tekmindz.covidhealthcare.ui.help
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 
 
 class HelpFragment : Fragment() {
@@ -18,6 +19,8 @@ class HelpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_help, container, false)
     }
 
@@ -33,5 +36,12 @@ class HelpFragment : Fragment() {
                 youTubePlayer.loadVideo(videoId, 0f)
             }
         })
+    }
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        item.isVisible = getUserType() == UserTypes.PATIENT.toString()
+    }
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
     }
  }

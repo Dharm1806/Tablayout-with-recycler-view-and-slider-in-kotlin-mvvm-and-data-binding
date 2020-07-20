@@ -2,6 +2,9 @@ package com.tekmindz.covidhealthcare.ui.notifications
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.responseModel.NotificationResponse
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,6 +54,12 @@ class NotificationViewModel : ViewModel() {
     fun refreshToken() {
         mNotificationRepository.refreshToken()
     }
+
+
+        fun getUserType(): String {
+            return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+        }
+
 
 
 }

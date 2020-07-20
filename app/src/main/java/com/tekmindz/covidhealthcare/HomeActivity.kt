@@ -1,6 +1,11 @@
 package com.tekmindz.covidhealthcare
 
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -24,6 +30,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
 import com.tekmindz.covidhealthcare.application.App
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.constants.UserTypes
@@ -146,11 +153,56 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.notifications -> {
                 navController.navigate(R.id.navigateToNotifications, null)
             }
-
+            R.id.sos->{
+                sendSos()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun sendSos() {
+        callPhoneNumber()
+
+    }
+    fun callPhoneNumber() {
+        try {
+            if (Build.VERSION.SDK_INT > 22) {
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.CALL_PHONE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.CALL_PHONE),
+                        101
+                    )
+                    return
+                }
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" +  Constants.SOS_NUMBER)
+                startActivity(callIntent)
+            } else {
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
+                startActivity(callIntent)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    override  fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 101) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                callPhoneNumber()
+            }
+        }
+    }
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

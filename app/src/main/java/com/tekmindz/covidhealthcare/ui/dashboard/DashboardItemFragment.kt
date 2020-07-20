@@ -4,9 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -23,6 +21,7 @@ import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentTabItemBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
@@ -57,6 +56,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
+        setHasOptionsMenu(true);
 
         return view
     }
@@ -173,6 +173,13 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         }
     }
 
+   @Override
+   override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        Log.e("userType", mDashboardViewModel.getUserType())
+
+        item.isVisible = false //mDashboardViewModel.getUserType() == UserTypes.PATIENT.toString()
+    }
     private fun handleObservations(it: Resource<DashboardObservationsResponse>) {
 
         when (it.status) {

@@ -10,9 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -60,6 +58,7 @@ class PatientDetailFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
+        setHasOptionsMenu(true);
 
         return view
     }
@@ -118,20 +117,23 @@ class PatientDetailFragment : Fragment() {
                 setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout))
             requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 
-            binding.btSos.visibility = View.GONE
+            binding.btSos.visibility = View.VISIBLE
         }
 
         binding.btSos.setOnClickListener {
-           callPhoneNumber()
-        /*    val bundle = bundleOf("patientId" to patientId.toString())
-            findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)*/
+           //callPhoneNumber()
+           val bundle = bundleOf("patientId" to patientId.toString())
+            findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
 
         }
 
     }
 
 
-
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        item.isVisible = mPatientDetailViewModel.getUserType() == UserTypes.PATIENT.toString()
+    }
 
     private fun handlePatientDetails(it: Resource<PatientDetails>) {
 

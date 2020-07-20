@@ -108,7 +108,6 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_dia"
             style="@style/Widget.Design.TextInputLayoutPD"
-
             android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="wrap_content"
@@ -124,6 +123,30 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/sys_mmhg"
                 android:text="@={UpdatePatientReadings.dia}"
+                android:inputType="textWebPassword"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/field_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_spo2"
+            style="@style/Widget.Design.TextInputLayoutPD"
+            android:theme="@style/TextInputLayoutAppearancePD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_Sys">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/sp02"
+                android:text="@={UpdatePatientReadings.wardNumber}"
                 android:inputType="textWebPassword"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"

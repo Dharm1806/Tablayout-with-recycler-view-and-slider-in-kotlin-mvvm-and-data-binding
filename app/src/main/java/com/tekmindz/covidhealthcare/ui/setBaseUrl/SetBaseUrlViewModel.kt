@@ -4,7 +4,9 @@ import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -98,5 +100,9 @@ class SetBaseUrlViewModel(application: Application) : AndroidViewModel(Applicati
         mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
       /*  val presenter = Presenter(Application())
         presenter.schedule(userData.expires_in)*/
+    }
+
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
     }
 }

@@ -9,9 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -75,6 +73,7 @@ class AnalyticsTabFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
+        setHasOptionsMenu(true);
 
         return view
     }
@@ -138,12 +137,16 @@ class AnalyticsTabFragment : Fragment() {
             }
         })
         if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()){
-            binding.btSos.visibility = View.VISIBLE
+            binding.btSos.visibility = View.GONE
         }else{
             binding.btSos.visibility = View.GONE
         }
         binding.btSos.setOnClickListener { callPhoneNumber() }
 
+    }
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.sos)
+        item.isVisible = mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()
     }
 
     private fun showDateRangePicker() {
