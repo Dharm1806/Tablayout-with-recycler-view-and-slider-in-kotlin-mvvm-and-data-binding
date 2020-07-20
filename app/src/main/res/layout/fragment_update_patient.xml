@@ -87,7 +87,7 @@
             android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_20dp"
+            android:layout_marginStart="@dimen/padding_20dp"
             android:layout_marginEnd="@dimen/padding_20dp"
             android:gravity="start"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,8 @@
             android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_20dp"
+            android:layout_marginStart="@dimen/padding_20dp"
+            app:layout_goneMarginEnd="@dimen/padding_20dp"
             android:layout_marginEnd="@dimen/padding_20dp"
             android:gravity="end"
             app:layout_constraintEnd_toEndOf="parent"
@@ -128,24 +129,40 @@
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/lbl_oxygen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:gravity="center|start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_Sys"
+            android:text="@string/sp02"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="@dimen/dimen_17sp"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:layout_marginBottom="@dimen/padding_20dp"
+            android:textColor="@color/dashboard_text_color" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_spo2"
             style="@style/Widget.Design.TextInputLayoutPD"
             android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_20dp"
+            android:layout_marginStart="@dimen/padding_20dp"
             android:layout_marginEnd="@dimen/padding_20dp"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_Sys">
+            app:layout_constraintTop_toBottomOf="@+id/lbl_oxygen">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:hint="@string/sp02"
                 android:text="@={UpdatePatientReadings.wardNumber}"
                 android:inputType="textWebPassword"
                 android:textColor="@color/white"

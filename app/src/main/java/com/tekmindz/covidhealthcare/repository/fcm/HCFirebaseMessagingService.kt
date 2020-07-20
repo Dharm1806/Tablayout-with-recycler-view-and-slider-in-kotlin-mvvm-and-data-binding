@@ -21,7 +21,6 @@ import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App.Companion.isForeGround
 import com.tekmindz.covidhealthcare.constants.Constants.BROADCAST_RECEIVER_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
 import com.tekmindz.covidhealthcare.utills.Utills
 import java.util.*
 
@@ -75,10 +74,13 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
             val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.notification_icon)
             val mBuilder = NotificationCompat.Builder(this, channelId)
             val intent = Intent(this, HomeActivity::class.java) //add screen class name to move on when user click on notification
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
             val pendingIntent = PendingIntent.getActivity(
                 this, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT
             )
+
             var title = ""
             var body = ""
             val id = Date().time.toInt()

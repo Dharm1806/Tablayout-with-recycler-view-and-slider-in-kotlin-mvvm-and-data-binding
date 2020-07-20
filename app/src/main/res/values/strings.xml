@@ -45,8 +45,8 @@
     <string name="unit_respiration">BrPM</string>
     <string name="msg_body_temperature">Body Temperature</string>
     <string name="unit_body_temp">°C</string>
-    <string name="patient_details">Patient Details</string>
-    <string name="title_search_patient">Search Patients</string>
+    <string name="patient_details">PATIENT DETAILS</string>
+    <string name="title_search_patient">SEARCH PATIENTS</string>
     <string name="please_select_start_date_and_end_date_to_view_the_patient_data">Select Date Range</string>
     <string name="title_view_statics">VIEW STATISTICS</string>
     <string name="select_bed_number">Select Bed Number</string>
