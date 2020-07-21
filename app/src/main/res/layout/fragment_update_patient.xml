@@ -33,9 +33,9 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/select_bed_number"
                 android:text="@={UpdatePatientReadings.bedNumber}"
-                android:inputType="textWebEmailAddress"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,9 +58,9 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/select_ward_no"
                 android:text="@={UpdatePatientReadings.wardNumber}"
-                android:inputType="textWebPassword"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,9 +99,9 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/sys_mmhg"
                 android:text="@={UpdatePatientReadings.sys}"
-                android:inputType="textWebPassword"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,9 +124,9 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/sys_mmhg"
                 android:text="@={UpdatePatientReadings.dia}"
-                android:inputType="textWebPassword"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
@@ -164,9 +164,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@={UpdatePatientReadings.wardNumber}"
-                android:inputType="textWebPassword"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 

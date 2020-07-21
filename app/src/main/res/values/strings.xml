@@ -79,10 +79,11 @@
     <string name="graph_time">HH:mm</string>
     <string name="timezone">UTC</string>
     <string name="msg_please_connect">Please connect to internet for continue</string>
-    <string name="msg_base_url">Base Url</string>
-    <string name="set_base_url">Set Base Url</string>
+    <string name="msg_base_url">BASE URL</string>
+    <string name="set_base_url">SET BASE URL</string>
     <string name="action_sos">SOS</string>
     <string name="help">HELP</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="notification">Notifications</string>
+    <string name="app_name_smart">SMART4PEOPLE</string>
 </resources>

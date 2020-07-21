@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/login"
         android:name="com.tekmindz.covidhealthcare.ui.login.LoginFragment"
-        android:label="@string/app_name"
+        android:label="@string/app_name_smart"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/loginToHome"
@@ -95,7 +95,7 @@
     <fragment
         android:id="@+id/observations"
         android:name="com.tekmindz.covidhealthcare.ui.dashboard.DashboardItemFragment"
-        android:label="@string/app_name"
+        android:label="@string/app_name_smart"
         tools:layout="@layout/fragment_tab_item">
         <action
             android:id="@+id/observationsToPatientDetails"
@@ -172,7 +172,7 @@
     <fragment
         android:id="@+id/helpFragment"
         android:name="com.tekmindz.covidhealthcare.ui.help.HelpFragment"
-        android:label="Help"
+        android:label="@string/help"
         tools:layout="@layout/fragment_help"/>
 
 

@@ -59,7 +59,7 @@ class PatientDetailFragment : Fragment() {
         val view: View = binding.root
         binding.lifecycleOwner = this
         setHasOptionsMenu(true);
-
+        Utills.hideKeyboard(requireActivity())
         return view
     }
 
