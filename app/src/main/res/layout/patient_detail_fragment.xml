@@ -445,7 +445,7 @@
 
         </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.tekmindz.covidhealthcare.utills.MovableFloatingActionButton
             android:id="@+id/bt_sos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
