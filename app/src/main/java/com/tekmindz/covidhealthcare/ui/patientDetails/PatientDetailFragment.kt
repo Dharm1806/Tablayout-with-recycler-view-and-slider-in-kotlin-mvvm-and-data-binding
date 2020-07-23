@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.patientDetails
 
 
 import android.Manifest
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -23,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputLayout
 import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
@@ -36,6 +40,8 @@ import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.add_blood_pressure.*
+import kotlinx.android.synthetic.main.patient_detail_fragment.*
 
 
 class PatientDetailFragment : Fragment() {
@@ -58,7 +64,7 @@ class PatientDetailFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
         Utills.hideKeyboard(requireActivity())
         return view
     }
@@ -117,24 +123,110 @@ class PatientDetailFragment : Fragment() {
                 setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout))
             requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
 
-            binding.btSos.visibility = View.VISIBLE
+            binding.btSos.visibility = View.GONE
         }
 
         binding.btSos.setOnClickListener {
-           //callPhoneNumber()
-           val bundle = bundleOf("patientId" to patientId.toString())
+          Utills.callPhoneNumber(requireActivity())
+           /*val bundle = bundleOf("patientId" to patientId.toString())
             findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
+*/
+        }
+        binding.painLevel.setOnClickListener {
+            val bundle = bundleOf("patientId" to patientId.toString())
+            findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
+        }
 
+        binding.addBloodPressure.setOnClickListener {
+            addBP()
+        }
+
+        binding.addSpo2.setOnClickListener {
+            addSpO2Al()
         }
 
     }
 
+    private fun addSpO2Al() {
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.add_oxygen)
+        val etSpO2 = dialog.findViewById(R.id.et_spo2) as TextInputLayout
+        //body.text = title
+        val saveSpO2 = dialog.findViewById(R.id.saveSpO2) as TextView
+        val cancelSpO2 = dialog.findViewById(R.id.cancelSpO2) as TextView
+
+        saveSpO2.setOnClickListener {
+            val spO2 = etSpO2.editText?.text
+            if (spO2?.trim()?.length==0){
+                etSpO2.isErrorEnabled= true
+                etSpO2.error = getString(R.string.err_spo2)
+            }else{
+                etSpO2.isErrorEnabled =false
+                dialog.dismiss()
+                Log.e("spo2", "$spO2")
+            }
+        }
+        cancelSpO2.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+        val cancelAction = dialog.findViewById(R.id.cancel_action) as ImageView
+
+        cancelAction.setOnClickListener { dialog.dismiss() }
+
+    }
+
+    private fun addBP() {
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.add_blood_pressure)
+        val etSys = dialog.findViewById(R.id.tv_Sys) as TextInputLayout
+        val etDia = dialog.findViewById(R.id.tv_dia) as TextInputLayout
+
+        //body.text = title
+        val saveBloodPressure = dialog.findViewById(R.id.saveBloodPressure) as TextView
+        val cancelBloodPressure = dialog.findViewById(R.id.cancelBloodPressure) as TextView
+        val cancelAction = dialog.findViewById(R.id.cancel_action) as ImageView
+        saveBloodPressure.setOnClickListener {
+            val sys = etSys.editText?.text
+            if (sys?.trim()?.length==0){
+                etSys.isErrorEnabled= true
+                etSys.error = getString(R.string.err_sys)
+            }else{
+                etSys.isErrorEnabled =false
+                Log.e("SYS", "$sys")
+            }
+
+            val dia = etDia.editText?.text
+            if (dia?.trim()?.length==0){
+                etDia.isErrorEnabled= true
+                etDia.error = getString(R.string.error_valid_dia)
+            }else{
+                etDia.isErrorEnabled =false
+                Log.e("dia", "$dia")
+            }
+
+            if (sys?.trim()?.length!=0 && dia?.trim()?.length!=0){
+
+            dialog.dismiss()}
+        }
+
+        cancelBloodPressure.setOnClickListener { dialog.dismiss() }
+        cancelAction.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+    }
+
+
+
+
+    /*override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         item.isVisible = mPatientDetailViewModel.getUserType() == UserTypes.PATIENT.toString()
     }
-
+*/
     private fun handlePatientDetails(it: Resource<PatientDetails>) {
 
         when (it.status) {
@@ -230,7 +322,7 @@ class PatientDetailFragment : Fragment() {
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
-    fun callPhoneNumber() {
+    /*fun callPhoneNumber() {
         try {
             if (Build.VERSION.SDK_INT > 22) {
                 if (ActivityCompat.checkSelfPermission(
@@ -256,17 +348,7 @@ class PatientDetailFragment : Fragment() {
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
-    }
+    }*/
 
-    override  fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == 101) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                callPhoneNumber()
-            }
-        }
-    }
+
 }

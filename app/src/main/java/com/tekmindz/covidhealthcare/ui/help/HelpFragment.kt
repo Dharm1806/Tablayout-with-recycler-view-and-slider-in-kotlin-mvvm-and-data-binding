@@ -10,6 +10,8 @@ import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
+import com.tekmindz.covidhealthcare.utills.Utills
+import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 
 
 class HelpFragment : Fragment() {
@@ -19,7 +21,7 @@ class HelpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
 
         return inflater.inflate(R.layout.fragment_help, container, false)
     }
@@ -36,11 +38,18 @@ class HelpFragment : Fragment() {
                 youTubePlayer.loadVideo(videoId, 0f)
             }
         })
+        if(getUserType() == UserTypes.PATIENT.toString()){
+            bt_sos.visibility = View.VISIBLE
+        }else{
+            bt_sos.visibility = View.GONE
+        }
+        bt_sos.setOnClickListener { Utills.callPhoneNumber(requireActivity())
+        }
     }
-    override fun onPrepareOptionsMenu(menu: Menu) {
+  /*  override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         item.isVisible = getUserType() == UserTypes.PATIENT.toString()
-    }
+    }*/
     fun getUserType(): String {
         return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
     }

@@ -86,4 +86,19 @@
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="notification">Notifications</string>
     <string name="app_name_smart">SMART4PEOPLE</string>
+    <string name="spo2_oxygen_saturation">SpO2 Oxygen Saturation</string>
+    <string name="spo2">SpO2%</string>
+    <string name="action_save">save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="blood_pressure">Blood Pressure</string>
+    <string name="msg_blood_pressure">Blood Pressure</string>
+    <string name="msg_oxygen_saturation">Oxygen Saturation</string>
+    <string name="err_spo2">Please enter valid spO2</string>
+    <string name="err_sys">Please enter valid SYS</string>
+    <string name="level_of_pain">LEVEL OF PAIN</string>
+    <string name="assess_the_intensity_of_pain">Assess the intensity of pain</string>
+    <string name="zero">0</string>
+    <string name="no_pain">No Pain</string>
+    <string name="severe_pain">Severe Pain</string>
+    <string name="ten">10</string>
 </resources>

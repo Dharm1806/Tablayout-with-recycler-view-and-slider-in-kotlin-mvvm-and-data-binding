@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <!--   <variable
+               name="UpdatePainLevel"
+               type="com.tekmindz.covidhealthcare.ui.UpdatePainLevel.UpdatePainLevelViewModel" />
+    -->
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:background="@color/tab_background"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_pain_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/width_50dp"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:src="@drawable/ic_pain_emoji_big" />
+
+            <TextView
+                android:id="@+id/tv_pain_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/padding_20dp"
+                android:fontFamily="@font/roboto_medium"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="@string/assess_the_intensity_of_pain"
+                android:textColor="@color/dashboard_text_color"
+                android:textSize="@dimen/text_size_15sp" />
+        </LinearLayout>
+
+        <com.xw.repo.BubbleSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            app:bsb_auto_adjust_section_mark="true"
+            app:bsb_bubble_color="@color/green"
+            app:bsb_bubble_text_color="@color/white"
+            app:bsb_max="10"
+            app:bsb_min="0"
+            app:bsb_progress="0"
+            app:bsb_second_track_color="@color/colorPrimaryDark"
+            app:bsb_section_count="10"
+            app:bsb_section_text_position="sides"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_progress_in_float="false"
+            app:bsb_show_section_mark="true"
+            app:bsb_show_section_text="true"
+            app:bsb_show_thumb_text="true"
+            app:bsb_thumb_radius="2dp"
+            app:bsb_track_color="@color/dark_grey"
+            android:outlineAmbientShadowColor="@color/colorPrimaryDark"
+
+            app:bsb_thumb_color="@color/colorPrimary"
+            app:bsb_bubble_text_size="@dimen/text_size_15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_170"
+            android:background="@color/tab_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/bt_save"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/ic_no_pain"
+                android:layout_width="@dimen/width_40dp"
+                android:layout_height="@dimen/width_40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/padding_20dp"
+                android:layout_marginTop="@dimen/dimen_30dp"
+                android:background="@drawable/ic_no_pain"
+                android:fontFamily="@font/roboto_regular"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:padding="@dimen/margin_10dp"
+                android:text="@string/zero"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_no_pain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/padding_20dp"
+                android:layout_marginTop="35dp"
+                android:fontFamily="@font/roboto_regular"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="@string/no_pain"
+                android:textColor="@color/dashboard_text_color"
+                android:textSize="@dimen/padding_20dp"
+                app:layout_constraintStart_toEndOf="@+id/ic_no_pain"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/ic_severe_pain"
+                android:layout_width="@dimen/width_40dp"
+                android:layout_height="@dimen/width_40dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/padding_20dp"
+                android:layout_marginTop="@dimen/padding_20dp"
+                android:background="@drawable/ic_severe_pain"
+                android:fontFamily="@font/roboto_regular"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:padding="@dimen/margin_10dp"
+                android:text="@string/ten"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ic_no_pain" />
+
+            <TextView
+                android:id="@+id/tv_severe_pain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="33dp"
+                android:fontFamily="@font/roboto_regular"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="@string/severe_pain"
+                android:textColor="@color/dashboard_text_color"
+                android:textSize="@dimen/padding_20dp"
+                app:layout_constraintStart_toEndOf="@+id/ic_severe_pain"
+                app:layout_constraintTop_toBottomOf="@+id/tv_no_pain" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/bt_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:background="@drawable/title_bg"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:padding="@dimen/text_size_15sp"
+            android:text="@string/action_save"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

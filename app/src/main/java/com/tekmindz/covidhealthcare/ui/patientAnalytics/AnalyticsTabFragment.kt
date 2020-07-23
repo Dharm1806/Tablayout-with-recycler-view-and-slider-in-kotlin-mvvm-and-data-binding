@@ -73,7 +73,7 @@ class AnalyticsTabFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
 
         return view
     }
@@ -137,17 +137,17 @@ class AnalyticsTabFragment : Fragment() {
             }
         })
         if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()){
-            binding.btSos.visibility = View.GONE
+            binding.btSos.visibility = View.VISIBLE
         }else{
             binding.btSos.visibility = View.GONE
         }
-        binding.btSos.setOnClickListener { callPhoneNumber() }
+        binding.btSos.setOnClickListener { Utills.callPhoneNumber(requireActivity()) }
 
     }
-    override fun onPrepareOptionsMenu(menu: Menu) {
+   /* override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         item.isVisible = mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()
-    }
+    }*/
 
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -390,44 +390,6 @@ Log.e("data", "123 t ${data.size}")
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
-    fun callPhoneNumber() {
-        try {
-            if (Build.VERSION.SDK_INT > 22) {
-                if (ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.CALL_PHONE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.CALL_PHONE),
-                        101
-                    )
-                    return
-                }
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            } else {
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == 101) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                callPhoneNumber()
-            }
-        }
-    }
 
 }

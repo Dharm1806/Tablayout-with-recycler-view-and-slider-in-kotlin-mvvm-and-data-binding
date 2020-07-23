@@ -1,9 +1,11 @@
-package com.tekmindz.covidhealthcare.ui.updatePatientDetails
+package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.constants.UserTypes
-import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePatientBinding
-import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePatientReadings
+import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePainLevelBinding
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
@@ -26,7 +28,7 @@ import com.tekmindz.covidhealthcare.utills.Utills
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var mUpdatePatientViewModel: UpdatePatientViewModel
+private lateinit var mUpdatePainLevelViewModel: UpdatePainLevelViewModel
 private var mProgressDialog: ProgressDialog? = null
 private lateinit var patientId: String
 
@@ -35,8 +37,8 @@ private lateinit var patientId: String
  * Use the [LoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class UpdatePatientDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentUpdatePatientBinding
+class UpdatePainLevelFragment : Fragment() {
+    private lateinit var binding: FragmentUpdatePainLevelBinding
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -57,11 +59,11 @@ class UpdatePatientDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_update_patient, container, false
+            inflater, R.layout.fragment_update_pain_level, container, false
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+        // setHasOptionsMenu(true);
         return view
 
     }
@@ -72,31 +74,33 @@ class UpdatePatientDetailsFragment : Fragment() {
         mProgressDialog =
             activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
-        mUpdatePatientViewModel =
-            ViewModelProviders.of(this).get(UpdatePatientViewModel::class.java)
-        binding.updatePatientReadings = (mUpdatePatientViewModel)
+        mUpdatePainLevelViewModel =
+            ViewModelProviders.of(this).get(UpdatePainLevelViewModel::class.java)
+      // binding.updatePainLevel = (mUpdatePainLevelViewModel)?:null
 
         /* button_login.setOnClickListener {
              validateFields()
          }*/
 
-        mUpdatePatientViewModel.response().observe(requireActivity(), Observer {
+        mUpdatePainLevelViewModel.response().observe(requireActivity(), Observer {
             when (it) {
                 is Resource<PatientDetails> -> {
                     handlePatientDetails(it)
                 }
             }
         })
-        mUpdatePatientViewModel.getUpdatedPatientDetails()
-            ?.observe(requireActivity(), Observer<UpdatePatientReadings> { updateDetails ->
+        mUpdatePainLevelViewModel.getUpdatedPatientDetails()
+            ?.observe(requireActivity(), Observer<UpdatePainLevel> { updateDetails ->
 
                 validateFields(updateDetails)
             })
+
+
     }
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.sos)
-        item.isVisible = mUpdatePatientViewModel.getUserType() == UserTypes.PATIENT.toString()
-    }
+    /* override fun onPrepareOptionsMenu(menu: Menu) {
+         val item: MenuItem = menu.findItem(R.id.sos)
+         item.isVisible = mUpdatePatientViewModel.getUserType() == UserTypes.PATIENT.toString()
+     }*/
 
     private fun handlePatientDetails(it: Resource<PatientDetails>) {
 
@@ -145,50 +149,19 @@ class UpdatePatientDetailsFragment : Fragment() {
         mProgressDialog?.hide()
     }
 
-    private fun validateFields(updatePatientReadings: UpdatePatientReadings) {
+    private fun validateFields(updatePatientReadings: UpdatePainLevel) {
 
 
-        if (mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)) {
 
-            binding.textBedNo.error = getString(R.string.error_valid_bed_number)
-            binding.textBedNo.isErrorEnabled = true
-        } else {
 
-            binding.textBedNo.isErrorEnabled = false
-        }
-
-        if (mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)) {
-            binding.textWardNo.error = getString(R.string.error_valid_ward_no)
-            binding.textWardNo.isErrorEnabled = true
-        } else {
-
-            binding.textWardNo.isErrorEnabled = false
-        }
-
-        if (mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)) {
-            binding.textSys.error = getString(R.string.error_valid_sys)
-            binding.textSys.isErrorEnabled = true
-        } else {
-
-            binding.textSys.isErrorEnabled = false
-        }
-
-        if (mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)) {
-            binding.textDia.error = getString(R.string.error_valid_dia)
-            binding.textDia.isErrorEnabled = true
-        } else {
-
-            binding.textDia.isErrorEnabled = false
-        }
-
-        if (!mUpdatePatientViewModel.isValidBedNumber(updatePatientReadings.bedNumber)
-            && !mUpdatePatientViewModel.isValidWardNumber(updatePatientReadings.wardNumber)
-            && !mUpdatePatientViewModel.isValidSys(updatePatientReadings.sys)
-            && !mUpdatePatientViewModel.isValidDia(updatePatientReadings.dia)
+        if (!mUpdatePainLevelViewModel.isValidBedNumber(updatePatientReadings.bedNumber)
+            && !mUpdatePainLevelViewModel.isValidWardNumber(updatePatientReadings.wardNumber)
+            && !mUpdatePainLevelViewModel.isValidSys(updatePatientReadings.sys)
+            && !mUpdatePainLevelViewModel.isValidDia(updatePatientReadings.dia)
         ) {
             if (Utills.verifyAvailableNetwork(requireActivity())) {
                 mProgressDialog?.show()
-                mUpdatePatientViewModel.updatePatientDetails(updatePatientReadings)
+                mUpdatePainLevelViewModel.updatePainLevel(updatePatientReadings)
             }
         }
     }

@@ -1,14 +1,13 @@
-package com.tekmindz.covidhealthcare.ui.updatePatientDetails
+package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
 import android.app.Application
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
-import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePatientReadings
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,31 +16,31 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 
-class UpdatePatientViewModel(application: Application) : AndroidViewModel(Application()) {
+class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Application()) {
 
     private val subscriptions = CompositeDisposable()
 
     private var response: MutableLiveData<Resource<PatientDetails>> =
         MutableLiveData<Resource<PatientDetails>>()
 
-    private var mUpdatePatientDetailsRepository: UpdatePatientDetailsRepository =
-        UpdatePatientDetailsRepository()
+    private var mUpdatePatientDetailsRepository: UpdatePainLevelRepository =
+        UpdatePainLevelRepository()
     var bedNumber = MutableLiveData<String>()
     var wardNumber = MutableLiveData<String>()
     var sys = MutableLiveData<String>()
     var dia = MutableLiveData<String>()
     var patientId = MutableLiveData<String>()
-    private var updatePDetailsMutableLiveData: MutableLiveData<UpdatePatientReadings>? = null
+    private var updatePDetailsMutableLiveData: MutableLiveData<UpdatePainLevel>? = null
 
-    fun getUpdatedPatientDetails(): MutableLiveData<UpdatePatientReadings>? {
+    fun getUpdatedPatientDetails(): MutableLiveData<UpdatePainLevel>? {
         if (updatePDetailsMutableLiveData == null) {
-            updatePDetailsMutableLiveData = MutableLiveData<UpdatePatientReadings>()
+            updatePDetailsMutableLiveData = MutableLiveData<UpdatePainLevel>()
         }
         return updatePDetailsMutableLiveData
     }
 
     fun onClick(view: View?) {
-        val loginUser = UpdatePatientReadings(
+        val loginUser = UpdatePainLevel(
             patientId = patientId.value.toString(),
             bedNumber = bedNumber.value.toString(),
             wardNumber = wardNumber.value.toString(),
@@ -51,8 +50,8 @@ class UpdatePatientViewModel(application: Application) : AndroidViewModel(Applic
         updatePDetailsMutableLiveData!!.value = loginUser
     }
 
-    fun updatePatientDetails(updatePatientReadings: UpdatePatientReadings) {
-        subscribe(mUpdatePatientDetailsRepository.updatePatientDetails(updatePatientReadings)
+    fun updatePainLevel(updatePainLevel: UpdatePainLevel) {
+        subscribe(mUpdatePatientDetailsRepository.updatePainLevel(updatePainLevel)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

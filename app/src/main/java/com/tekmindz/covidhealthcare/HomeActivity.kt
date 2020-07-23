@@ -153,43 +153,16 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.notifications -> {
                 navController.navigate(R.id.navigateToNotifications, null)
             }
-            R.id.sos->{
+            /*R.id.sos->{
                 sendSos()
-            }
+            }*/
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun sendSos() {
-        callPhoneNumber()
+        Utills.callPhoneNumber(this)
 
-    }
-    fun callPhoneNumber() {
-        try {
-            if (Build.VERSION.SDK_INT > 22) {
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.CALL_PHONE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.CALL_PHONE),
-                        101
-                    )
-                    return
-                }
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" +  Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            } else {
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
     }
 
     override  fun onRequestPermissionsResult(
@@ -199,7 +172,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     ) {
         if (requestCode == 101) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                callPhoneNumber()
+                Utills.callPhoneNumber(this)
             }
         }
     }
@@ -273,4 +246,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onPause()
 
     }
+
 }

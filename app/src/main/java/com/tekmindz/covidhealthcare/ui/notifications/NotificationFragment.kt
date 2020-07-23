@@ -33,6 +33,7 @@ import com.tekmindz.covidhealthcare.repository.responseModel.NotificationRespons
 import com.tekmindz.covidhealthcare.repository.responseModel.observations
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
+import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 
 class NotificationFragment : Fragment(), OnItemClickListener {
     private lateinit var binding: FragmentNotificationsBinding
@@ -60,7 +61,7 @@ class NotificationFragment : Fragment(), OnItemClickListener {
 
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+       // setHasOptionsMenu(true);
 
         return view
     }
@@ -93,6 +94,13 @@ class NotificationFragment : Fragment(), OnItemClickListener {
                 }
             }
         })
+        if(mNotificationViewModel.getUserType() == UserTypes.PATIENT.toString()){
+            bt_sos.visibility = View.VISIBLE
+        }else{
+            bt_sos.visibility = View.GONE
+        }
+        binding.btSos.setOnClickListener { Utills.callPhoneNumber(requireActivity())
+        }
 
     }
 
@@ -145,11 +153,11 @@ class NotificationFragment : Fragment(), OnItemClickListener {
         )
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+   /* override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         item.isVisible = mNotificationViewModel.getUserType() == UserTypes.PATIENT.toString()
     }
-
+*/
     @Override
     override fun onStop() {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mBroadCastReceiver)

@@ -351,24 +351,22 @@
                     app:layout_constraintTop_toBottomOf="@+id/respiration_rate" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-        <TextView
+        <com.tekmindz.covidhealthcare.utills.MovableButton
+            android:id="@+id/bt_sos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="@dimen/dimen_30dp"
-            android:layout_marginBottom="@dimen/padding_20dp"
-            android:id="@+id/bt_sos"
-            android:text="@string/action_sos"
-            android:tint="@color/white"
+            android:layout_marginBottom="@dimen/width_50dp"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_17sp"
             android:gravity="center"
+            android:padding="10dp"
+            android:textSize="@dimen/text_size_15sp"
             android:fontFamily="@font/roboto_bold"
             android:layout_gravity="bottom|end"
-            android:foregroundTint="@color/white"
-            android:padding="@dimen/margin_10dp"
-            android:background="@drawable/ic_sos_bg" />
+            android:background="@drawable/ic_sos"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

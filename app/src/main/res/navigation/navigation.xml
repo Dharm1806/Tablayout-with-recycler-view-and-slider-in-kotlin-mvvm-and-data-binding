@@ -115,7 +115,7 @@
             android:defaultValue="0" />
         <action
             android:id="@+id/pDetailsToUpdateReadings"
-            app:destination="@id/updatePatientDetails" />
+            app:destination="@id/updatePainLevel" />
 
         <action
             android:id="@+id/pDetailsToAnalytics"
@@ -161,10 +161,10 @@
 
 
     <fragment
-        android:id="@+id/updatePatientDetails"
-        android:name="com.tekmindz.covidhealthcare.ui.updatePatientDetails.UpdatePatientDetailsFragment"
-        android:label="@string/b_p_reading"
-        tools:layout="@layout/fragment_update_patient">
+        android:id="@+id/updatePainLevel"
+        android:name="com.tekmindz.covidhealthcare.ui.UpdatePainLevel.UpdatePainLevelFragment"
+        android:label="@string/level_of_pain"
+        tools:layout="@layout/fragment_update_pain_level">
         <action
             android:id="@+id/homeToPatientDetails"
             app:destination="@id/patient_details" />

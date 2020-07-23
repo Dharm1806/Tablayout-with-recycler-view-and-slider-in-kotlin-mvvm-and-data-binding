@@ -49,6 +49,22 @@
             android:layout_marginEnd="@dimen/padding_20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_critical_patient_list" />
+        <com.tekmindz.covidhealthcare.utills.MovableButton
+            android:id="@+id/bt_sos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="@dimen/dimen_30dp"
+            android:layout_marginBottom="@dimen/width_50dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="@dimen/text_size_15sp"
+            android:fontFamily="@font/roboto_bold"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/ic_sos"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

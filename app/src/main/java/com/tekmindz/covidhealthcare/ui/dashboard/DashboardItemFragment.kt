@@ -56,7 +56,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
         return view
     }
@@ -172,14 +172,14 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
             )
         }
     }
-
+/*
    @Override
    override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         Log.e("userType", mDashboardViewModel.getUserType())
 
         item.isVisible = false //mDashboardViewModel.getUserType() == UserTypes.PATIENT.toString()
-    }
+    }*/
     private fun handleObservations(it: Resource<DashboardObservationsResponse>) {
 
         when (it.status) {

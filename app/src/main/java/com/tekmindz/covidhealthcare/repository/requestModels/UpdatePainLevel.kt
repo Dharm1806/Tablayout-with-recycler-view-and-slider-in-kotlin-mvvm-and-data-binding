@@ -1,6 +1,6 @@
 package com.tekmindz.covidhealthcare.repository.requestModels
 
-data class UpdatePatientReadings(
+data class UpdatePainLevel(
     val patientId: String,
     val bedNumber: String,
     val wardNumber: String,

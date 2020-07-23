@@ -62,7 +62,7 @@ class SetBaseUrlFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
 
         return view
 
@@ -78,7 +78,7 @@ class SetBaseUrlFragment : Fragment() {
         binding.loginViewModel = mSetBaseUrlViewModel
 
        val mBaseUrl =
-            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.216.159.69:8081/"
+            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://52.33.48.49:8081/"
 
         /*val mBaseUrl =
             App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.210.115.120:8081/"*/
@@ -120,6 +120,12 @@ class SetBaseUrlFragment : Fragment() {
                 }
             }
         }
+        if (mSetBaseUrlViewModel.getUserType() == UserTypes.PATIENT.toString()){
+            binding.btSos.visibility = View.VISIBLE
+        }else{
+            binding.btSos.visibility = View.GONE
+        }
+        binding.btSos.setOnClickListener { Utills.callPhoneNumber(requireActivity()) }
 
     }
 
@@ -143,10 +149,10 @@ class SetBaseUrlFragment : Fragment() {
     private fun hideProgressbar() {
         mProgressDialog?.hide()
     }
-    override fun onPrepareOptionsMenu(menu: Menu) {
+   /* override fun onPrepareOptionsMenu(menu: Menu) {
         val item: MenuItem = menu.findItem(R.id.sos)
         item.isVisible = mSetBaseUrlViewModel.getUserType() == UserTypes.PATIENT.toString()
-    }
+    }*/
     private fun validateFields(loginUser: LoginRequest) {
 
 

@@ -1,12 +1,16 @@
 package com.tekmindz.covidhealthcare.utills
 
 
+import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
@@ -21,6 +25,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import com.auth0.android.jwt.Claim
@@ -390,5 +396,32 @@ var destination:String = ""
         val decodedBytes =
             Base64.decode(strEncoded, Base64.URL_SAFE)
         return String(decodedBytes, Charsets.UTF_8)
+    }
+    fun callPhoneNumber(requireActivity:Activity) {
+        try {
+            if (Build.VERSION.SDK_INT > 22) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireActivity,
+                        Manifest.permission.CALL_PHONE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity,
+                        arrayOf(Manifest.permission.CALL_PHONE),
+                        101
+                    )
+                    return
+                }
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" +  Constants.SOS_NUMBER)
+                requireActivity.startActivity(callIntent)
+            } else {
+                val callIntent = Intent(Intent.ACTION_CALL)
+                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
+                requireActivity.startActivity(callIntent)
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
     }
 }

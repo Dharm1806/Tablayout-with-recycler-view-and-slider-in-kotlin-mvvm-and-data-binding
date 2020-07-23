@@ -8,10 +8,11 @@
         app:actionLayout="@layout/notification_action_item"
         android:title="@string/action_notification" />
 
-    <item
+   <!-- <item
         android:id="@+id/sos"
         android:icon="@drawable/ic_sos"
         app:showAsAction="always"
-        android:title="@string/action_notification" />
+
+        android:title="@string/action_notification" />-->
 
 </menu>

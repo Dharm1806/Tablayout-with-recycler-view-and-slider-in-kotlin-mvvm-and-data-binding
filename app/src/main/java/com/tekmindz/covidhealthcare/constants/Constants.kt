@@ -11,7 +11,7 @@ object Constants {
 
     //dev base url
     const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    var BASE_URL = "http://34.216.159.69:8081/"
+    var BASE_URL = "http://52.33.48.49:8081/"
 
     //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
@@ -23,7 +23,7 @@ object Constants {
     const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"
     const val GET_PATIENT_OBSERVATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
     const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
-    const val UPDATE_PATIENT_DETAILS = "api/dashboard/observations"
+    const val UPDATE_PAIN_LEVEL= "api/dashboard/observations"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
     const val GET_NOTIFICATIONS= "api/dashboard/mobile/patientDetails/{patientId}"
 
