@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,12 +17,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePainLevelBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
+import com.xw.repo.BubbleSeekBar
+import com.xw.repo.BubbleSeekBar.OnProgressChangedListenerAdapter
+import kotlinx.android.synthetic.main.fragment_update_pain_level.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -81,6 +84,51 @@ class UpdatePainLevelFragment : Fragment() {
         /* button_login.setOnClickListener {
              validateFields()
          }*/
+      /*  mObsScrollView.setOnScrollChangedListener(object : OnScrollChangedListener() {
+            fun onScrollChanged(
+                scrollView: ObservableScrollView?,
+                x: Int,
+                y: Int,
+                oldx: Int,
+                oldy: Int
+            ) {
+                bubbleSeekBar1.correctOffsetWhenContainerOnScrolling()
+            }
+        })*/
+        seek_level_Of_pain.setOnProgressChangedListener(object : OnProgressChangedListenerAdapter() {
+            override fun onProgressChanged(
+                bubbleSeekBar: BubbleSeekBar,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {
+                Log.e("on progress changed", "$progress, $progressFloat")
+                val color: Int
+                color = if (progress <= 3) {
+                    ContextCompat.getColor(requireActivity(), R.color.green)
+                } else if (progress <= 8) {
+                    ContextCompat.getColor(requireActivity(), R.color.amber)
+                } else {
+                    ContextCompat.getColor(requireActivity(), R.color.red)
+                }
+                bubbleSeekBar.setSecondTrackColor(color);
+                bubbleSeekBar.setThumbColor(color);
+                bubbleSeekBar.setBubbleColor(color);
+            }
+
+            override fun getProgressOnActionUp(
+                bubbleSeekBar: BubbleSeekBar,
+                progress: Int,
+                progressFloat: Float
+            ) {}
+
+            override fun getProgressOnFinally(
+                bubbleSeekBar: BubbleSeekBar,
+                progress: Int,
+                progressFloat: Float,
+                fromUser: Boolean
+            ) {}
+        })
 
         mUpdatePainLevelViewModel.response().observe(requireActivity(), Observer {
             when (it) {

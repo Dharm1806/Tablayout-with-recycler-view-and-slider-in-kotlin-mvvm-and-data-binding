@@ -57,10 +57,10 @@ class App : Application(), LifecycleObserver {
 
     ){
     //  BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://34.210.115.120:8081/"
-       BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://52.33.48.49:8081/"
+       BASE_URL =   mSharedPrefrenceManager.getValueString("base_url")?:  "http://54.188.160.119:8081/"
       Log.e("base_url", "$BASE_URL")
       if (!BASE_URL.contains("http")){
-          BASE_URL =    "http://52.33.48.49:8081/"
+          BASE_URL =    "http://54.188.160.119:8081/"
          // BASE_URL = "http://34.210.115.120:8081/"
       }
         val gGson = GsonBuilder()

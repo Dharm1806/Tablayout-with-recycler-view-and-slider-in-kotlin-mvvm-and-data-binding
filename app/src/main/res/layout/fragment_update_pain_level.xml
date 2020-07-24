@@ -49,6 +49,7 @@
         </LinearLayout>
 
         <com.xw.repo.BubbleSeekBar
+            android:id="@+id/seek_level_Of_pain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_20dp"
@@ -61,7 +62,6 @@
             app:bsb_progress="0"
             app:bsb_second_track_color="@color/colorPrimaryDark"
             app:bsb_section_count="10"
-            app:bsb_section_text_position="sides"
             app:bsb_seek_step_section="true"
             app:bsb_show_progress_in_float="false"
             app:bsb_show_section_mark="true"
@@ -70,9 +70,10 @@
             app:bsb_thumb_radius="2dp"
             app:bsb_track_color="@color/dark_grey"
             android:outlineAmbientShadowColor="@color/colorPrimaryDark"
-
-            app:bsb_thumb_color="@color/colorPrimary"
+            app:bsb_section_text_position="below_section_mark"
+            app:bsb_thumb_color="@color/green"
             app:bsb_bubble_text_size="@dimen/text_size_15sp"
+            app:bsb_always_show_bubble="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

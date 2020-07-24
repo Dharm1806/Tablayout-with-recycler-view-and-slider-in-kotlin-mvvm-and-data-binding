@@ -78,7 +78,7 @@ class SetBaseUrlFragment : Fragment() {
         binding.loginViewModel = mSetBaseUrlViewModel
 
        val mBaseUrl =
-            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://52.33.48.49:8081/"
+            App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://54.188.160.119:8081/"
 
         /*val mBaseUrl =
             App.mSharedPrefrenceManager.getValueString("base_url") ?: "http://34.210.115.120:8081/"*/

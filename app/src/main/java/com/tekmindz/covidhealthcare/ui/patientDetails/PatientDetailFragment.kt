@@ -145,6 +145,7 @@ class PatientDetailFragment : Fragment() {
             addSpO2Al()
         }
 
+
     }
 
     private fun addSpO2Al() {

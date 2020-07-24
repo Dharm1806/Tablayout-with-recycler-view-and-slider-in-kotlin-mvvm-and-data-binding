@@ -11,7 +11,7 @@ object Constants {
 
     //dev base url
     const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    var BASE_URL = "http://52.33.48.49:8081/"
+    var BASE_URL = "http://54.188.160.119:8081/"
 
     //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
