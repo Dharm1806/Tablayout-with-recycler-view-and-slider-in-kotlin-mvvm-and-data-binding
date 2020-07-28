@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -26,6 +28,10 @@ class PatientDetailViewModel : ViewModel() {
     private var patientObserations: MutableLiveData<Resource<PatientObservations>> =
         MutableLiveData<Resource<PatientObservations>>()
 
+
+    private var updatePatientObservations: MutableLiveData<Resource<EditProfileResponse>> =
+        MutableLiveData<Resource<EditProfileResponse>>()
+
     val patientDetail: LiveData<Resource<PatientDetails>> = patientDetails
 
     var mPatientDetailsRepository: PatientDetailsRepository = PatientDetailsRepository()
@@ -41,6 +47,8 @@ class PatientDetailViewModel : ViewModel() {
 
     fun getPatientObservations(): MutableLiveData<Resource<PatientObservations>> =
         patientObserations
+
+    fun updateObservation(): MutableLiveData<Resource<EditProfileResponse>> = updatePatientObservations
 
     private fun subscribe(disposable: Disposable): Disposable {
         subscriptions.add(disposable)
@@ -70,7 +78,7 @@ class PatientDetailViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                patientDetails.value = Resource.loading()
+                patientObserations.value = Resource.loading()
             }
             .subscribe({
 
@@ -94,5 +102,25 @@ class PatientDetailViewModel : ViewModel() {
 
     fun getUserType(): String {
         return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+    }
+
+    fun updateObservationType(mUpdatePainLevel: UpdatePainLevel) {
+        subscribe(mPatientDetailsRepository.updatePainLevel(mUpdatePainLevel)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                updatePatientObservations.value = Resource.loading()
+            }
+            .subscribe({
+
+                if ((it.code() == 200|| it.code() == 201)) {
+                    updatePatientObservations.value = (Resource.success(it.body()))
+                } else {
+                    updatePatientObservations.value = Resource.error(it.message())
+                }
+            }, {
+                updatePatientObservations.value = Resource.error(it.localizedMessage)
+            })
+        )
     }
 }

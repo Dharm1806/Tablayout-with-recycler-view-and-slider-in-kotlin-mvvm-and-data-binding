@@ -8,6 +8,7 @@ import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,62 +21,40 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
 
     private val subscriptions = CompositeDisposable()
 
-    private var response: MutableLiveData<Resource<PatientDetails>> =
-        MutableLiveData<Resource<PatientDetails>>()
+    private var updatePatientObservations: MutableLiveData<Resource<EditProfileResponse>> =
+        MutableLiveData<Resource<EditProfileResponse>>()
 
     private var mUpdatePatientDetailsRepository: UpdatePainLevelRepository =
         UpdatePainLevelRepository()
-    var bedNumber = MutableLiveData<String>()
-    var wardNumber = MutableLiveData<String>()
-    var sys = MutableLiveData<String>()
-    var dia = MutableLiveData<String>()
-    var patientId = MutableLiveData<String>()
-    private var updatePDetailsMutableLiveData: MutableLiveData<UpdatePainLevel>? = null
 
-    fun getUpdatedPatientDetails(): MutableLiveData<UpdatePainLevel>? {
-        if (updatePDetailsMutableLiveData == null) {
-            updatePDetailsMutableLiveData = MutableLiveData<UpdatePainLevel>()
-        }
-        return updatePDetailsMutableLiveData
-    }
 
-    fun onClick(view: View?) {
-        val loginUser = UpdatePainLevel(
-            patientId = patientId.value.toString(),
-            bedNumber = bedNumber.value.toString(),
-            wardNumber = wardNumber.value.toString(),
-            sys = sys.value.toString(),
-            dia = dia.value.toString()
-        )
-        updatePDetailsMutableLiveData!!.value = loginUser
-    }
 
-    fun updatePainLevel(updatePainLevel: UpdatePainLevel) {
-        subscribe(mUpdatePatientDetailsRepository.updatePainLevel(updatePainLevel)
+
+    fun updateObservationType(mUpdatePainLevel: UpdatePainLevel) {
+        subscribe(mUpdatePatientDetailsRepository.updatePainLevel(mUpdatePainLevel)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                response.value = Resource.loading()
+                updatePatientObservations.value = Resource.loading()
             }
             .subscribe({
-                if (it.code() == 200 && it.isSuccessful) {
-                    response.value = (Resource.success(it.body()))
+
+                if ((it.code() == 200|| it.code() == 201)) {
+                    updatePatientObservations.value = (Resource.success(it.body()))
                 } else {
-                    response.value = Resource.error(it.message())
+                    updatePatientObservations.value = Resource.error(it.message())
                 }
             }, {
-                response.value = Resource.error(it.localizedMessage)
+                updatePatientObservations.value = Resource.error(it.localizedMessage)
             })
         )
     }
-
-
     override fun onCleared() {
         subscriptions.clear()
     }
 
-    fun response(): MutableLiveData<Resource<PatientDetails>> {
-        return response
+    fun response(): MutableLiveData<Resource<EditProfileResponse>> {
+        return updatePatientObservations
     }
 
 
@@ -84,16 +63,6 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
         return disposable
     }
 
-    fun isValidWardNumber(wardNumber: String): Boolean =
-        wardNumber.trim().isNotEmpty()
-
-
-    fun isValidBedNumber(bedNumber: String): Boolean =
-        bedNumber.trim().isNotEmpty()
-
-    fun isValidSys(sys: String): Boolean = sys.trim().isNotEmpty()
-
-    fun isValidDia(dia: String): Boolean = dia.trim().isNotEmpty()
 
     fun getUserType(): String {
         return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()

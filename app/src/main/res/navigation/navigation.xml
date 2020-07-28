@@ -27,6 +27,10 @@
         android:id="@+id/navigateToNotifications"
         app:destination="@id/notification"
         />
+    <action
+        android:id="@+id/navigateToUpdateContactInfo"
+        app:destination="@id/updateContactInfo"
+        />
 
     <fragment
         android:id="@+id/login"
@@ -69,6 +73,13 @@
             app:destination="@id/patient_details"
             app:popUpTo="@id/notification"
             app:popUpToInclusive="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/updateContactInfo"
+        android:name="com.tekmindz.covidhealthcare.ui.editProfile.EditProfileFragment"
+        android:label="@string/edit_profile"
+        tools:layout="@layout/fragment_edit_profile">
 
     </fragment>
 

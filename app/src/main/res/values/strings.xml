@@ -84,7 +84,7 @@
     <string name="action_sos">SOS</string>
     <string name="help">HELP</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <string name="notification">Notifications</string>
+    <string name="notification">NOTIFICATIONS</string>
     <string name="app_name_smart">SMART4PEOPLE</string>
     <string name="spo2_oxygen_saturation">SpO2 Oxygen Saturation</string>
     <string name="spo2">SpO2%</string>
@@ -101,4 +101,9 @@
     <string name="no_pain">No Pain</string>
     <string name="severe_pain">Severe Pain</string>
     <string name="ten">10</string>
+    <string name="edit_profile">EDIT PROFILE</string>
+    <string name="msg_mobile_number">Mobile Number</string>
+    <string name="msg_emergency_contact_number">Emergency Contact Number</string>
+    <string name="error_valid_mobile">Please enter valid Mobile number</string>
+    <string name="error_valid_emergency_contact_number">Please enter valid Emergency Contact Number</string>
 </resources>

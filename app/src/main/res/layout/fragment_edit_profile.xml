@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="EditProfileViewModel"
+            type="com.tekmindz.covidhealthcare.ui.editProfile.EditProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tab_background">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_contact_number"
+            style="@style/Widget.Design.TextInputLayoutPD"
+            android:theme="@style/TextInputLayoutAppearancePD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/msg_mobile_number"
+                android:text="@={EditProfileViewModel.mobileNumber}"
+                android:inputType="number"
+
+                android:textSize="@dimen/field_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_emergency_contact_number"
+            style="@style/Widget.Design.TextInputLayoutPD"
+            android:theme="@style/TextInputLayoutAppearancePD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_20dp"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@+id/et_contact_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/msg_emergency_contact_number"
+                android:text="@={EditProfileViewModel.emergencyContactNumber}"
+                android:inputType="number"
+
+                android:textSize="@dimen/field_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_20dp"
+            android:background="@drawable/title_bg"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:padding="@dimen/text_size_15sp"
+            android:text="@string/action_save"
+            android:textAllCaps="true"
+            android:onClick="@{(v) -> EditProfileViewModel.onClick(v)}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/button_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

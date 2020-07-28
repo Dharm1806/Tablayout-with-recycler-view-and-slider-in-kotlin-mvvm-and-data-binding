@@ -9,7 +9,8 @@ import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_OBSERVATIONS
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_END_POINTS
 import com.tekmindz.covidhealthcare.constants.Constants.REFRESH_TOKEN_END_POINTS
-import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_PAIN_LEVEL
+import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_CONTACT_NUMBER
+import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_MANUAL_OBSERVSTION
 import com.tekmindz.covidhealthcare.repository.requestModels.*
 import com.tekmindz.covidhealthcare.repository.responseModel.*
 import io.reactivex.Observable
@@ -42,6 +43,14 @@ interface HealthCareApis {
 
     ): Call<UserModel>
 
+    /*  call the patient contact numbers and emergency contact number */
+
+    @FormUrlEncoded
+    @POST(UPDATE_CONTACT_NUMBER)
+    fun updateProfile(
+        @Body editProfileRequest: EditProfileRequest,
+        @Header("Authorization") access_token: String
+    ): Observable<Response<EditProfileResponse>>
 
     /*  call the patient list dashboard observations api*/
 
@@ -90,11 +99,11 @@ interface HealthCareApis {
 
     /* update the patient details from update api*/
 
-    @POST(UPDATE_PAIN_LEVEL)
+    @POST(UPDATE_MANUAL_OBSERVSTION)
     fun updatePainLevel(
         @Body updatePainLevel: UpdatePainLevel,
         @Header("Authorization") access_token: String
-    ): Observable<Response<PatientDetails>>
+    ): Observable<Response<EditProfileResponse>>
 
     /* get the notifications from getNotifications api*/
 

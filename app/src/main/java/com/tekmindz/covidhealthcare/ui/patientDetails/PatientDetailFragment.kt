@@ -33,10 +33,8 @@ import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
-import com.tekmindz.covidhealthcare.repository.responseModel.Details
-import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
-import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservation
-import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.responseModel.*
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.activity_home.*
@@ -103,6 +101,13 @@ class PatientDetailFragment : Fragment() {
             }
         })
 
+        mPatientDetailViewModel.updateObservation().observe(requireActivity(), Observer {
+            when (it) {
+
+                is Resource<EditProfileResponse> -> handleUpdatePatientObservations(it)
+            }
+        })
+
         binding.viewAnalytics.setOnClickListener {
             val bundle = bundleOf(
                 "patientId" to patientId.toInt(),
@@ -148,6 +153,19 @@ class PatientDetailFragment : Fragment() {
 
     }
 
+    private fun handleUpdatePatientObservations(it: Resource<EditProfileResponse>) {
+        when (it.status) {
+            //Resource.Status.LOADING -> showProgressBar()
+            Resource.Status.SUCCESS -> {
+                if ((it.data?.statusCode == 200 || it.data?.statusCode ==201)) showError(it.data?.message)
+                else showError(it.data?.message!!)
+
+            }
+            Resource.Status.ERROR -> showError(it.exception!!)
+        }
+    }
+
+
     private fun addSpO2Al() {
 
         val dialog = Dialog(requireActivity())
@@ -160,13 +178,17 @@ class PatientDetailFragment : Fragment() {
         val cancelSpO2 = dialog.findViewById(R.id.cancelSpO2) as TextView
 
         saveSpO2.setOnClickListener {
-            val spO2 = etSpO2.editText?.text
+            val spO2 = etSpO2.editText?.text.toString()
             if (spO2?.trim()?.length==0){
                 etSpO2.isErrorEnabled= true
                 etSpO2.error = getString(R.string.err_spo2)
             }else{
                 etSpO2.isErrorEnabled =false
                 dialog.dismiss()
+                showProgressBar()
+
+                Utills.hideKeyboard(requireActivity())
+                updateObservationType(spO2, Constants.OBSERVATION_TYPE_SPO2)
                 Log.e("spo2", "$spO2")
             }
         }
@@ -176,6 +198,10 @@ class PatientDetailFragment : Fragment() {
 
         cancelAction.setOnClickListener { dialog.dismiss() }
 
+    }
+
+    private fun updateObservationType(observationValue: String, observationType: String) {
+        mPatientDetailViewModel.updateObservationType(UpdatePainLevel(patientId, observationType,observationValue ,Utills.getCurrentDate()))
     }
 
     private fun addBP() {
@@ -191,7 +217,7 @@ class PatientDetailFragment : Fragment() {
         val cancelBloodPressure = dialog.findViewById(R.id.cancelBloodPressure) as TextView
         val cancelAction = dialog.findViewById(R.id.cancel_action) as ImageView
         saveBloodPressure.setOnClickListener {
-            val sys = etSys.editText?.text
+            val sys = etSys.editText?.text.toString()
             if (sys?.trim()?.length==0){
                 etSys.isErrorEnabled= true
                 etSys.error = getString(R.string.err_sys)
@@ -200,7 +226,7 @@ class PatientDetailFragment : Fragment() {
                 Log.e("SYS", "$sys")
             }
 
-            val dia = etDia.editText?.text
+            val dia = etDia.editText?.text.toString()
             if (dia?.trim()?.length==0){
                 etDia.isErrorEnabled= true
                 etDia.error = getString(R.string.error_valid_dia)
@@ -210,8 +236,12 @@ class PatientDetailFragment : Fragment() {
             }
 
             if (sys?.trim()?.length!=0 && dia?.trim()?.length!=0){
+            dialog.dismiss()
+                Utills.hideKeyboard(requireActivity())
+                showProgressBar()
+                updateObservationType(sys+"/"+dia, Constants.OBSERVATION_TYPE_BP)
 
-            dialog.dismiss()}
+            }
         }
 
         cancelBloodPressure.setOnClickListener { dialog.dismiss() }
@@ -254,6 +284,7 @@ class PatientDetailFragment : Fragment() {
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
+                hideProgressbar()
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientObserVations(it.data.body)
                 else if (it.data?.statusCode == 401 ){
                     mPatientDetailViewModel.refreshToken()
@@ -275,6 +306,9 @@ class PatientDetailFragment : Fragment() {
         binding.tvHeartRateValue.text =Utills.round(data.heartRate)
         binding.tvRespirationRateValue.text =Utills.round(data.respirationRate)
         binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemprature)
+        binding.tvSpO2.text =(data.spo2?:"")
+        binding.tvBloodPressure.text = (data.bp?:"")
+
 
         if (data.status.equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
@@ -323,33 +357,6 @@ class PatientDetailFragment : Fragment() {
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
-    /*fun callPhoneNumber() {
-        try {
-            if (Build.VERSION.SDK_INT > 22) {
-                if (ActivityCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.CALL_PHONE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.CALL_PHONE),
-                        101
-                    )
-                    return
-                }
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" +  Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            } else {
-                val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
-                startActivity(callIntent)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-    }*/
 
 
 }

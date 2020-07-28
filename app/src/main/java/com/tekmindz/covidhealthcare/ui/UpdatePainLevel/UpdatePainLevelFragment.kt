@@ -16,9 +16,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePainLevelBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
@@ -46,6 +48,7 @@ class UpdatePainLevelFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    var patientProgress = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,22 +82,7 @@ class UpdatePainLevelFragment : Fragment() {
 
         mUpdatePainLevelViewModel =
             ViewModelProviders.of(this).get(UpdatePainLevelViewModel::class.java)
-      // binding.updatePainLevel = (mUpdatePainLevelViewModel)?:null
 
-        /* button_login.setOnClickListener {
-             validateFields()
-         }*/
-      /*  mObsScrollView.setOnScrollChangedListener(object : OnScrollChangedListener() {
-            fun onScrollChanged(
-                scrollView: ObservableScrollView?,
-                x: Int,
-                y: Int,
-                oldx: Int,
-                oldy: Int
-            ) {
-                bubbleSeekBar1.correctOffsetWhenContainerOnScrolling()
-            }
-        })*/
         seek_level_Of_pain.setOnProgressChangedListener(object : OnProgressChangedListenerAdapter() {
             override fun onProgressChanged(
                 bubbleSeekBar: BubbleSeekBar,
@@ -102,6 +90,7 @@ class UpdatePainLevelFragment : Fragment() {
                 progressFloat: Float,
                 fromUser: Boolean
             ) {
+                patientProgress = progress
                 Log.e("on progress changed", "$progress, $progressFloat")
                 val color: Int
                 color = if (progress <= 3) {
@@ -132,16 +121,15 @@ class UpdatePainLevelFragment : Fragment() {
 
         mUpdatePainLevelViewModel.response().observe(requireActivity(), Observer {
             when (it) {
-                is Resource<PatientDetails> -> {
+                is Resource<EditProfileResponse> -> {
                     handlePatientDetails(it)
                 }
             }
         })
-        mUpdatePainLevelViewModel.getUpdatedPatientDetails()
-            ?.observe(requireActivity(), Observer<UpdatePainLevel> { updateDetails ->
-
-                validateFields(updateDetails)
-            })
+        bt_save.setOnClickListener {
+            showProgressBar()
+            mUpdatePainLevelViewModel.updateObservationType(UpdatePainLevel(patientId,Constants.OBSERVATION_TYPE_PAIN_LEVEL, patientProgress.toString(),Utills.getCurrentDate()))
+        }
 
 
     }
@@ -150,11 +138,11 @@ class UpdatePainLevelFragment : Fragment() {
          item.isVisible = mUpdatePatientViewModel.getUserType() == UserTypes.PATIENT.toString()
      }*/
 
-    private fun handlePatientDetails(it: Resource<PatientDetails>) {
+    private fun handlePatientDetails(it: Resource<EditProfileResponse>) {
 
         when (it.status) {
             Resource.Status.LOADING -> showProgressBar()
-            Resource.Status.SUCCESS -> loginSuccess(it.data!!)
+            Resource.Status.SUCCESS -> successUpdate(it.data!!)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
@@ -164,26 +152,13 @@ class UpdatePainLevelFragment : Fragment() {
         mProgressDialog?.show()
     }
 
-    private fun loginSuccess(userData: PatientDetails) {
+    private fun successUpdate(editProfileResponse: EditProfileResponse) {
 
         hideProgressbar()
-
-        if (this.activity != null) {
-            val navController =
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            val id = navController.currentDestination!!.id
-            Log.e("id", "$id")
-
-            if (id == R.id.login) {
-                findNavController().navigate(
-                    R.id.loginToHome, null, NavOptions.Builder()
-                        .setPopUpTo(
-                            R.id.login,
-                            true
-                        ).build()
-                )
-            }
+        if (editProfileResponse.statusCode ==200 ||editProfileResponse.statusCode ==201) {
+            showMessage(editProfileResponse.message)
         }
+
     }
 
     private fun showError(error: String) {
@@ -197,22 +172,7 @@ class UpdatePainLevelFragment : Fragment() {
         mProgressDialog?.hide()
     }
 
-    private fun validateFields(updatePatientReadings: UpdatePainLevel) {
 
-
-
-
-        if (!mUpdatePainLevelViewModel.isValidBedNumber(updatePatientReadings.bedNumber)
-            && !mUpdatePainLevelViewModel.isValidWardNumber(updatePatientReadings.wardNumber)
-            && !mUpdatePainLevelViewModel.isValidSys(updatePatientReadings.sys)
-            && !mUpdatePainLevelViewModel.isValidDia(updatePatientReadings.dia)
-        ) {
-            if (Utills.verifyAvailableNetwork(requireActivity())) {
-                mProgressDialog?.show()
-                mUpdatePainLevelViewModel.updatePainLevel(updatePatientReadings)
-            }
-        }
-    }
 
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

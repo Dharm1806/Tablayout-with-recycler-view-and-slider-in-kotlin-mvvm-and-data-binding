@@ -17,13 +17,14 @@ object Constants {
     const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
     //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 
+    const val UPDATE_CONTACT_NUMBER = "api/user/addEmergencyContact"
     const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
     const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
     const val GET_DASHBOARD_COUNTS = "api/dashboard/ragstatus/count"
     const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"
     const val GET_PATIENT_OBSERVATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
     const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
-    const val UPDATE_PAIN_LEVEL= "api/dashboard/observations"
+    const val UPDATE_MANUAL_OBSERVSTION= "api/manual/observation/create"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
     const val GET_NOTIFICATIONS= "api/dashboard/mobile/patientDetails/{patientId}"
 
@@ -78,6 +79,9 @@ object Constants {
     const val UNIT_RESPIRATION = "BrPM"
     const val UNIT_TEMPERATURE = "°C"
 
+    const val OBSERVATION_TYPE_SPO2 = "spo2"
+    const val OBSERVATION_TYPE_BP = "bp"
+    const val OBSERVATION_TYPE_PAIN_LEVEL = "painLevel"
 
 
     const val DATE_RANGE = "Date Range"

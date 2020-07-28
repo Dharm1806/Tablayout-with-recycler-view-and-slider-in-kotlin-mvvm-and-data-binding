@@ -29,8 +29,12 @@ data class PatientObservations(
 ):BaseResponse()
 
 data class PatientObservation(
+
     val heartRate: String,
     val respirationRate: String,
     val bodyTemprature: String,
-    val status: String
+    val status: String,
+    val bp:String,
+    val painLevel:String,
+    val spo2:String
 )

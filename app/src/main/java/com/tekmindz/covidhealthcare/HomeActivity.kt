@@ -153,9 +153,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.notifications -> {
                 navController.navigate(R.id.navigateToNotifications, null)
             }
-            /*R.id.sos->{
-                sendSos()
-            }*/
+            R.id.updateProfile->{
+                navController.navigate(R.id.navigateToUpdateContactInfo, null)            }
         }
         return super.onOptionsItemSelected(item)
     }
