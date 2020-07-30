@@ -119,6 +119,9 @@ class PatientDetailFragment : Fragment() {
 
         if (mPatientDetailViewModel.getUserType() == UserTypes.PATIENT.toString()){
             binding.btSos.visibility = View.VISIBLE
+            binding.addBloodPressure.visibility = View.GONE
+            binding.addSpo2.visibility  = View.GONE
+            binding.painLevel.visibility = View.VISIBLE
          val appBarConfiguration = AppBarConfiguration(
                 setOf(R.id.home, R.id.patient_details), requireActivity().findViewById(R.id.drawer_layout))
             requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
@@ -127,8 +130,10 @@ class PatientDetailFragment : Fragment() {
             val appBarConfiguration = AppBarConfiguration(
                 setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout))
             requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
-
+            binding.addBloodPressure.visibility = View.VISIBLE
+            binding.addSpo2.visibility  = View.VISIBLE
             binding.btSos.visibility = View.GONE
+            binding.painLevel.visibility = View.GONE
         }
 
         binding.btSos.setOnClickListener {
@@ -239,14 +244,13 @@ class PatientDetailFragment : Fragment() {
             dialog.dismiss()
                 Utills.hideKeyboard(requireActivity())
                 showProgressBar()
-                updateObservationType(sys+"/"+dia, Constants.OBSERVATION_TYPE_BP)
+                updateObservationType(sys+","+dia, Constants.OBSERVATION_TYPE_BP)
 
             }
         }
 
         cancelBloodPressure.setOnClickListener { dialog.dismiss() }
         cancelAction.setOnClickListener { dialog.dismiss() }
-
         dialog.show()
     }
 

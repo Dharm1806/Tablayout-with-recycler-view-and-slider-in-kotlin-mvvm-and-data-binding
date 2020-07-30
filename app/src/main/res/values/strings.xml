@@ -55,6 +55,8 @@
 
     <string name="blood_pressure_reading">Blood Pressure Reading</string>
     <string name="sys_mmhg">SYS(mmHg)</string>
+    <string name="dia_mmhg">DIA(mmHg)</string>
+
     <string name="b_p_reading">CAPTURE VITALS</string>
 
     <string name="error_valid_bed_number">Please enter valid bed number</string>

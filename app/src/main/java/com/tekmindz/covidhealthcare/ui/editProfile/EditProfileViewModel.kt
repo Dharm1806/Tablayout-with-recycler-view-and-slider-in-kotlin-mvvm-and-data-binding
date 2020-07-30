@@ -41,8 +41,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
     fun onClick(view: View?) {
         val editProfileRequest = EditProfileRequest(
             mobileNumber.value.toString(),
-            emergencyContactNumber.value.toString()
-
+            emergencyContactNumber.value.toString(), "8"
         )
         ePMutableLiveData!!.value = editProfileRequest
     }

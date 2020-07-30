@@ -186,7 +186,7 @@ Log.e("mEditProfileResponse", "$mEditProfileResponse")
     private fun validateFields(mEditProfileRequest: EditProfileRequest) {
 
 
-        if (mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString()) && binding.etContactNumber.editText?.text.toString().trim().length>20) {
+        if (mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString()) ||  binding.etContactNumber.editText?.text.toString().trim().length>20) {
 
             binding.etContactNumber.error = getString(R.string.error_valid_mobile)
             binding.etContactNumber.isErrorEnabled = true
