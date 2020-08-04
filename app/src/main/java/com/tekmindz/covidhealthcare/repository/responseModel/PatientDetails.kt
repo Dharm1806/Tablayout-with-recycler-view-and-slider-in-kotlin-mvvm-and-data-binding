@@ -17,10 +17,6 @@ data class Details(
     val relayId: String,
     val wearableIdentifier: String,
     val wearableName: String,
-    val heartRate: String,
-    val respirationRate: String,
-    val bodyTemprature: String,
-    val status: String,
     val imageUrl: String
 )
 
@@ -34,7 +30,8 @@ data class PatientObservation(
     val respirationRate: String,
     val bodyTemprature: String,
     val status: String,
-    val bp:String,
-    val painLevel:String,
-    val spo2:String
+    val bpLow: String,
+    val bpHigh: String,
+    val painlevel: String,
+    val spo2: String
 )

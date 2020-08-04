@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -12,16 +13,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePainLevelBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
-import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import com.xw.repo.BubbleSeekBar
@@ -48,14 +45,18 @@ class UpdatePainLevelFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    var patientProgress = 0;
-
+    var patientProgress = 0
+    var painLevel = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
             patientId = it.getString(PATIENT_ID)!!
+            val pain = it.getInt("painLevel")
+            if (pain != null) {
+                painLevel = pain.toInt()
+            }
         }
     }
 
@@ -69,7 +70,7 @@ class UpdatePainLevelFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        // setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         return view
 
     }
@@ -82,8 +83,11 @@ class UpdatePainLevelFragment : Fragment() {
 
         mUpdatePainLevelViewModel =
             ViewModelProviders.of(this).get(UpdatePainLevelViewModel::class.java)
-
-        seek_level_Of_pain.setOnProgressChangedListener(object : OnProgressChangedListenerAdapter() {
+        Log.e("painLevel", "$painLevel")
+        if (painLevel != null) {
+            //seek_level_Of_pain.setProgress(painLevel.toFloat()?:0.0f)
+        }
+        seek_level_Of_pain.onProgressChangedListener = object : OnProgressChangedListenerAdapter() {
             override fun onProgressChanged(
                 bubbleSeekBar: BubbleSeekBar,
                 progress: Int,
@@ -100,9 +104,9 @@ class UpdatePainLevelFragment : Fragment() {
                 } else {
                     ContextCompat.getColor(requireActivity(), R.color.red)
                 }
-                bubbleSeekBar.setSecondTrackColor(color);
-                bubbleSeekBar.setThumbColor(color);
-                bubbleSeekBar.setBubbleColor(color);
+                bubbleSeekBar.setSecondTrackColor(color)
+                bubbleSeekBar.setThumbColor(color)
+                bubbleSeekBar.setBubbleColor(color)
             }
 
             override fun getProgressOnActionUp(
@@ -117,7 +121,7 @@ class UpdatePainLevelFragment : Fragment() {
                 progressFloat: Float,
                 fromUser: Boolean
             ) {}
-        })
+        }
 
         mUpdatePainLevelViewModel.response().observe(requireActivity(), Observer {
             when (it) {
@@ -128,15 +132,23 @@ class UpdatePainLevelFragment : Fragment() {
         })
         bt_save.setOnClickListener {
             showProgressBar()
-            mUpdatePainLevelViewModel.updateObservationType(UpdatePainLevel(patientId,Constants.OBSERVATION_TYPE_PAIN_LEVEL, patientProgress.toString(),Utills.getCurrentDate()))
+            mUpdatePainLevelViewModel.updateObservationType(
+                UpdatePainLevel(
+                    patientId,
+                    Constants.OBSERVATION_TYPE_PAIN_LEVEL,
+                    patientProgress.toString(),
+                    Utills.getCurrentDate()
+                )
+            )
         }
 
 
     }
-    /* override fun onPrepareOptionsMenu(menu: Menu) {
-         val item: MenuItem = menu.findItem(R.id.sos)
-         item.isVisible = mUpdatePatientViewModel.getUserType() == UserTypes.PATIENT.toString()
-     }*/
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
+    }
 
     private fun handlePatientDetails(it: Resource<EditProfileResponse>) {
 

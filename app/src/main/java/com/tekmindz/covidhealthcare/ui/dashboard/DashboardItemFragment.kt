@@ -4,7 +4,10 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -17,11 +20,9 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentTabItemBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
@@ -56,7 +57,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         return view
     }
@@ -196,7 +197,9 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
                     }, Constants.DELAY_IN_API_CALL)
                 }
                 else {
-                    showError(it.data?.message!!)
+                    if (it.data != null && it.data.message != null) {
+                        showError(it.data.message)
+                    }
                 }
             }
             Resource.Status.ERROR -> showError(it.exception!!)
@@ -300,8 +303,12 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
     override fun onItemClicked(mDashboardObservationsResponse: observations) {
         Utills.hideKeyboard(requireActivity())
 
-        val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
+        val bundle = bundleOf("observation" to mDashboardObservationsResponse)
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
+    }
 }

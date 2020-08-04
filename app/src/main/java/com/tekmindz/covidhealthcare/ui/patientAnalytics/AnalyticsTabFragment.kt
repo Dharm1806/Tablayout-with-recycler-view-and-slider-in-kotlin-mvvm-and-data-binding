@@ -1,17 +1,14 @@
 package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
-import android.Manifest
 import android.app.ProgressDialog
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -73,7 +70,7 @@ class AnalyticsTabFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-       // setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         return view
     }
@@ -136,18 +133,19 @@ class AnalyticsTabFragment : Fragment() {
                 }
             }
         })
-        if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()){
+        if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()) {
             binding.btSos.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.btSos.visibility = View.GONE
         }
         binding.btSos.setOnClickListener { Utills.callPhoneNumber(requireActivity()) }
 
     }
-   /* override fun onPrepareOptionsMenu(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.sos)
-        item.isVisible = mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()
-    }*/
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
+    }
 
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()

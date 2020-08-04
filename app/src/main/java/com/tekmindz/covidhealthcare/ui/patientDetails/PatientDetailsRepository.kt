@@ -4,11 +4,13 @@ import android.app.Application
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdateManualObservations
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Presenter
+import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.Observable
 import retrofit2.Response
 
@@ -34,11 +36,20 @@ class PatientDetailsRepository {
         presenter.refreshToken()
     }
 
-    fun updatePainLevel(updatePainLevel: UpdatePainLevel): Observable<Response<EditProfileResponse>> =
+    fun updatePainLevel(updateManualObservations: UpdateManualObservations): Observable<Response<EditProfileResponse>> =
         App.healthCareApi.updatePainLevel(
-            updatePainLevel,
+            updateManualObservations,
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
+
+    fun isPatient(): Boolean =
+        Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
+
+    fun getPatient(): UserInfoBody =
+        (App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))!!
+
+    fun isPatientAndHc(): Boolean =
+        Utills.isPatientAndHc(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
 
 
 }

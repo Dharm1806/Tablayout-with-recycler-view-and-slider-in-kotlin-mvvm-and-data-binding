@@ -19,8 +19,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.application.App
-import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
@@ -28,9 +26,11 @@ import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_SCOPE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_INFO
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.databinding.FragmentLoginBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfo
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
@@ -100,6 +100,13 @@ class LoginFragment : Fragment() {
             }
         })
 
+        mLoginViewModel.userInfo().observe(requireActivity(), Observer {
+            when (it) {
+                is Resource<UserInfo> -> {
+                    handleUserInfoResponse(it)
+                }
+            }
+        })
         mLoginViewModel.getUser()?.observe(requireActivity(), Observer<LoginRequest> { loginUser ->
             validateFields(loginUser)
 
@@ -141,6 +148,16 @@ class LoginFragment : Fragment() {
 
     }
 
+    private fun handleUserInfoResponse(it: Resource<UserInfo>) {
+
+        when (it.status) {
+            Resource.Status.LOADING -> showProgressBar()
+            Resource.Status.SUCCESS -> userInfoRecieved(it.data!!)
+            Resource.Status.ERROR -> showError(it.exception!!)
+
+        }
+    }
+
     private fun validateEditText(s: Editable): Boolean {
         return !TextUtils.isEmpty(s)
     }
@@ -160,7 +177,6 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginSuccess(userData: UserModel) {
-Log.e("loginSuccess", "$userData")
         hideProgressbar()
 
         if (this.activity != null) {
@@ -187,8 +203,26 @@ Log.e("loginSuccess", "$userData")
             //mLoginViewModel.saveUserData(PREF_NOT_BEFORE_POLICY, userData.not_before_policy)
             mLoginViewModel.saveUserData(PREF_SESSION_STATE, userData.session_state)
             mLoginViewModel.saveUserData(PREF_SCOPE, userData.scope)
+            // mLoginViewModel.setIsLogin(true)
+
+            //  mLoginViewModel.refreshToken()
+            mLoginViewModel.getUserInfo()
+
+        }
+    }
+
+    private fun userInfoRecieved(userInfo: UserInfo) {
+        hideProgressbar()
+
+        if (this.activity != null) {
+
+            val navController =
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            val id = navController.currentDestination!!.id
+
+            mLoginViewModel.saveUserInfo(PREF_USER_INFO, userInfo.body)
+            Log.e("userdeco", "fecd")
             mLoginViewModel.setIsLogin(true)
-            mLoginViewModel.refreshToken()
             if (id == R.id.login) {
                 hideKeyboard(requireActivity())
                 findNavController().navigate(

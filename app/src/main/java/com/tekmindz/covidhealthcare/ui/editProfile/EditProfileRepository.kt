@@ -6,9 +6,11 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.EditProfileRequest
-import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.EmergencyContact
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
+import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,8 +50,8 @@ class EditProfileRepository : Callback<UserModel> {
     }
 
     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-        if (response.isSuccessful && response.code()==200 && response.body()!= null)
-        saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
+        if (response.isSuccessful && response.code() == 200 && response.body() != null)
+            saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
         saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
         saveUserDate(
             Constants.PREF_REFRESH_EXPIRES_IN,
@@ -57,5 +59,13 @@ class EditProfileRepository : Callback<UserModel> {
         )
 
     }
+
+    fun isPatient() =
+        Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
+
+    fun getEmeregncyContact(patientId: String): Observable<Response<EmergencyContact>> =
+        App.healthCareApi.getEmergencyContact(
+            patientId, "bearer " + App.mSharedPrefrenceManager.getValueString(PREF_ACCESS_TOKEN)
+        )
 
 }

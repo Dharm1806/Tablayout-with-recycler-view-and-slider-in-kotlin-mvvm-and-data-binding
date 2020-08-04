@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,10 +14,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.application.App
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -99,6 +96,8 @@ class HomeFragment : Fragment() {
 
         pager.isUserInputEnabled = false
 
+        (activity as HomeActivity).hideSelfAssesment()
+
         if (!mDashboardViewModel.getIsLogin()) {
             findNavController().navigate(
                 R.id.homeTologin, null, NavOptions.Builder()
@@ -107,12 +106,12 @@ class HomeFragment : Fragment() {
                         true
                     ).build()
             )
-        }else if(mDashboardViewModel.getUserType( ) == UserTypes.PATIENT.toString()){
+        } else if (mDashboardViewModel.isPatient()) {
             Utills.hideKeyboard(requireActivity())
 
-            val bundle = bundleOf("patientId" to 9)
+            //  val bundle = bundleOf("patientId" to 9)
             findNavController().navigate(
-                R.id.homeToPatientDetails, bundle, NavOptions.Builder()
+                R.id.homeToPatientDetails, null, NavOptions.Builder()
                     .setPopUpTo(
                         R.id.home,
                         true

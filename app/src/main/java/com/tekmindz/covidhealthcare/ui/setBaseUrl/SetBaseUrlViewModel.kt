@@ -6,10 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Resource
+import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -98,11 +99,11 @@ class SetBaseUrlViewModel(application: Application) : AndroidViewModel(Applicati
     fun setIsLogin(isLogin: Boolean) = mLoginRepository.setISLogin(isLogin)
     fun refreshToken() {
         mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
-      /*  val presenter = Presenter(Application())
-        presenter.schedule(userData.expires_in)*/
+        /*  val presenter = Presenter(Application())
+          presenter.schedule(userData.expires_in)*/
     }
 
-    fun getUserType(): String {
-        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+    fun getUserType(): Boolean {
+        return Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
     }
 }

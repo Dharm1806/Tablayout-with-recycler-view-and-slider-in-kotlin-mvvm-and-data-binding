@@ -3,8 +3,11 @@ package com.tekmindz.covidhealthcare.ui.login
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfo
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import io.reactivex.Observable
 import retrofit2.Call
@@ -25,14 +28,20 @@ class LoginRepository : Callback<UserModel> {
 
         )
 
+    /*request to login user from login api*/
+    fun getUserInfo(): Observable<Response<UserInfo>> =
+        App.healthCareApi.getUserInfo(
+            "bearer " + App.mSharedPrefrenceManager.getValueString(PREF_ACCESS_TOKEN)!!
+
+        )
     /*request to get counts  from dashboard count api*/
 
     fun refreshToken(
         clientID: String,
         refreshGrantType: String
 
-    ){
-        val valueString =  App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
+    ) {
+        val valueString = App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
         val mResponse = App.healthCareApiLogin
             .refreshToken(
                clientID, valueString!!, refreshGrantType
@@ -49,14 +58,18 @@ class LoginRepository : Callback<UserModel> {
     }
 
     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-        if (response.isSuccessful && response.code()==200 && response.body()!= null)
-        saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
+        if (response.isSuccessful && response.code() == 200 && response.body() != null)
+            saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
         saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
         saveUserDate(
             Constants.PREF_REFRESH_EXPIRES_IN,
             response.body()?.refresh_expires_in.toString()
         )
 
+    }
+
+    fun saveUserInfo(key: String, value: UserInfoBody) {
+        App.mSharedPrefrenceManager.put(value, key)
     }
 
 }

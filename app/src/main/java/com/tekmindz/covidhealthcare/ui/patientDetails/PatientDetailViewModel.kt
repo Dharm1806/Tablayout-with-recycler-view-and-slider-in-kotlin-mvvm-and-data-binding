@@ -1,16 +1,13 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tekmindz.covidhealthcare.application.App
-import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.constants.UserTypes
-import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdateManualObservations
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientDetails
 import com.tekmindz.covidhealthcare.repository.responseModel.PatientObservations
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -100,12 +97,8 @@ class PatientDetailViewModel : ViewModel() {
         mPatientDetailsRepository.refreshToken()
     }
 
-    fun getUserType(): String {
-        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
-    }
-
-    fun updateObservationType(mUpdatePainLevel: UpdatePainLevel) {
-        subscribe(mPatientDetailsRepository.updatePainLevel(mUpdatePainLevel)
+    fun updateObservationType(updateManualObservations: UpdateManualObservations) {
+        subscribe(mPatientDetailsRepository.updatePainLevel(updateManualObservations)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -113,7 +106,7 @@ class PatientDetailViewModel : ViewModel() {
             }
             .subscribe({
 
-                if ((it.code() == 200|| it.code() == 201)) {
+                if ((it.code() == 200 || it.code() == 201)) {
                     updatePatientObservations.value = (Resource.success(it.body()))
                 } else {
                     updatePatientObservations.value = Resource.error(it.message())
@@ -123,4 +116,8 @@ class PatientDetailViewModel : ViewModel() {
             })
         )
     }
+
+    fun getPatientInfo(): UserInfoBody = mPatientDetailsRepository.getPatient()
+    fun isPatient(): Boolean = mPatientDetailsRepository.isPatient()
+    fun isPatientAndHC(): Boolean = mPatientDetailsRepository.isPatientAndHc()
 }

@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/msg_mobile_number"
+                android:visibility="gone"
                 android:text="@={EditProfileViewModel.mobileNumber}"
                 android:inputType="number"
 
@@ -49,14 +50,13 @@
             android:layout_marginTop="@dimen/padding_20dp"
             android:layout_marginEnd="@dimen/padding_20dp"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@+id/et_contact_number">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/msg_emergency_contact_number"
-                android:text="@={EditProfileViewModel.emergencyContactNumber}"
                 android:inputType="number"
 
                 android:textSize="@dimen/field_text_size" />

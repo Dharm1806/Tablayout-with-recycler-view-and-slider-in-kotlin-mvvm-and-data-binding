@@ -8,29 +8,25 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentNotificationsBinding
-import com.tekmindz.covidhealthcare.databinding.SearchFragmentBinding
-import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
-import com.tekmindz.covidhealthcare.repository.requestModels.SearchRequestModel
-import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.Notification
 import com.tekmindz.covidhealthcare.repository.responseModel.NotificationResponse
-import com.tekmindz.covidhealthcare.repository.responseModel.observations
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_analytics_tab.*
@@ -61,7 +57,7 @@ class NotificationFragment : Fragment(), OnItemClickListener {
 
         val view: View = binding.root
         binding.lifecycleOwner = this
-       // setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         return view
     }
@@ -145,7 +141,7 @@ class NotificationFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(
             (mBroadCastReceiver),
@@ -153,16 +149,17 @@ class NotificationFragment : Fragment(), OnItemClickListener {
         )
     }
 
-   /* override fun onPrepareOptionsMenu(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.sos)
-        item.isVisible = mNotificationViewModel.getUserType() == UserTypes.PATIENT.toString()
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
     }
-*/
+
     @Override
     override fun onStop() {
         LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(mBroadCastReceiver)
         super.onStop()
     }
+
     override fun onItemClicked(mNotification: Notification) {
         Utills.hideKeyboard(requireActivity())
 

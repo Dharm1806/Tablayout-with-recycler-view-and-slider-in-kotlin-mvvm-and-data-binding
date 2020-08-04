@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -147,10 +148,9 @@ class SearchFragment : Fragment(), OnItemClickListener {
                         searchQuery()
                     }, Constants.DELAY_IN_API_CALL)
 
-                }else if(it.data?.body ==null){
+                }else if (it.data?.body == null) {
                     handleUi()
-                }
-                else showError(it.data?.message!!)
+                } else showError(it.data.message)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
@@ -184,10 +184,13 @@ class SearchFragment : Fragment(), OnItemClickListener {
 
     override fun onItemClicked(mDashboardObservationsResponse: observations) {
         Utills.hideKeyboard(requireActivity())
-
-        val bundle = bundleOf("patientId" to mDashboardObservationsResponse.patientId.toInt())
+        val bundle = bundleOf("observation" to mDashboardObservationsResponse)
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
+    }
 
 }

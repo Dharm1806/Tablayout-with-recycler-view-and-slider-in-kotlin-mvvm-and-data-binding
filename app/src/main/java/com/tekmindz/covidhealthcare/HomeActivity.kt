@@ -1,11 +1,7 @@
 package com.tekmindz.covidhealthcare
 
 
-import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -15,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -32,8 +27,7 @@ import com.google.firebase.iid.InstanceIdResult
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
-import com.tekmindz.covidhealthcare.constants.UserTypes
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Utills
 
 
@@ -99,12 +93,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
 
-            R.id.selfAssesment -> {/*App.mSharedPrefrenceManager.getValueString(
-                Constants.PREF_ACCESS_TOKEN))*/
-                val bundle = bundleOf("patientId" to 8)
-                navController.navigate(R.id.homeToPatientDetails, bundle)
-                /*val intent = Intent(this, MainActivity::class.java)
-                   startActivity(intent)*/
+            R.id.selfAssesment -> {
+                val patientId = Utills.getPatientId()
+                if (patientId != null && patientId.toInt() != 0) {
+                    Log.e("patientId", "$patientId")
+                    val bundle = bundleOf("patientId" to patientId.toInt())
+                    navController.navigate(R.id.homeToPatientDetails, bundle)
+                } else showAlertMessage()
+
             }
 
             R.id.base_url -> {
@@ -114,6 +110,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         return true
+    }
+
+    private fun showAlertMessage() {
+        Utills.showAlertNoPatient(this)
     }
 
     @Override
@@ -136,13 +136,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val mNotificationCount = 0
         if (tvNotificationItemCount != null) {
             if (mNotificationCount == 0) {
-                if (tvNotificationItemCount.getVisibility() != View.GONE) {
-                    tvNotificationItemCount.setVisibility(View.GONE);
+                if (tvNotificationItemCount.visibility != View.GONE) {
+                    tvNotificationItemCount.visibility = View.GONE
                 }
             } else {
-                tvNotificationItemCount.setText(mNotificationCount.toString());
-                if (tvNotificationItemCount.getVisibility() != View.VISIBLE) {
-                    tvNotificationItemCount.setVisibility(View.VISIBLE);
+                tvNotificationItemCount.text = mNotificationCount.toString()
+                if (tvNotificationItemCount.visibility != View.VISIBLE) {
+                    tvNotificationItemCount.visibility = View.VISIBLE
                 }
             }
         }
@@ -153,8 +153,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.notifications -> {
                 navController.navigate(R.id.navigateToNotifications, null)
             }
-            R.id.updateProfile->{
-                navController.navigate(R.id.navigateToUpdateContactInfo, null)            }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -198,7 +197,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController.addOnDestinationChangedListener { _, destination, _ ->
             var isDestination = false
 
-            if (Utills.userType().toString() == UserTypes.PATIENT.toString()) {
+            if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
                 isDestination =
                     destination.id == R.id.login || destination.id == R.id.search// || destination.id== R.id.patient_details
             } else {
@@ -224,19 +223,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //getCurrentFragment()
     }
 
-    private fun hideSelfAssesment() {
-        val userTypes = App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
+    fun hideSelfAssesment() {
+        // val userTypes = App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
         val menu = navigationView.menu
-        if (userTypes != null && userTypes.length != 0 && userTypes == UserTypes.PATIENT.toString()) menu.findItem(
-            R.id.selfAssesment
-        ).setVisible(false)
-        else menu.findItem(R.id.selfAssesment).setVisible(true)
+        if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
+
+            menu.findItem(R.id.selfAssesment).isVisible = false
+        } else menu.findItem(R.id.selfAssesment).isVisible = true
 
     }
 
 
     public override fun onResume() {
         super.onResume()
+        hideSelfAssesment()
         navController.addOnDestinationChangedListener(listener)
     }
 

@@ -4,11 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.tekmindz.covidhealthcare.application.App
-import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_BASE_URL
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
-import com.tekmindz.covidhealthcare.constants.UserTypes
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
@@ -64,6 +60,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
     }
 
     fun getDashboardObservations(dashBoardObservations: DashBoardObservations) {
+        Log.e("dashboardObservation", "${Gson().toJson(dashBoardObservations)}")
+
         subscribe(mDashboardRepository.getDashboardObservations(dashBoardObservations)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -72,10 +70,19 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
             }
             .subscribe({
                 Log.e("requestREsponse", "${it.raw().request()}")
+                Log.e(
+                    "response",
+                    "${it.code()}, ${it.body()?.message}, ${Gson().toJson(it.body())}"
+                )
+
                 response.value = (Resource.success(it.body()))
 
             }, {
-               // Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace}  ")
+                // Log.e("requestREsponse", "${it.raw().request()}")
+                Log.e(
+                    "error",
+                    "${it.message} , ${it.localizedMessage} , ${it.printStackTrace()}  "
+                )
                 response.value = Resource.error(it.localizedMessage)
             })
         )
@@ -113,12 +120,5 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
         mDashboardRepository.saveRefreshToken(data)
     }
 
-    fun getUserType(): String {
-        return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
-       /* if (value ==1) {
-            return UserTypes.PATIENT.toString()
-        }else{
-            return UserTypes.HEALTH_WORKER.toString()
-        }*/
-    }
+    fun isPatient(): Boolean = mDashboardRepository.isPatient()
 }

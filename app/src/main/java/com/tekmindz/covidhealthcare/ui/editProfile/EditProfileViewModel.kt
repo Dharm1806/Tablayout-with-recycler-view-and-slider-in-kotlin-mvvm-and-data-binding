@@ -7,9 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.EditProfileRequest
-import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
-import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
+import com.tekmindz.covidhealthcare.repository.responseModel.EmergencyContact
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,6 +22,9 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
 
     private var response: MutableLiveData<Resource<EditProfileResponse>> =
         MutableLiveData<Resource<EditProfileResponse>>()
+
+    private var emergencyContactResponse: MutableLiveData<Resource<EmergencyContact>> =
+        MutableLiveData<Resource<EmergencyContact>>()
 
     private var mEditProfileRepository: EditProfileRepository =
         EditProfileRepository()
@@ -40,13 +42,14 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
 
     fun onClick(view: View?) {
         val editProfileRequest = EditProfileRequest(
-            mobileNumber.value.toString(),
-            emergencyContactNumber.value.toString(), "8"
+            1,
+            emergencyContactNumber.value.toString()
         )
         ePMutableLiveData!!.value = editProfileRequest
     }
 
     fun updateContactInfo(editProfileRequest: EditProfileRequest) {
+
         subscribe(mEditProfileRepository.updateContactInfo(editProfileRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -74,10 +77,9 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
         subscriptions.clear()
     }
 
-    fun response(): MutableLiveData<Resource<EditProfileResponse>> {
-        return response
-    }
+    fun response(): MutableLiveData<Resource<EditProfileResponse>> = response
 
+    fun emergencyContact(): MutableLiveData<Resource<EmergencyContact>> = emergencyContactResponse
 
     private fun subscribe(disposable: Disposable): Disposable {
         subscriptions.add(disposable)
@@ -96,7 +98,35 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
     fun setIsLogin(isLogin: Boolean) = mEditProfileRepository.setISLogin(isLogin)
     fun refreshToken() {
         mEditProfileRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
-      /*  val presenter = Presenter(Application())
-        presenter.schedule(userData.expires_in)*/
+        /*  val presenter = Presenter(Application())
+          presenter.schedule(userData.expires_in)*/
     }
+
+
+    fun isPatient(): Boolean = mEditProfileRepository.isPatient()
+
+    fun getEmerncyContact(patientId: String) {
+
+        subscribe(mEditProfileRepository.getEmeregncyContact(patientId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                emergencyContactResponse.value = Resource.loading()
+            }
+            .subscribe({
+                Log.e("request", "${it.code()} , ${it.raw().request()}")
+                Log.e("response", "${it.body()}")
+                if (it.code() == 200 && it.isSuccessful) {
+                    emergencyContactResponse.value = (Resource.success(it.body()))
+
+                } else {
+                    emergencyContactResponse.value = Resource.error(it.message())
+                }
+            }, {
+                //   Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+                emergencyContactResponse.value = Resource.error(it.localizedMessage)
+            })
+        )
+    }
+
 }

@@ -4,7 +4,10 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
@@ -18,7 +21,6 @@ import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_BASE_URL
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentSetBaseUrlLoginBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.utills.Utills
@@ -62,7 +64,7 @@ class SetBaseUrlFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         return view
 
@@ -120,9 +122,9 @@ class SetBaseUrlFragment : Fragment() {
                 }
             }
         }
-        if (mSetBaseUrlViewModel.getUserType() == UserTypes.PATIENT.toString()){
+        if (mSetBaseUrlViewModel.getUserType()) {
             binding.btSos.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.btSos.visibility = View.GONE
         }
         binding.btSos.setOnClickListener { Utills.callPhoneNumber(requireActivity()) }
@@ -203,10 +205,15 @@ class SetBaseUrlFragment : Fragment() {
                 }
             }
         }
-    }
+   }
 
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
     }
 
     companion object {

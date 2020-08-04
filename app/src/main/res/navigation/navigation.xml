@@ -80,7 +80,15 @@
         android:name="com.tekmindz.covidhealthcare.ui.editProfile.EditProfileFragment"
         android:label="@string/edit_profile"
         tools:layout="@layout/fragment_edit_profile">
-
+        <action
+            android:id="@+id/patientUpdate"
+            app:destination="@id/patient_details"
+            app:popUpTo="@id/updateContactInfo"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="patientId"
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 
     <fragment
@@ -121,9 +129,15 @@
         android:label="@string/patient_details"
         tools:layout="@layout/patient_detail_fragment">
         <argument
+            android:name="observation"
+            android:defaultValue="@null"
+            app:argType="com.tekmindz.covidhealthcare.repository.responseModel.observations"
+            app:nullable="true" />
+
+        <argument
             android:name="patientId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/pDetailsToUpdateReadings"
             app:destination="@id/updatePainLevel" />

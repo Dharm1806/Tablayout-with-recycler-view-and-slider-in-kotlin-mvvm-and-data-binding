@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -15,11 +16,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.FragmentEditProfileBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.EditProfileRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.EmergencyContact
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 
@@ -42,6 +44,7 @@ class EditProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var patientId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +64,7 @@ class EditProfileFragment : Fragment() {
         )
         val view: View = binding.root
         binding.lifecycleOwner = this
-
+        setHasOptionsMenu(true)
         return view
 
     }
@@ -74,11 +77,25 @@ class EditProfileFragment : Fragment() {
 
         mEditProfileViewModel = ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
         binding.editProfileViewModel = mEditProfileViewModel
+        arguments?.takeIf {
+            it.containsKey(Constants.PATIENT_ID)
+        }?.apply {
+            patientId = getInt(Constants.PATIENT_ID).toString()
 
+            Log.e("patientIdEdit", "$patientId")
+        }
         /* button_login.setOnClickListener {
              validateFields()
          }*/
 
+        /* if(mEditProfileViewModel.isPatient()){
+           val userInfoBody =   App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO)
+             Log.e("userInfor" , userInfoBody?.emergencyContact)
+             binding.etEmergencyContactNumber.editText?.setText( userInfoBody?.emergencyContact?:"")
+         }else{
+             mEditProfileViewModel.getEmerncyContact(patientId)
+         }*/
+        mEditProfileViewModel.getEmerncyContact(patientId)
         mEditProfileViewModel.response().observe(requireActivity(), Observer {
             when (it) {
                 is Resource<EditProfileResponse> -> {
@@ -86,11 +103,20 @@ class EditProfileFragment : Fragment() {
                 }
             }
         })
-
-        mEditProfileViewModel.getProfileData()?.observe(requireActivity(), Observer<EditProfileRequest> { loginUser ->
-            validateFields(loginUser)
-
+        mEditProfileViewModel.emergencyContact().observe(requireActivity(), Observer {
+            when (it) {
+                is Resource<EmergencyContact> -> {
+                    handleEmergencyContact(it)
+                }
+            }
         })
+
+
+        mEditProfileViewModel.getProfileData()
+            ?.observe(requireActivity(), Observer<EditProfileRequest> { loginUser ->
+                validateFields(loginUser)
+
+            })
         binding.etContactNumber.editText?.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 if (validateEditText((v as EditText).text)) {
@@ -142,34 +168,55 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun handleEmergencyContact(it: Resource<EmergencyContact>) {
+
+        when (it.status) {
+            Resource.Status.LOADING -> showProgressBar()
+            Resource.Status.SUCCESS -> updateEmergencyContact(it.data!!)
+            Resource.Status.ERROR -> showError(it.exception!!)
+
+        }
+    }
+
     private fun showProgressBar() {
         mProgressDialog?.show()
     }
 
-    private fun updateSuccess(mEditProfileResponse:EditProfileResponse) {
-Log.e("mEditProfileResponse", "$mEditProfileResponse")
+    private fun updateEmergencyContact(mEmergencyContact: EmergencyContact) {
+        Log.e("mEditProfileResponse", "$mEmergencyContact")
         hideProgressbar()
-
-        if (this.activity != null) {
-
-            val navController =
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            val id = navController.currentDestination!!.id
-            //Log.e("id", "$id")
-            //mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
-
-
-          /*  if (id == R.id.login) {
-                hideKeyboard(requireActivity())
-                findNavController().navigate(
-                    R.id.loginToHome, null, NavOptions.Builder()
-                        .setPopUpTo(
-                            R.id.login,
-                            true
-                        ).build()
-                )
-            }*/
+        if (mEmergencyContact.body.emergencyContact != null) {
+            binding.etEmergencyContactNumber.editText?.setText(mEmergencyContact.body.emergencyContact)
         }
+    }
+
+
+    private fun updateSuccess(mEditProfileResponse: EditProfileResponse) {
+        Log.e("mEditProfileResponse", "$mEditProfileResponse")
+        hideProgressbar()
+        if (mEditProfileResponse.statusCode == 200 || mEditProfileResponse.statusCode == 201) {
+            showMessage(getString(R.string.emergency_contact_updated))
+        }
+        /* if (this.activity != null) {
+
+             val navController =
+                 Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+             val id = navController.currentDestination!!.id
+             //Log.e("id", "$id")
+             //mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
+
+
+            if (id == R.id.updateContactInfo) {
+                 hideKeyboard(requireActivity())
+                 navController.navigate(
+                     R.id.patientUpdate, null, NavOptions.Builder()
+                         .setPopUpTo(
+                             R.id.updateContactInfo,
+                             true
+                         ).build()
+                 )
+             }
+         }*/
     }
 
     private fun showError(error: String) {
@@ -186,32 +233,41 @@ Log.e("mEditProfileResponse", "$mEditProfileResponse")
     private fun validateFields(mEditProfileRequest: EditProfileRequest) {
 
 
-        if (mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString()) ||  binding.etContactNumber.editText?.text.toString().trim().length>20) {
+        /* if (mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString()) ||  binding.etContactNumber.editText?.text.toString().trim().length>20) {
 
-            binding.etContactNumber.error = getString(R.string.error_valid_mobile)
-            binding.etContactNumber.isErrorEnabled = true
-        } else {
+             binding.etContactNumber.error = getString(R.string.error_valid_mobile)
+             binding.etContactNumber.isErrorEnabled = true
+         } else {
 
-            binding.etContactNumber.isErrorEnabled = false
-        }
-
+             binding.etContactNumber.isErrorEnabled = false
+         }
+ */
         if (mEditProfileViewModel.isValidEmergencyContactNumber(binding.etEmergencyContactNumber.editText?.text.toString())) {
-            binding.etEmergencyContactNumber.error = getString(R.string.error_valid_emergency_contact_number)
+            binding.etEmergencyContactNumber.error =
+                getString(R.string.error_valid_emergency_contact_number)
             binding.etEmergencyContactNumber.isErrorEnabled = true
         } else {
 
             binding.etEmergencyContactNumber.isErrorEnabled = false
         }
 
-        if (!mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString())
-            && !mEditProfileViewModel.isValidEmergencyContactNumber(binding.etEmergencyContactNumber.editText?.text.toString())
-            && binding.etContactNumber.editText?.text.toString().trim().length<=20
+        if (/*!mEditProfileViewModel.isValidMobileNumber(binding.etContactNumber.editText?.text.toString())
+            &&
+            && binding.etContactNumber.editText?.text.toString().trim().length<=20*/!mEditProfileViewModel.isValidEmergencyContactNumber(
+                binding.etEmergencyContactNumber.editText?.text.toString()
+            )
+
         ) {
 
             if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
 
                 mProgressDialog?.show()
-                mEditProfileViewModel.updateContactInfo(mEditProfileRequest)
+                mEditProfileViewModel.updateContactInfo(
+                    EditProfileRequest(
+                        patientId.toInt(),
+                        binding.etEmergencyContactNumber.editText?.text.toString()
+                    )
+                )
 
             }
         }
@@ -219,6 +275,11 @@ Log.e("mEditProfileResponse", "$mEditProfileResponse")
 
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
     }
 
     companion object {

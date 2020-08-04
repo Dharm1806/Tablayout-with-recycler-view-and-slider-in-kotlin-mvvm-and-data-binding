@@ -1,7 +1,10 @@
 package com.tekmindz.covidhealthcare.ui.help
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -9,7 +12,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.constants.UserTypes
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 
@@ -21,7 +24,7 @@ class HelpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-       // setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         return inflater.inflate(R.layout.fragment_help, container, false)
     }
@@ -29,28 +32,30 @@ class HelpFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val youTubePlayerView: YouTubePlayerView = requireActivity().findViewById(R.id.youtube_player_view)
+        val youTubePlayerView: YouTubePlayerView =
+            requireActivity().findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
 
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady( youTubePlayer: YouTubePlayer) {
-                val videoId ="qWCrnwzk9kA"//"S0Q4gqBUs7c"
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                val videoId = "qWCrnwzk9kA"//"S0Q4gqBUs7c"
                 youTubePlayer.loadVideo(videoId, 0f)
             }
         })
-        if(getUserType() == UserTypes.PATIENT.toString()){
+        if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
+
             bt_sos.visibility = View.VISIBLE
-        }else{
+        } else {
             bt_sos.visibility = View.GONE
         }
-        bt_sos.setOnClickListener { Utills.callPhoneNumber(requireActivity())
+        bt_sos.setOnClickListener {
+            Utills.callPhoneNumber(requireActivity())
         }
     }
-  /*  override fun onPrepareOptionsMenu(menu: Menu) {
-        val item: MenuItem = menu.findItem(R.id.sos)
-        item.isVisible = getUserType() == UserTypes.PATIENT.toString()
-    }*/
-    fun getUserType(): String {
-        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.updateProfile)
+        if (item != null) item.isVisible = false
     }
- }
+
+}

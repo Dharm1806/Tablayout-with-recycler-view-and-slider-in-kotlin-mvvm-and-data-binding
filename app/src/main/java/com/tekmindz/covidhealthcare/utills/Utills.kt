@@ -26,7 +26,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import com.auth0.android.jwt.Claim
@@ -38,10 +37,15 @@ import com.tekmindz.covidhealthcare.constants.Constants.APP_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
+import com.tekmindz.covidhealthcare.constants.Constants.HEALTH_CARE_WORKER_ROLE
+import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ROLE
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
+import com.tekmindz.covidhealthcare.constants.Constants.SUPERVISOR_ROLE
+import com.tekmindz.covidhealthcare.constants.Constants.SUPER_ADMIN_ROLE
 import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.responseModel.DateRange
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
@@ -52,7 +56,7 @@ import java.util.regex.Pattern
 
 
 object Utills {
-var destination:String = ""
+    var destination: String = ""
     var dateRange: MutableLiveData<DateRange> = MutableLiveData<DateRange>()
 
     fun dateRange(dateRangeValue: String) {
@@ -227,7 +231,7 @@ var destination:String = ""
 
         val date = Date()
         return formatDateIntoFilterFormat(date)
-       // return "2020-06-26T06:32:37Z"
+        // return "2020-06-26T06:32:37Z"
     }
 
     fun getRealCurrentDate(): String {
@@ -248,7 +252,7 @@ var destination:String = ""
 
         val date = Date(System.currentTimeMillis() - hours * 60 * 60 * 1000)
 
-       return formatDateIntoFilterFormat(date)
+        return formatDateIntoFilterFormat(date)
         //return "2019-06-26T09:32:37Z"
     }
 
@@ -280,7 +284,11 @@ var destination:String = ""
     fun parseDate(date: String): String {
         val parser = SimpleDateFormat(SERVER_DOB_DATE_FORMAT)
         val formatter = SimpleDateFormat(APP_DATE_FORMAT)
-        return formatter.format(parser.parse(date))
+        if (date.trim().length == 0) {
+            return ""
+        } else {
+            return formatter.format(parser.parse(date))
+        }
     }
 
     fun getTabTitile(position: Int, context: Context): String {
@@ -323,6 +331,22 @@ var destination:String = ""
         builder.show()
     }
 
+
+    fun showAlertNoPatient(context: Activity) {
+        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.AlertDialogTheme))
+
+        //  builder.setTitle(context.getString(R.string.no_internet))
+        builder.setMessage(context.getString(R.string.you_are_not_being_monitered))
+        builder.setPositiveButton(android.R.string.ok) { dialog, which ->
+            /*    val intent = Intent(Settings.ACTION_SETTINGS)
+                context.startActivity(intent)*/
+        }
+
+        builder.setCancelable(true)
+
+        builder.show()
+    }
+
     fun hideKeyboard(activity: Activity) {
         val inputMethodManager =
             activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -331,33 +355,36 @@ var destination:String = ""
         val currentFocusedView = activity.currentFocus
         currentFocusedView?.let {
             inputMethodManager.hideSoftInputFromWindow(
-                currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
         }
     }
 
-    fun round(value :String): String? {
-         return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toString()
+    fun round(value: String): String? {
+        return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toString()
     }
 
-    fun userType():String{
-        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.PATIENT.toString()
+    fun userType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)
+            ?: UserTypes.PATIENT.toString()
 
     }
-  fun   decodeAccessToke(value :String):String{
-      val parsedJWT = JWT(value)
-      Log.e("parsed", "$parsedJWT")
-      val subscriptionMetaData: Map<String, Claim> = parsedJWT.getClaims()
 
-      Log.e("parsedVAlue", "$subscriptionMetaData")
+    fun decodeAccessToke(value: String): String {
+        val parsedJWT = JWT(value)
+        Log.e("parsed", "$parsedJWT")
+        val subscriptionMetaData: Map<String, Claim> = parsedJWT.claims
 
-      return "String(decoded)"
+        Log.e("parsedVAlue", "$subscriptionMetaData")
+
+        return "String(decoded)"
 
 
-  }
+    }
 
     @Throws(Exception::class)
-    fun decoded(JWTEncoded: String):String {
-        var usertYPE= ""
+    fun decoded(JWTEncoded: String): String {
+        var usertYPE = ""
         try {
             val split =
                 JWTEncoded.split("\\.".toRegex()).toTypedArray()
@@ -366,14 +393,14 @@ var destination:String = ""
             val bodyObject = JSONObject(body.toString())
             val realmAccess = bodyObject.getJSONObject("realm_access")
             val roles = realmAccess.getJSONArray("roles")
-            for (i in 0.. roles.length()){
-                if (roles.get(i) =="supervisor"){
+            for (i in 0..roles.length()) {
+                if (roles.get(i) == "supervisor") {
                     usertYPE = UserTypes.HEALTH_WORKER.toString()
-                    break;
+                    break
                 }
-                if (roles.get(i)== "patient"){
+                if (roles.get(i) == "patient") {
                     usertYPE = UserTypes.PATIENT.toString()
-                    break;
+                    break
 
                 }
             }
@@ -397,7 +424,8 @@ var destination:String = ""
             Base64.decode(strEncoded, Base64.URL_SAFE)
         return String(decodedBytes, Charsets.UTF_8)
     }
-    fun callPhoneNumber(requireActivity:Activity) {
+
+    fun callPhoneNumber(requireActivity: Activity) {
         try {
             if (Build.VERSION.SDK_INT > 22) {
                 if (ActivityCompat.checkSelfPermission(
@@ -413,7 +441,7 @@ var destination:String = ""
                     return
                 }
                 val callIntent = Intent(Intent.ACTION_CALL)
-                callIntent.data = Uri.parse("tel:" +  Constants.SOS_NUMBER)
+                callIntent.data = Uri.parse("tel:" + Constants.SOS_NUMBER)
                 requireActivity.startActivity(callIntent)
             } else {
                 val callIntent = Intent(Intent.ACTION_CALL)
@@ -424,4 +452,28 @@ var destination:String = ""
             ex.printStackTrace()
         }
     }
+
+    fun isPatient(userInfoBody: UserInfoBody?): Boolean {
+        return !((userInfoBody?.roles?.contains(SUPERVISOR_ROLE)!!) || userInfoBody.roles.contains(
+            SUPER_ADMIN_ROLE
+        ) || userInfoBody.roles.contains(
+            HEALTH_CARE_WORKER_ROLE
+        ))
+    }
+
+    fun isPatientAndHc(userInfoBody: UserInfoBody?): Boolean {
+        return ((userInfoBody?.roles?.contains(SUPERVISOR_ROLE)!!) || userInfoBody.roles.contains(
+            SUPER_ADMIN_ROLE
+        ) || userInfoBody.roles.contains(
+            HEALTH_CARE_WORKER_ROLE
+        )) && userInfoBody.roles.contains(
+            PATIENT_ROLE
+        )
+    }
+
+    fun getPatientId(): String? {
+        val userInfoBody = App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO)
+        return userInfoBody?.patientId?.toString()
+    }
+
 }

@@ -3,10 +3,12 @@ package com.tekmindz.covidhealthcare.repository.api
 
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_COUNTS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_DASHBOARD_OBSERVATIONS
+import com.tekmindz.covidhealthcare.constants.Constants.GET_EMERGENCY_CONTACT_NUMBER
 import com.tekmindz.covidhealthcare.constants.Constants.GET_NOTIFICATIONS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_ANALYTICS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_DETAILS
 import com.tekmindz.covidhealthcare.constants.Constants.GET_PATIENT_OBSERVATIONS
+import com.tekmindz.covidhealthcare.constants.Constants.GET_USER_INFO
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_END_POINTS
 import com.tekmindz.covidhealthcare.constants.Constants.REFRESH_TOKEN_END_POINTS
 import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_CONTACT_NUMBER
@@ -43,9 +45,13 @@ interface HealthCareApis {
 
     ): Call<UserModel>
 
+    @GET(GET_USER_INFO)
+    fun getUserInfo(
+        @Header("Authorization") access_token: String
+    ): Observable<Response<UserInfo>>
+
     /*  call the patient contact numbers and emergency contact number */
 
-    @FormUrlEncoded
     @POST(UPDATE_CONTACT_NUMBER)
     fun updateProfile(
         @Body editProfileRequest: EditProfileRequest,
@@ -101,7 +107,7 @@ interface HealthCareApis {
 
     @POST(UPDATE_MANUAL_OBSERVSTION)
     fun updatePainLevel(
-        @Body updatePainLevel: UpdatePainLevel,
+        @Body updateManualObservations: UpdateManualObservations,
         @Header("Authorization") access_token: String
     ): Observable<Response<EditProfileResponse>>
 
@@ -111,6 +117,12 @@ interface HealthCareApis {
     fun getNotifications(
         @Header("Authorization") access_token: String
     ): Observable<Response<NotificationResponse>>
+
+    @GET(GET_EMERGENCY_CONTACT_NUMBER)
+    fun getEmergencyContact(
+        @Path("patientId") patientId: String,
+        @Header("Authorization") access_token: String
+    ): Observable<Response<EmergencyContact>>
 
 
 }

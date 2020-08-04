@@ -1,22 +1,17 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
 
-import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -27,26 +22,24 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
-import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
-import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
+import com.tekmindz.covidhealthcare.repository.requestModels.UpdateManualObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.*
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.add_blood_pressure.*
-import kotlinx.android.synthetic.main.patient_detail_fragment.*
 
 
 class PatientDetailFragment : Fragment() {
+    private var painLevel: Int = 0
+    private lateinit var tvNotificationItemCount: TextView
     private lateinit var binding: PatientDetailFragmentBinding
     private var mProgressDialog: ProgressDialog? = null
     lateinit var patientId: String
-    lateinit var patientName :String
+    lateinit var patientName: String
 
     companion object {
         fun newInstance() = PatientDetailFragment()
@@ -64,7 +57,28 @@ class PatientDetailFragment : Fragment() {
         binding.lifecycleOwner = this
         //setHasOptionsMenu(true);
         Utills.hideKeyboard(requireActivity())
+        setHasOptionsMenu(true)
+
         return view
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.updateProfile -> {
+                val bundle = bundleOf(
+                    "patientId" to patientId.toInt()
+
+                )
+
+                findNavController().navigate(R.id.navigateToUpdateContactInfo, bundle)/*, NavOptions.Builder()
+                    .setPopUpTo(
+                        R.id.patient_details,
+                        true
+                    ).build())  */
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,15 +91,52 @@ class PatientDetailFragment : Fragment() {
 
         binding.patientDetailsBind = (mPatientDetailViewModel)
 
-        arguments?.takeIf { it.containsKey(Constants.PATIENT_ID) }?.apply {
-            patientId = getInt(Constants.PATIENT_ID).toString()
+        arguments?.takeIf {
+            it.containsKey(Constants.OBSERVATION)
+        }?.apply {
+            val observation = getParcelable<observations>(Constants.OBSERVATION) as observations
+            patientId = observation.patientId.toString()
+            Log.e("patientId", "$patientId")
+            showPatientDeatils(
+                Details(
+                    observation.firstName,
+                    observation.lastName,
+                    observation.gender,
+                    observation.dob,
+                    observation.bedNumber,
+                    observation.admittedDate,
+                    observation.wardNo,
+                    "",
+                    observation.relayId,
+                    observation.wearableIdentifier.toString(),
+                    "",
+                    observation.imageUrl
+                )
+            )
             if (Utills.verifyAvailableNetwork(requireActivity())) {
                 showProgressBar()
 
-                mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
+                //  mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
                 mPatientDetailViewModel.getPatientObservations(patientId.toString())
             }
         }
+
+        arguments?.takeIf {
+            it.containsKey(Constants.PATIENT_ID)
+        }?.apply {
+            if (getInt(Constants.PATIENT_ID) != 0) {
+                patientId = getInt(Constants.PATIENT_ID).toString()
+                Log.e("patienTiD", "$patientId")
+                getPatient()
+            }
+        }
+
+
+        if (mPatientDetailViewModel.isPatient()) {
+            getPatient()
+        }
+
+
 
         mPatientDetailViewModel.getPatientDetails().observe(requireActivity(), Observer {
             when (it) {
@@ -117,33 +168,48 @@ class PatientDetailFragment : Fragment() {
             findNavController().navigate(R.id.pDetailsToAnalytics, bundle)
         }
 
-        if (mPatientDetailViewModel.getUserType() == UserTypes.PATIENT.toString()){
+        if (mPatientDetailViewModel.isPatient()) {
             binding.btSos.visibility = View.VISIBLE
             binding.addBloodPressure.visibility = View.GONE
-            binding.addSpo2.visibility  = View.GONE
+            binding.addSpo2.visibility = View.GONE
             binding.painLevel.visibility = View.VISIBLE
-         val appBarConfiguration = AppBarConfiguration(
-                setOf(R.id.home, R.id.patient_details), requireActivity().findViewById(R.id.drawer_layout))
-            requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
-
-        }else{
             val appBarConfiguration = AppBarConfiguration(
-                setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout))
-            requireActivity().toolbar.setupWithNavController(findNavController(), appBarConfiguration)
+                setOf(R.id.home, R.id.patient_details),
+                requireActivity().findViewById(R.id.drawer_layout)
+            )
+            requireActivity().toolbar.setupWithNavController(
+                findNavController(),
+                appBarConfiguration
+            )
+
+        } else {
+            val appBarConfiguration = AppBarConfiguration(
+                setOf(R.id.home), requireActivity().findViewById(R.id.drawer_layout)
+            )
+            requireActivity().toolbar.setupWithNavController(
+                findNavController(),
+                appBarConfiguration
+            )
             binding.addBloodPressure.visibility = View.VISIBLE
-            binding.addSpo2.visibility  = View.VISIBLE
+            binding.addSpo2.visibility = View.VISIBLE
             binding.btSos.visibility = View.GONE
             binding.painLevel.visibility = View.GONE
         }
+        if (mPatientDetailViewModel.isPatientAndHC()) {
+            binding.painLevel.visibility = View.VISIBLE
+        }
 
         binding.btSos.setOnClickListener {
-          Utills.callPhoneNumber(requireActivity())
-           /*val bundle = bundleOf("patientId" to patientId.toString())
-            findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
-*/
+            Utills.callPhoneNumber(requireActivity())
+            /*val bundle = bundleOf("patientId" to patientId.toString())
+             findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
+ */
         }
         binding.painLevel.setOnClickListener {
-            val bundle = bundleOf("patientId" to patientId.toString())
+            val bundle = bundleOf(
+                "patientId" to patientId,
+                "painLevel" to painLevel
+            )
             findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
         }
 
@@ -158,11 +224,39 @@ class PatientDetailFragment : Fragment() {
 
     }
 
+    private fun getPatient() {
+        val userInfoBody = mPatientDetailViewModel.getPatientInfo()
+        patientId = userInfoBody.patientId.toString()
+        if (Utills.verifyAvailableNetwork(requireActivity())) {
+            showProgressBar()
+
+            //  mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
+            mPatientDetailViewModel.getPatientObservations(patientId.toString())
+        }
+        showPatientDeatils(
+            Details(
+                userInfoBody.firstName,
+                userInfoBody.lastName,
+                userInfoBody.gender,
+                userInfoBody.dob,
+                userInfoBody.bedNumber,
+                userInfoBody.admittedDate,
+                userInfoBody.wardNo,
+                "",
+                userInfoBody.relayId,
+                userInfoBody.wearableIdentifier.toString(),
+                "",
+                userInfoBody.imageUrl
+            )
+        )
+
+    }
+
     private fun handleUpdatePatientObservations(it: Resource<EditProfileResponse>) {
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
-                if ((it.data?.statusCode == 200 || it.data?.statusCode ==201)) showError(it.data?.message)
+                if ((it.data?.statusCode == 200 || it.data?.statusCode == 201)) showError(it.data.message)
                 else showError(it.data?.message!!)
 
             }
@@ -184,29 +278,55 @@ class PatientDetailFragment : Fragment() {
 
         saveSpO2.setOnClickListener {
             val spO2 = etSpO2.editText?.text.toString()
-            if (spO2?.trim()?.length==0){
-                etSpO2.isErrorEnabled= true
+            if (spO2.trim().length == 0) {
+                etSpO2.isErrorEnabled = true
                 etSpO2.error = getString(R.string.err_spo2)
-            }else{
-                etSpO2.isErrorEnabled =false
+            } else {
+                etSpO2.isErrorEnabled = false
                 dialog.dismiss()
                 showProgressBar()
 
                 Utills.hideKeyboard(requireActivity())
-                updateObservationType(spO2, Constants.OBSERVATION_TYPE_SPO2)
+                binding.tvSpO2.text = spO2 + " " + getString(R.string.spo2_unit)
+                dialog.window
+                    ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+                updateObservationType(
+                    UpdateManualObservations(
+                        listOf<UpdatePainLevel>(
+                            UpdatePainLevel(
+                                patientId,
+                                Constants.OBSERVATION_TYPE_SPO2,
+                                spO2,
+                                Utills.getCurrentDate()
+                            )
+                        )
+                    )
+                )
                 Log.e("spo2", "$spO2")
             }
         }
-        cancelSpO2.setOnClickListener { dialog.dismiss() }
+        //  cancelSpO2.setOnClickListener { dialog.dismiss() }
         dialog.show()
         val cancelAction = dialog.findViewById(R.id.cancel_action) as ImageView
 
-        cancelAction.setOnClickListener { dialog.dismiss() }
+        cancelAction.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+        cancelSpO2.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
 
     }
 
-    private fun updateObservationType(observationValue: String, observationType: String) {
-        mPatientDetailViewModel.updateObservationType(UpdatePainLevel(patientId, observationType,observationValue ,Utills.getCurrentDate()))
+    private fun updateObservationType(updateManualObservations: UpdateManualObservations) {
+
+        mPatientDetailViewModel.updateObservationType(updateManualObservations)
     }
 
     private fun addBP() {
@@ -223,38 +343,75 @@ class PatientDetailFragment : Fragment() {
         val cancelAction = dialog.findViewById(R.id.cancel_action) as ImageView
         saveBloodPressure.setOnClickListener {
             val sys = etSys.editText?.text.toString()
-            if (sys?.trim()?.length==0){
-                etSys.isErrorEnabled= true
+            if (sys.trim().length == 0) {
+                etSys.isErrorEnabled = true
                 etSys.error = getString(R.string.err_sys)
-            }else{
-                etSys.isErrorEnabled =false
+            } else {
+                etSys.isErrorEnabled = false
                 Log.e("SYS", "$sys")
             }
 
             val dia = etDia.editText?.text.toString()
-            if (dia?.trim()?.length==0){
-                etDia.isErrorEnabled= true
+            if (dia.trim().length == 0) {
+                etDia.isErrorEnabled = true
                 etDia.error = getString(R.string.error_valid_dia)
-            }else{
-                etDia.isErrorEnabled =false
+            } else {
+                etDia.isErrorEnabled = false
                 Log.e("dia", "$dia")
             }
 
-            if (sys?.trim()?.length!=0 && dia?.trim()?.length!=0){
-            dialog.dismiss()
+            if (sys.trim().length != 0 && dia.trim().length != 0) {
+                dialog.dismiss()
                 Utills.hideKeyboard(requireActivity())
                 showProgressBar()
-                updateObservationType(sys+","+dia, Constants.OBSERVATION_TYPE_BP)
+
+                binding.tvBloodPressure.text =
+                    (sys + "/" + dia) + " " + getString(R.string.bp_unit)
+                dialog.window
+                    ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+                val imm: InputMethodManager =
+                    requireActivity()
+                        .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                updateObservationType(
+                    UpdateManualObservations(
+                        listOf<UpdatePainLevel>(
+                            UpdatePainLevel(
+                                patientId,
+                                Constants.OBSERVATION_TYPE_BP_HIGH,
+                                sys,
+                                Utills.getCurrentDate()
+                            ),
+                            UpdatePainLevel(
+                                patientId,
+                                Constants.OBSERVATION_TYPE_BP_LOW,
+                                dia,
+                                Utills.getCurrentDate()
+                            )
+                        )
+                    )
+                )
+
 
             }
         }
 
-        cancelBloodPressure.setOnClickListener { dialog.dismiss() }
-        cancelAction.setOnClickListener { dialog.dismiss() }
+
+        //    cancelAction.setOnClickListener {}
+        cancelAction.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+        cancelBloodPressure.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
         dialog.show()
     }
-
-
 
 
     /*override fun onPrepareOptionsMenu(menu: Menu) {
@@ -268,15 +425,14 @@ class PatientDetailFragment : Fragment() {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientDeatils(it.data.body)
-                else if (it.data?.statusCode == 401 ){
+                else if (it.data?.statusCode == 401) {
                     mPatientDetailViewModel.refreshToken()
 
                     Handler().postDelayed({
                         mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
                     }, Constants.DELAY_IN_API_CALL)
 
-                }
-                else showError(it.data?.message!!)
+                } else showError(it.data?.message!!)
 
             }
             Resource.Status.ERROR -> showError(it.exception!!)
@@ -290,15 +446,14 @@ class PatientDetailFragment : Fragment() {
             Resource.Status.SUCCESS -> {
                 hideProgressbar()
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientObserVations(it.data.body)
-                else if (it.data?.statusCode == 401 ){
+                else if (it.data?.statusCode == 401) {
                     mPatientDetailViewModel.refreshToken()
 
                     Handler().postDelayed({
                         mPatientDetailViewModel.getPatientObservations(patientId = patientId.toString())
 
                     }, Constants.DELAY_IN_API_CALL)
-                }
-                else showError(it.data?.message!!)
+                } else showError(it.data?.message!!)
 
             }
             Resource.Status.ERROR -> showError(it.exception!!)
@@ -306,14 +461,19 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientObserVations(data: PatientObservation) {
-       // formatString("103.012955")
-        binding.tvHeartRateValue.text =Utills.round(data.heartRate)
-        binding.tvRespirationRateValue.text =Utills.round(data.respirationRate)
+        // formatString("103.012955")
+        binding.tvHeartRateValue.text = Utills.round(data.heartRate)
+        binding.tvRespirationRateValue.text = Utills.round(data.respirationRate)
         binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemprature)
-        binding.tvSpO2.text =(data.spo2?:"")
-        binding.tvBloodPressure.text = (data.bp?:"")
-
-
+        binding.tvSpO2.text = data.spo2 + " " + getString(R.string.spo2_unit)
+        binding.tvBloodPressure.text =
+            (data.bpHigh + "/" + data.bpLow) + " " + getString(R.string.bp_unit)
+        var painLl = data.painlevel
+        if (painLl != null) {
+            painLevel = painLl.toInt()
+        } else {
+            painLevel = 0
+        }
         if (data.status.equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
         }
@@ -331,8 +491,9 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun showPatientDeatils(data: Details) {
-        patientName = data.firstName+" "+data.lastName
-        Glide.with(requireActivity()).load(data.imageUrl).placeholder(R.drawable.ic_placeholder).into(binding.imgPatientProfile)
+        patientName = data.firstName + " " + data.lastName
+        Glide.with(requireActivity()).load(data.imageUrl).placeholder(R.drawable.ic_placeholder)
+            .into(binding.imgPatientProfile)
 
         binding.tvPatientName.text = patientName
         binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)

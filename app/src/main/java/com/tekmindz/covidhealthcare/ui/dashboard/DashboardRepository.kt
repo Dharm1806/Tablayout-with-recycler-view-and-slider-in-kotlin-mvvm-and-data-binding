@@ -12,8 +12,10 @@ import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservatio
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Presenter
+import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.Observable
 import retrofit2.Response
 
@@ -26,12 +28,12 @@ class DashboardRepository {
     /*request to get the observation data from api */
     fun getDashboardObservations(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardObservationsResponse>> {
 
-      /*  Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
+        Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
         Log.e(
             "access_token",
             "${mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}"
         )
-*/
+
         return App.healthCareApi.getDashboardPatientList(
             dashBoardObservations,
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
@@ -65,5 +67,8 @@ class DashboardRepository {
         mSharedPrefrenceManager.saveString(Constants.PREF_SESSION_STATE, data.session_state)
         mSharedPrefrenceManager.saveString(Constants.PREF_SCOPE, data.scope)
     }
+
+    fun isPatient() =
+        Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
 
 }

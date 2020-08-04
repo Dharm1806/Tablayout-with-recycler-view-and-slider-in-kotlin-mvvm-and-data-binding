@@ -108,4 +108,8 @@
     <string name="msg_emergency_contact_number">Emergency Contact Number</string>
     <string name="error_valid_mobile">Please enter valid Mobile number</string>
     <string name="error_valid_emergency_contact_number">Please enter valid Emergency Contact Number</string>
+    <string name="bp_unit"> mmHg</string>
+    <string name="spo2_unit"> %SpO2</string>
+    <string name="you_are_not_being_monitered">You are not being monitored, please apply a patch on your body.</string>
+    <string name="emergency_contact_updated">Emergency contact Number successfully updated.</string>
 </resources>
