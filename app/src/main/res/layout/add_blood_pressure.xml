@@ -2,8 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/tab_background">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +47,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/sys_mmhg"
-            android:inputType="text"
+            android:inputType="numberDecimal"
+
+            android:maxLength="3"
             android:textColor="@color/patient_details_text"
             android:textColorHint="@color/patient_details_text"
             android:textSize="@dimen/field_text_size" />
@@ -77,7 +82,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/dia_mmhg"
-            android:inputType="text"
+            android:inputType="numberDecimal"
+            android:maxLength="3"
             android:textColor="@color/patient_details_text"
             android:textColorHint="@color/patient_details_text"
             android:textSize="@dimen/field_text_size" />

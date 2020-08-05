@@ -20,6 +20,16 @@ import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App.Companion.isForeGround
 import com.tekmindz.covidhealthcare.constants.Constants.BROADCAST_RECEIVER_NAME
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_BED_NUMBER
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_MESSAGE
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_NOTIFICATION_ID
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_NOTIFICATION_TIME
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_OBSERVATION_TYPE
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_OBSERVATION_VALUE
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_PATIENT_ID
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_PATIENT_NAME
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_STATUS
+import com.tekmindz.covidhealthcare.constants.Constants.EXTRA_WARD_NUMBER
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.utills.Utills
 import java.util.*
@@ -28,10 +38,12 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
     private var TAG = "HCFirebaseMessagingService"
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        Log.d(TAG,"New Token : "+p0)
+        Log.d(TAG, "New Token : " + p0)
         //save locally or / send token to server
     }
+
     lateinit var mbroadCastreceiver: LocalBroadcastManager
+
     @Override
     override fun onCreate() {
         mbroadCastreceiver = LocalBroadcastManager.getInstance(this)
@@ -39,24 +51,45 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d(TAG, "FROM : " + remoteMessage!!.from)
+        Log.d(TAG, "FROM : " + remoteMessage.from)
 
         //Verify if the message contains data
         if (remoteMessage.data != null) {
             if (remoteMessage.data.isNotEmpty()) {
                 Log.d(TAG, "Message data : " + remoteMessage.data)
                 val data = remoteMessage.data
-                if (isForeGround && Utills.destination == "Notifications" && remoteMessage.data.containsKey(PATIENT_ID) ){
+                if (isForeGround && Utills.destination == "Notifications" && remoteMessage.data.containsKey(
+                        PATIENT_ID
+                    )
+                ) {
                     Log.e("patientId", "${remoteMessage.data.get(PATIENT_ID)}")
                     val intent = Intent(BROADCAST_RECEIVER_NAME)
-                    intent.putExtra(PATIENT_ID, remoteMessage.data.get(PATIENT_ID))
-                   /* intent.putExtra(EXTRA_CO2_EMMISSION_SAVED, remoteMessage.data.get(CO2_EMMISSION_SAVED))
-                    intent.putExtra(EXTRA_DURATION, remoteMessage.data.get(DURATION))
-                    intent.putExtra(EXTRA_ENERGY_CONSUMED, remoteMessage.data.get(ENERGY_CONSUMED))
-                    intent.putExtra(EXTRA_NOTIFICATION_TYPE, remoteMessage.data.get(NOTIFICATION_TYPE))*/
+                    intent.putExtra(EXTRA_PATIENT_ID, remoteMessage.data.get(EXTRA_PATIENT_ID))
+                    intent.putExtra(
+                        EXTRA_OBSERVATION_TYPE,
+                        remoteMessage.data.get(EXTRA_OBSERVATION_TYPE)
+                    )
+                    intent.putExtra(
+                        EXTRA_OBSERVATION_VALUE,
+                        remoteMessage.data.get(EXTRA_OBSERVATION_VALUE)
+                    )
+                    intent.putExtra(EXTRA_STATUS, remoteMessage.data.get(EXTRA_STATUS))
+                    intent.putExtra(EXTRA_PATIENT_NAME, remoteMessage.data.get(EXTRA_PATIENT_NAME))
+                    intent.putExtra(EXTRA_WARD_NUMBER, remoteMessage.data.get(EXTRA_WARD_NUMBER))
+                    intent.putExtra(EXTRA_BED_NUMBER, remoteMessage.data.get(EXTRA_BED_NUMBER))
+                    intent.putExtra(EXTRA_MESSAGE, remoteMessage.data.get(EXTRA_MESSAGE))
+                    intent.putExtra(
+                        EXTRA_NOTIFICATION_TIME,
+                        remoteMessage.data.get(EXTRA_NOTIFICATION_TIME)
+                    )
+                    intent.putExtra(
+                        EXTRA_NOTIFICATION_ID,
+                        remoteMessage.data.get(EXTRA_NOTIFICATION_ID)
+                    )
+
                     mbroadCastreceiver.sendBroadcast(intent)
 
-                }else {
+                } else {
                     sendNotification(data)
                 }
             }
@@ -73,7 +106,10 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.notification_icon)
             val mBuilder = NotificationCompat.Builder(this, channelId)
-            val intent = Intent(this, HomeActivity::class.java) //add screen class name to move on when user click on notification
+            val intent = Intent(
+                this,
+                HomeActivity::class.java
+            ) //add screen class name to move on when user click on notification
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
             val pendingIntent = PendingIntent.getActivity(
@@ -100,12 +136,12 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
                 .setGroupSummary(true)
                 .setPriority(NotificationManager.IMPORTANCE_HIGH)
                 .setAutoCancel(true)
-                .setLights(Color.RED, 300,300)
+                .setLights(Color.RED, 300, 300)
                 .setContentIntent(pendingIntent)
                 .setContentText(body)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mBuilder.setSmallIcon(R.mipmap.notification_icon)
-                mBuilder.setColor(ActivityCompat.getColor(this,R.color.colorPrimaryDark))
+                mBuilder.color = ActivityCompat.getColor(this, R.color.colorPrimaryDark)
             } else {
                 mBuilder.setSmallIcon(R.mipmap.notification_icon)
             }
@@ -128,7 +164,7 @@ class HCFirebaseMessagingService : FirebaseMessagingService() {
                 notificationManager.createNotificationChannel(channel)
             }
             notificationManager.notify(id, mBuilder.build())
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             ex.printStackTrace()
         }
     }

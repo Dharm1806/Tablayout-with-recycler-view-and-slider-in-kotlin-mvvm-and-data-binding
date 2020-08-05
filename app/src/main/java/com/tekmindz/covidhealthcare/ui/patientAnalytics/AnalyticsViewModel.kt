@@ -2,7 +2,6 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.R
@@ -51,9 +50,9 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
-                Log.e("request", "${it.raw().request()}")
+               // Log.e("request", "${it.raw().request()}")
 
-                Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
+                //  Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
 
                 response.value = (Resource.success(it.body()))
 

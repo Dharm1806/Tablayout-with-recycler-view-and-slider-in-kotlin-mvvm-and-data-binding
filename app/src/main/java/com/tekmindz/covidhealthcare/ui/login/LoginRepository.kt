@@ -6,6 +6,7 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
+import com.tekmindz.covidhealthcare.repository.requestModels.UserInfoRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfo
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
@@ -31,8 +32,8 @@ class LoginRepository : Callback<UserModel> {
     /*request to login user from login api*/
     fun getUserInfo(): Observable<Response<UserInfo>> =
         App.healthCareApi.getUserInfo(
-            "bearer " + App.mSharedPrefrenceManager.getValueString(PREF_ACCESS_TOKEN)!!
-
+            "bearer " + App.mSharedPrefrenceManager.getValueString(PREF_ACCESS_TOKEN)!!,
+            UserInfoRequest(Constants.device_token)
         )
     /*request to get counts  from dashboard count api*/
 

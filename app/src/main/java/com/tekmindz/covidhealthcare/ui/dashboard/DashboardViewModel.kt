@@ -1,10 +1,8 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.repository.requestModels.DashBoardObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.DateFilter
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardCounts
@@ -60,7 +58,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
     }
 
     fun getDashboardObservations(dashBoardObservations: DashBoardObservations) {
-        Log.e("dashboardObservation", "${Gson().toJson(dashBoardObservations)}")
+     //   Log.e("dashboardObservation", "${Gson().toJson(dashBoardObservations)}")
 
         subscribe(mDashboardRepository.getDashboardObservations(dashBoardObservations)
             .subscribeOn(Schedulers.io())
@@ -69,20 +67,20 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
-                Log.e("requestREsponse", "${it.raw().request()}")
-                Log.e(
-                    "response",
-                    "${it.code()}, ${it.body()?.message}, ${Gson().toJson(it.body())}"
-                )
+                /* Log.e("requestREsponse", "${it.raw().request()}")
+                 Log.e(
+                     "response",
+                     "${it.code()}, ${it.body()?.message}, ${Gson().toJson(it.body())}"
+                 )*/
 
                 response.value = (Resource.success(it.body()))
 
             }, {
                 // Log.e("requestREsponse", "${it.raw().request()}")
-                Log.e(
-                    "error",
-                    "${it.message} , ${it.localizedMessage} , ${it.printStackTrace()}  "
-                )
+                /*   Log.e(
+                       "error",
+                       "${it.message} , ${it.localizedMessage} , ${it.printStackTrace()}  "
+                   )*/
                 response.value = Resource.error(it.localizedMessage)
             })
         )
@@ -97,8 +95,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(Applicatio
                 responseCounts.value = Resource.loading()
             }
             .subscribe({
-                Log.e("requestREsponse", "${it.raw().request()}")
-                Log.e("response", "${it.code()}")
+                //Log.e("requestREsponse", "${it.raw().request()}")
+                //Log.e("response", "${it.code()}")
                 responseCounts.value = (Resource.success(it.body()))
 
 

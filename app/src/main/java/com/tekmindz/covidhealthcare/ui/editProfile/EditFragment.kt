@@ -1,15 +1,16 @@
 package com.tekmindz.covidhealthcare.ui.editProfile
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -24,6 +25,7 @@ import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.EmergencyContact
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
+import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -76,26 +78,26 @@ class EditProfileFragment : Fragment() {
             activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
         mEditProfileViewModel = ViewModelProviders.of(this).get(EditProfileViewModel::class.java)
+
         binding.editProfileViewModel = mEditProfileViewModel
         arguments?.takeIf {
             it.containsKey(Constants.PATIENT_ID)
         }?.apply {
             patientId = getInt(Constants.PATIENT_ID).toString()
 
-            Log.e("patientIdEdit", "$patientId")
+            //   Log.e("patientIdEdit", "$patientId")
         }
-        /* button_login.setOnClickListener {
-             validateFields()
-         }*/
+        if (mEditProfileViewModel.isPatient()) {
+            bt_sos.visibility = View.VISIBLE
+        } else {
+            bt_sos.visibility = View.GONE
+        }
+        binding.btSos.setOnClickListener {
+            Utills.callPhoneNumber(requireActivity())
+        }
 
-        /* if(mEditProfileViewModel.isPatient()){
-           val userInfoBody =   App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO)
-             Log.e("userInfor" , userInfoBody?.emergencyContact)
-             binding.etEmergencyContactNumber.editText?.setText( userInfoBody?.emergencyContact?:"")
-         }else{
-             mEditProfileViewModel.getEmerncyContact(patientId)
-         }*/
         mEditProfileViewModel.getEmerncyContact(patientId)
+
         mEditProfileViewModel.response().observe(requireActivity(), Observer {
             when (it) {
                 is Resource<EditProfileResponse> -> {
@@ -103,6 +105,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
         })
+
         mEditProfileViewModel.emergencyContact().observe(requireActivity(), Observer {
             when (it) {
                 is Resource<EmergencyContact> -> {
@@ -117,6 +120,7 @@ class EditProfileFragment : Fragment() {
                 validateFields(loginUser)
 
             })
+
         binding.etContactNumber.editText?.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 if (validateEditText((v as EditText).text)) {
@@ -183,7 +187,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun updateEmergencyContact(mEmergencyContact: EmergencyContact) {
-        Log.e("mEditProfileResponse", "$mEmergencyContact")
+        //Log.e("mEditProfileResponse", "$mEmergencyContact")
         hideProgressbar()
         if (mEmergencyContact.body.emergencyContact != null) {
             binding.etEmergencyContactNumber.editText?.setText(mEmergencyContact.body.emergencyContact)
@@ -192,7 +196,7 @@ class EditProfileFragment : Fragment() {
 
 
     private fun updateSuccess(mEditProfileResponse: EditProfileResponse) {
-        Log.e("mEditProfileResponse", "$mEditProfileResponse")
+        // Log.e("mEditProfileResponse", "$mEditProfileResponse")
         hideProgressbar()
         if (mEditProfileResponse.statusCode == 200 || mEditProfileResponse.statusCode == 201) {
             showMessage(getString(R.string.emergency_contact_updated))
@@ -260,8 +264,11 @@ class EditProfileFragment : Fragment() {
         ) {
 
             if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
-
+                val imm =
+                    context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+                imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
                 mProgressDialog?.show()
+
                 mEditProfileViewModel.updateContactInfo(
                     EditProfileRequest(
                         patientId.toInt(),

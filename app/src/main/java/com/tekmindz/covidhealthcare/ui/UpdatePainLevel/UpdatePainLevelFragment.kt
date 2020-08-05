@@ -2,7 +2,6 @@ package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -83,7 +82,7 @@ class UpdatePainLevelFragment : Fragment() {
 
         mUpdatePainLevelViewModel =
             ViewModelProviders.of(this).get(UpdatePainLevelViewModel::class.java)
-        Log.e("painLevel", "$painLevel")
+       // Log.e("painLevel", "$painLevel")
         if (painLevel != null) {
             //seek_level_Of_pain.setProgress(painLevel.toFloat()?:0.0f)
         }
@@ -95,7 +94,7 @@ class UpdatePainLevelFragment : Fragment() {
                 fromUser: Boolean
             ) {
                 patientProgress = progress
-                Log.e("on progress changed", "$progress, $progressFloat")
+                //  Log.e("on progress changed", "$progress, $progressFloat")
                 val color: Int
                 color = if (progress <= 3) {
                     ContextCompat.getColor(requireActivity(), R.color.green)

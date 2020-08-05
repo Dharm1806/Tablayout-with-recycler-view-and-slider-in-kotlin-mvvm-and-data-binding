@@ -1,12 +1,15 @@
 package com.tekmindz.covidhealthcare
 
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +54,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ) { instanceIdResult: InstanceIdResult ->
             val newToken = instanceIdResult.token
             Log.e("newToken", newToken)
-
+            Constants.device_token = newToken
         }
     }
 
@@ -226,10 +229,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun hideSelfAssesment() {
         // val userTypes = App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
         val menu = navigationView.menu
-        if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
-
-            menu.findItem(R.id.selfAssesment).isVisible = false
-        } else menu.findItem(R.id.selfAssesment).isVisible = true
+        menu.findItem(R.id.selfAssesment).isVisible =
+            !Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))
 
     }
 
@@ -246,4 +247,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val imm =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
 }

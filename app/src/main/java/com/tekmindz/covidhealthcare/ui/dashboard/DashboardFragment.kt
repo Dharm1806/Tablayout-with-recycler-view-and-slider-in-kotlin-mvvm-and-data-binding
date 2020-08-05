@@ -2,7 +2,6 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +65,7 @@ class HomeFragment : Fragment() {
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                Log.e("tabselected pos", "${tab?.position}")
+               // Log.e("tabselected pos", "${tab?.position}")
                 pager.setCurrentItem(tab?.position!!, false)
 
             }
@@ -77,7 +76,7 @@ class HomeFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // pager.setCurrentItem(tab?.position!!, false)
 
-                Log.e("tabReselected pos", "${tab?.position}")
+                //Log.e("tabReselected pos", "${tab?.position}")
 
             }
         })

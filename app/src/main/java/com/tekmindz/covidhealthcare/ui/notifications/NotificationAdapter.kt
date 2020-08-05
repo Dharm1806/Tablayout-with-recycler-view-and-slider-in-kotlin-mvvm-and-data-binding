@@ -15,40 +15,40 @@ import com.tekmindz.covidhealthcare.constants.Constants.UNIT_HEART_RATE
 import com.tekmindz.covidhealthcare.constants.Constants.UNIT_RESPIRATION
 import com.tekmindz.covidhealthcare.constants.Constants.UNIT_TEMPERATURE
 import com.tekmindz.covidhealthcare.databinding.ItemNotificationsBinding
-import com.tekmindz.covidhealthcare.repository.responseModel.Notification
+import com.tekmindz.covidhealthcare.repository.responseModel.Body
 import com.tekmindz.covidhealthcare.utills.Utills
 
 
 class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(notifiction: Notification, clickListener: OnItemClickListener, mContext: Context) {
+    fun bind(body: Body, clickListener: OnItemClickListener, mContext: Context) {
         //load the patient profile image
-       //Glide.with(mContext).load(observation.imageUrl).into(binding.imgProfile)
+        //Glide.with(mContext).load(observation.imageUrl).into(binding.imgProfile)
 
-        if (notifiction.body.patientStatus.equals(STATE_CRITICAL)) {
+        if (body.status.equals(STATE_CRITICAL)) {
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.red))
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.red))
-        } else if (notifiction.body.patientStatus.equals(STATE_UNDER_CONTROL)) {
+        } else if (body.status.equals(STATE_UNDER_CONTROL)) {
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.amber))
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.amber))
-        } else if (notifiction.body.patientStatus.equals(STATE_RECOVERED)) {
+        } else if (body.status.equals(STATE_RECOVERED)) {
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.green))
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.green))
         }
 
-        setNotificationIcon(binding.icNotification, notifiction.body.unit, notifiction.body.patientStatus, mContext)
+        setNotificationIcon(binding.icNotification, body.obsType, body.status, mContext)
 
-        //set patient name with first charactar capital
-
-        binding.tvNotificationMessage.text = notifiction.body.message
-        binding.tvPatientStatus.text = Utills.parseDate(notifiction.time)
-        binding.tvReading.text = notifiction.body.reading
-        binding.tvBedNo.text = mContext.getString(R.string.msg_bed_number)+": "+notifiction.body.bedNo
-        binding.tvWardNo.text =mContext.getString(R.string.msg_ward_number)+": "+notifiction.body.wardNo
+//setNotificationData
+        binding.tvNotificationMessage.text = body.patientName
+        binding.tvPatientStatus.text = Utills.parseDate(body.bedNumber)
+        binding.tvReading.text = body.obsValue + " " + body.obsType
+        binding.tvBedNo.text = mContext.getString(R.string.msg_bed_number) + ": " + body.bedNumber
+        binding.tvWardNo.text =
+            mContext.getString(R.string.msg_ward_number) + ": " + body.wardNumber
 
         //handle patient click event
         binding.itemLayoutObservations.setOnClickListener {
-            clickListener.onItemClicked(notifiction)
+            clickListener.onItemClicked(body)
         }
 
     }
@@ -94,7 +94,7 @@ class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.V
 
 
 class NotificationAdapter(
-    private var notificationList: List<Notification>,
+    private var notificationList: List<Body>,
     private val itemClickListener: OnItemClickListener, private var mContext: Context
 ) : RecyclerView.Adapter<NotificationHolder>() {
 
@@ -120,5 +120,5 @@ class NotificationAdapter(
 
 
 interface OnItemClickListener {
-    fun onItemClicked(mNotification: Notification)
+    fun onItemClicked(body: Body)
 }

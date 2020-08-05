@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.search
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -74,7 +76,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
         }
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.e("querytext submit", "$query")
+                //  Log.e("querytext submit", "$query")
 
                 mQuery = query.toString()
                 searchQuery()
@@ -82,7 +84,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.e("querytext change", "$newText")
+                //    Log.e("querytext change", "$newText")
               mQuery = newText.toString()
 
                 searchQuery()
@@ -184,6 +186,9 @@ class SearchFragment : Fragment(), OnItemClickListener {
 
     override fun onItemClicked(mDashboardObservationsResponse: observations) {
         Utills.hideKeyboard(requireActivity())
+        val imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
         val bundle = bundleOf("observation" to mDashboardObservationsResponse)
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
     }
@@ -191,6 +196,8 @@ class SearchFragment : Fragment(), OnItemClickListener {
     override fun onPrepareOptionsMenu(menu: Menu) {
         val item = menu.findItem(R.id.updateProfile)
         if (item != null) item.isVisible = false
+
+
     }
 
 }

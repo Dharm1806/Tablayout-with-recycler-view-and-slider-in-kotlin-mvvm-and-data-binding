@@ -77,11 +77,25 @@
             android:onClick="@{(v) -> EditProfileViewModel.onClick(v)}"
             android:textColor="@color/white"
             android:textSize="@dimen/button_text_size"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <com.tekmindz.covidhealthcare.utills.MovableButton
+            android:id="@+id/bt_sos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/dimen_30dp"
+            android:layout_marginBottom="@dimen/dimen_100dp"
+            android:background="@drawable/ic_sos"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -13,7 +13,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Base64
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -28,8 +27,6 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
-import com.auth0.android.jwt.Claim
-import com.auth0.android.jwt.JWT
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -38,7 +35,6 @@ import com.tekmindz.covidhealthcare.constants.Constants.BASIC
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.HEALTH_CARE_WORKER_ROLE
-import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ROLE
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SUPERVISOR_ROLE
@@ -60,7 +56,7 @@ object Utills {
     var dateRange: MutableLiveData<DateRange> = MutableLiveData<DateRange>()
 
     fun dateRange(dateRangeValue: String) {
-        Log.e("date", "$dateRangeValue")
+      //  Log.e("date", "$dateRangeValue")
         this.dateRange.value = DateRange(dateRangeValue)
     }
 
@@ -370,17 +366,7 @@ object Utills {
 
     }
 
-    fun decodeAccessToke(value: String): String {
-        val parsedJWT = JWT(value)
-        Log.e("parsed", "$parsedJWT")
-        val subscriptionMetaData: Map<String, Claim> = parsedJWT.claims
 
-        Log.e("parsedVAlue", "$subscriptionMetaData")
-
-        return "String(decoded)"
-
-
-    }
 
     @Throws(Exception::class)
     fun decoded(JWTEncoded: String): String {
@@ -405,9 +391,6 @@ object Utills {
                 }
             }
 
-
-
-            Log.e("JWT_DECODED", "Body: " + getJson(split[1]))
         } catch (e: UnsupportedEncodingException) {
             e.printStackTrace()
             //Error
@@ -419,7 +402,6 @@ object Utills {
 
     @Throws(UnsupportedEncodingException::class)
     private fun getJson(strEncoded: String): String {
-        Log.e("strEncoded", "$strEncoded")
         val decodedBytes =
             Base64.decode(strEncoded, Base64.URL_SAFE)
         return String(decodedBytes, Charsets.UTF_8)
@@ -462,18 +444,26 @@ object Utills {
     }
 
     fun isPatientAndHc(userInfoBody: UserInfoBody?): Boolean {
-        return ((userInfoBody?.roles?.contains(SUPERVISOR_ROLE)!!) || userInfoBody.roles.contains(
-            SUPER_ADMIN_ROLE
-        ) || userInfoBody.roles.contains(
-            HEALTH_CARE_WORKER_ROLE
-        )) && userInfoBody.roles.contains(
-            PATIENT_ROLE
-        )
+        return isPatient(userInfoBody)
+        /* return ((userInfoBody?.roles?.contains(SUPERVISOR_ROLE)!!) || userInfoBody.roles.contains(
+             SUPER_ADMIN_ROLE
+         ) || userInfoBody.roles.contains(
+             HEALTH_CARE_WORKER_ROLE
+         )) && userInfoBody.roles.contains(
+             PATIENT_ROLE
+         )*/
     }
 
     fun getPatientId(): String? {
         val userInfoBody = App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO)
         return userInfoBody?.patientId?.toString()
     }
+
+    fun hide(context: Context) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
+    }
+
 
 }

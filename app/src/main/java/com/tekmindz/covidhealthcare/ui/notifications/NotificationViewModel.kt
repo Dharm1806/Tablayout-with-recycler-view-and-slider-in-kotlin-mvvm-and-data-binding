@@ -61,5 +61,6 @@ class NotificationViewModel : ViewModel() {
         }
 
 
+    fun isPatient(): Boolean = mNotificationRepository.isPatient()
 
 }

@@ -1,8 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
 import android.app.Application
-import android.util.Log
-import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -28,11 +26,11 @@ class DashboardRepository {
     /*request to get the observation data from api */
     fun getDashboardObservations(dashBoardObservations: DashBoardObservations): Observable<Response<DashboardObservationsResponse>> {
 
-        Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
+       /* Log.e("time ", "${Gson().toJson(dashBoardObservations)}")
         Log.e(
             "access_token",
             "${mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!}"
-        )
+        )*/
 
         return App.healthCareApi.getDashboardPatientList(
             dashBoardObservations,

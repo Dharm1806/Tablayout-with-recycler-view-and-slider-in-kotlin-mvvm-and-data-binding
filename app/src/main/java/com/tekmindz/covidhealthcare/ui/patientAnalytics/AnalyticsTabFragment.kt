@@ -3,7 +3,6 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -97,7 +96,7 @@ class AnalyticsTabFragment : Fragment() {
         respirationGraphEntry = ArrayList()
 
         binding.selectDate.setOnClickListener { showDateRangePicker() }
-        Log.e("patientNAme", "${arguments?.getString(ARG_PATIENT_NAME)}")
+        //Log.e("patientNAme", "${arguments?.getString(ARG_PATIENT_NAME)}")
         binding.patientName.text = arguments?.getString(ARG_PATIENT_NAME)
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
             hours = getInt(ARG_TIME)
@@ -204,7 +203,7 @@ class AnalyticsTabFragment : Fragment() {
 
 
     private fun showObservations(data: List<Analytics>) {
-Log.e("data", "123 t ${data.size}")
+//Log.e("data", "123 t ${data.size}")
         if (!data.isNullOrEmpty()) {
             mAnalyticsList.clear()
             posture?.clear()

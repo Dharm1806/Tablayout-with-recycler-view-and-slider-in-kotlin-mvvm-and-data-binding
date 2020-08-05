@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -88,9 +87,7 @@ class LoginFragment : Fragment() {
         mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         binding.loginViewModel = mLoginViewModel
 
-        /* button_login.setOnClickListener {
-             validateFields()
-         }*/
+
 
         mLoginViewModel.response().observe(requireActivity(), Observer {
             when (it) {
@@ -186,11 +183,11 @@ class LoginFragment : Fragment() {
             val id = navController.currentDestination!!.id
             //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
-            Log.e("userdeco", "fecd")
+          //  Log.e("userdeco", "fecd")
         val userType =
              Utills.decoded(userData.access_token)
 
-            Log.e("jwtToken", "$userType")
+            //  Log.e("jwtToken", "$userType")
             mLoginViewModel.saveUserData(
                 PREF_USER_TYPE, userType)
             mLoginViewModel.saveUserData(PREF_EXPIRES_IN, userData.expires_in.toString())
@@ -221,7 +218,7 @@ class LoginFragment : Fragment() {
             val id = navController.currentDestination!!.id
 
             mLoginViewModel.saveUserInfo(PREF_USER_INFO, userInfo.body)
-            Log.e("userdeco", "fecd")
+            //   Log.e("userdeco", "fecd")
             mLoginViewModel.setIsLogin(true)
             if (id == R.id.login) {
                 hideKeyboard(requireActivity())

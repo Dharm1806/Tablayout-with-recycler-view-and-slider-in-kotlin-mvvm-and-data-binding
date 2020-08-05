@@ -1,6 +1,8 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
 import android.app.Application
+import android.util.Log
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -36,11 +38,13 @@ class PatientDetailsRepository {
         presenter.refreshToken()
     }
 
-    fun updatePainLevel(updateManualObservations: UpdateManualObservations): Observable<Response<EditProfileResponse>> =
-        App.healthCareApi.updatePainLevel(
+    fun updatePainLevel(updateManualObservations: UpdateManualObservations): Observable<Response<EditProfileResponse>> {
+        Log.e("updateObservationType", "${Gson().toJson(updateManualObservations)}")
+        return App.healthCareApi.updatePainLevel(
             updateManualObservations,
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
+    }
 
     fun isPatient(): Boolean =
         Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))

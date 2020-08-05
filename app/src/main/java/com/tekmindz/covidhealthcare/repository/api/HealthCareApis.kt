@@ -45,9 +45,10 @@ interface HealthCareApis {
 
     ): Call<UserModel>
 
-    @GET(GET_USER_INFO)
+    @POST(GET_USER_INFO)
     fun getUserInfo(
-        @Header("Authorization") access_token: String
+        @Header("Authorization") access_token: String,
+        @Body userInfoRequest: UserInfoRequest
     ): Observable<Response<UserInfo>>
 
     /*  call the patient contact numbers and emergency contact number */

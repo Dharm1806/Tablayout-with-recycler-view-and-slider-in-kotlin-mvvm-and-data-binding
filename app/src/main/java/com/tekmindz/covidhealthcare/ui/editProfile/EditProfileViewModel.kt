@@ -1,7 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.editProfile
 
 import android.app.Application
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -57,8 +56,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
                 response.value = Resource.loading()
             }
             .subscribe({
-                Log.e("request", "${it.code()} , ${it.raw().request()}")
-                Log.e("response", "${it.body()}")
+                //   Log.e("request", "${it.code()} , ${it.raw().request()}")
+                // Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
                     response.value = (Resource.success(it.body()))
 
@@ -114,8 +113,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
                 emergencyContactResponse.value = Resource.loading()
             }
             .subscribe({
-                Log.e("request", "${it.code()} , ${it.raw().request()}")
-                Log.e("response", "${it.body()}")
+                //  Log.e("request", "${it.code()} , ${it.raw().request()}")
+                // Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
                     emergencyContactResponse.value = (Resource.success(it.body()))
 

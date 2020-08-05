@@ -3,7 +3,6 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -74,7 +73,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
         arguments?.takeIf { it.containsKey(ARG_TIME) }?.apply {
             hours = getInt(ARG_TIME)
-            Log.e("hours", "$hours")
+           // Log.e("hours", "$hours")
             if (hours == -1) {
                 binding.selectDate.visibility = View.VISIBLE
                 showDateRangePicker()
@@ -273,7 +272,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
 
     private fun showObservations(data: List<observations>) {
-        Log.e("size", "${data.size}")
+        //   Log.e("size", "${data.size}")
         hideProgressbar()
         if (!data.isNullOrEmpty()) {
             mObservationList.clear()

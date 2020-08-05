@@ -43,7 +43,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/spo2"
-            android:inputType="text"
+            android:inputType="numberDecimal"
+            android:maxLength="5"
             android:textColor="@color/patient_details_text"
             android:textColorHint="@color/patient_details_text"
             android:textSize="@dimen/field_text_size" />

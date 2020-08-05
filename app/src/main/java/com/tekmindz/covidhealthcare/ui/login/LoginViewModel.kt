@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
+import com.tekmindz.covidhealthcare.repository.requestModels.UserInfoRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfo
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
@@ -61,8 +62,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
                 response.value = Resource.loading()
             }
             .subscribe({
-                Log.e("request", "${it.code()} , ${it.raw().request()}")
-                Log.e("response", "${it.body()}")
+                //Log.e("request", "${it.code()} , ${it.raw().request()}")
+                //  Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
                     response.value = (Resource.success(it.body()))
 
@@ -77,6 +78,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
     }
 
     fun getUserInfo() {
+        Log.e("deviceTOken", "${UserInfoRequest(Constants.device_token)}")
         subscribe(mLoginRepository.getUserInfo()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -93,7 +95,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
                     userInfoResponse.value = Resource.error(it.message())
                 }
             }, {
-                //   Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
                 userInfoResponse.value = Resource.error(it.localizedMessage)
             })
         )

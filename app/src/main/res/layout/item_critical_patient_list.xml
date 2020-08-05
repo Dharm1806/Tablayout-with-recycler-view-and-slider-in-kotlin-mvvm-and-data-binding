@@ -32,6 +32,7 @@
             android:id="@+id/patient_name"
             android:fontFamily="@font/roboto_medium"
             android:textSize="@dimen/text_size_15sp"
+            android:layout_marginStart="@dimen/margin_10dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_10dp"
             app:layout_constraintLeft_toLeftOf="parent"

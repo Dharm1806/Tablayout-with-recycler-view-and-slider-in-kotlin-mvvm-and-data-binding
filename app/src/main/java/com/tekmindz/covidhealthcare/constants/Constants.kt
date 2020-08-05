@@ -8,6 +8,7 @@ object Constants {
     // const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
     // var BASE_URL = "http://34.210.115.120:8081/"
 
+    lateinit var device_token: String
     val OBSERVATION: String? = "observation"
 
     //dev base url
@@ -16,8 +17,12 @@ object Constants {
 
     //endpoints for apis
     const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
-    //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+    const val CLIENT_ID: String = "test-app"
+    const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
 
+    //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+    //const val CLIENT_ID: String = "ctms-qa-app"
+    //const val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
     const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
     const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
 
@@ -30,7 +35,7 @@ object Constants {
     const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
     const val UPDATE_MANUAL_OBSERVSTION = "api/manual/observation/create"
     const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
-    const val GET_NOTIFICATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
+    const val GET_NOTIFICATIONS = "api/notification/listAll"
 
     const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"
@@ -51,10 +56,7 @@ object Constants {
     var isLoginRequired: Boolean = true
     const val HEADER_CONTENT_TYPE = "Content-Type: application/json"
     const val HEADER_AUTHRIZATION = "Authorization"
-    const val CLIENT_ID: String = "test-app"
-    // const val CLIENT_ID: String = "ctms-qa-app"
-    //const val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
-    const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
+
     const val FILTER_DATE_FORMAT = "yyyy-MM-dd hh-mm-ss"
     const val PASSWROD = "password"
     const val EXTRA_GRANT_TYPE = "grantType"
@@ -77,6 +79,17 @@ object Constants {
     const val PREF_USER_TYPE = "user_type"
     const val PREF_USER_ID = "user_id"
 
+
+    const val EXTRA_OBSERVATION_TYPE = "obsType"
+    const val EXTRA_OBSERVATION_VALUE = "obsValue"
+    const val EXTRA_PATIENT_ID = "patientId"
+    const val EXTRA_STATUS = "status"
+    const val EXTRA_PATIENT_NAME = "patientName"
+    const val EXTRA_WARD_NUMBER = "wardNumber"
+    const val EXTRA_BED_NUMBER = "bedNumber"
+    const val EXTRA_MESSAGE = "message"
+    const val EXTRA_NOTIFICATION_TIME = "notificationTime"
+    const val EXTRA_NOTIFICATION_ID = "notificationId"
 
     const val STATE_CRITICAL = "critical"
     const val STATE_UNDER_CONTROL = "underControl"

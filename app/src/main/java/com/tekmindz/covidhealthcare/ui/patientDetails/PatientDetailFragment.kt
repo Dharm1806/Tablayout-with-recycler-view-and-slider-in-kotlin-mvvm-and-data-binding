@@ -1,14 +1,13 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
 
-import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.*
-import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +21,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
@@ -96,7 +96,7 @@ class PatientDetailFragment : Fragment() {
         }?.apply {
             val observation = getParcelable<observations>(Constants.OBSERVATION) as observations
             patientId = observation.patientId.toString()
-            Log.e("patientId", "$patientId")
+            //Log.e("patientId", "$patientId")
             showPatientDeatils(
                 Details(
                     observation.firstName,
@@ -126,7 +126,7 @@ class PatientDetailFragment : Fragment() {
         }?.apply {
             if (getInt(Constants.PATIENT_ID) != 0) {
                 patientId = getInt(Constants.PATIENT_ID).toString()
-                Log.e("patienTiD", "$patientId")
+//                Log.e("patienTiD", "$patientId")
                 getPatient()
             }
         }
@@ -233,6 +233,7 @@ class PatientDetailFragment : Fragment() {
             //  mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
             mPatientDetailViewModel.getPatientObservations(patientId.toString())
         }
+
         showPatientDeatils(
             Details(
                 userInfoBody.firstName,
@@ -275,7 +276,28 @@ class PatientDetailFragment : Fragment() {
         //body.text = title
         val saveSpO2 = dialog.findViewById(R.id.saveSpO2) as TextView
         val cancelSpO2 = dialog.findViewById(R.id.cancelSpO2) as TextView
-
+        etSpO2.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (etSpO2.editText?.text.toString().trim().length == 0) {
+                    etSpO2.error = getString(R.string.err_spo2)
+                    etSpO2.isErrorEnabled = true
+                } else {
+                    etSpO2.isErrorEnabled = false
+                }
+                true
+            }
+            false
+        }
+        etSpO2.editText?.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if ((v as EditText).text.toString().trim().length != 0) {
+                    etSpO2.isErrorEnabled = false
+                } else {
+                    etSpO2.isErrorEnabled = true
+                    etSpO2.error = getString(R.string.err_spo2)
+                }
+            }
+        }
         saveSpO2.setOnClickListener {
             val spO2 = etSpO2.editText?.text.toString()
             if (spO2.trim().length == 0) {
@@ -286,10 +308,12 @@ class PatientDetailFragment : Fragment() {
                 dialog.dismiss()
                 showProgressBar()
 
-                Utills.hideKeyboard(requireActivity())
+                Utills.hideKeyboard(activity as HomeActivity)
                 binding.tvSpO2.text = spO2 + " " + getString(R.string.spo2_unit)
                 dialog.window
                     ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+
+                Utills.hide(requireContext())
                 updateObservationType(
                     UpdateManualObservations(
                         listOf<UpdatePainLevel>(
@@ -302,7 +326,6 @@ class PatientDetailFragment : Fragment() {
                         )
                     )
                 )
-                Log.e("spo2", "$spO2")
             }
         }
         //  cancelSpO2.setOnClickListener { dialog.dismiss() }
@@ -311,12 +334,17 @@ class PatientDetailFragment : Fragment() {
 
         cancelAction.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                Utills.hide(requireContext())
+
                 dialog.dismiss()
                 return v?.onTouchEvent(event) ?: true
             }
         })
         cancelSpO2.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+                Utills.hide(requireContext())
+
                 dialog.dismiss()
                 return v?.onTouchEvent(event) ?: true
             }
@@ -337,6 +365,41 @@ class PatientDetailFragment : Fragment() {
         val etSys = dialog.findViewById(R.id.tv_Sys) as TextInputLayout
         val etDia = dialog.findViewById(R.id.tv_dia) as TextInputLayout
 
+        etSys.editText?.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if ((v as EditText).text.toString().trim().length != 0) {
+                    etSys.isErrorEnabled = false
+                } else {
+                    etSys.isErrorEnabled = true
+                    etSys.error = getString(R.string.err_sys)
+                }
+            }
+        }
+
+        etDia.editText?.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                if ((v as EditText).text.toString().trim().length != 0) {
+                    etDia.isErrorEnabled = false
+                } else {
+                    etDia.isErrorEnabled = true
+                    etDia.error = getString(R.string.error_valid_dia)
+                }
+            }
+        }
+
+        etDia.editText?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (etDia.editText?.text.toString().trim().length == 0) {
+                    etDia.error = getString(R.string.error_valid_dia)
+                    etDia.isErrorEnabled = true
+                } else {
+                    etDia.isErrorEnabled = false
+                }
+                true
+            }
+            false
+        }
+
         //body.text = title
         val saveBloodPressure = dialog.findViewById(R.id.saveBloodPressure) as TextView
         val cancelBloodPressure = dialog.findViewById(R.id.cancelBloodPressure) as TextView
@@ -348,7 +411,6 @@ class PatientDetailFragment : Fragment() {
                 etSys.error = getString(R.string.err_sys)
             } else {
                 etSys.isErrorEnabled = false
-                Log.e("SYS", "$sys")
             }
 
             val dia = etDia.editText?.text.toString()
@@ -357,11 +419,10 @@ class PatientDetailFragment : Fragment() {
                 etDia.error = getString(R.string.error_valid_dia)
             } else {
                 etDia.isErrorEnabled = false
-                Log.e("dia", "$dia")
             }
 
             if (sys.trim().length != 0 && dia.trim().length != 0) {
-                dialog.dismiss()
+
                 Utills.hideKeyboard(requireActivity())
                 showProgressBar()
 
@@ -369,10 +430,8 @@ class PatientDetailFragment : Fragment() {
                     (sys + "/" + dia) + " " + getString(R.string.bp_unit)
                 dialog.window
                     ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-                val imm: InputMethodManager =
-                    requireActivity()
-                        .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                Utills.hide(requireContext())
+
                 updateObservationType(
                     UpdateManualObservations(
                         listOf<UpdatePainLevel>(
@@ -391,7 +450,7 @@ class PatientDetailFragment : Fragment() {
                         )
                     )
                 )
-
+                dialog.dismiss()
 
             }
         }
@@ -400,12 +459,17 @@ class PatientDetailFragment : Fragment() {
         //    cancelAction.setOnClickListener {}
         cancelAction.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                Utills.hide(requireContext())
+
                 dialog.dismiss()
+
                 return v?.onTouchEvent(event) ?: true
             }
         })
         cancelBloodPressure.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                Utills.hide(requireContext())
+
                 dialog.dismiss()
                 return v?.onTouchEvent(event) ?: true
             }
