@@ -16,7 +16,6 @@ import com.tekmindz.covidhealthcare.constants.Constants.UNIT_RESPIRATION
 import com.tekmindz.covidhealthcare.constants.Constants.UNIT_TEMPERATURE
 import com.tekmindz.covidhealthcare.databinding.ItemNotificationsBinding
 import com.tekmindz.covidhealthcare.repository.responseModel.Body
-import com.tekmindz.covidhealthcare.utills.Utills
 
 
 class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -25,13 +24,13 @@ class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.V
         //load the patient profile image
         //Glide.with(mContext).load(observation.imageUrl).into(binding.imgProfile)
 
-        if (body.status.equals(STATE_CRITICAL)) {
+        if (body.status.toUpperCase().equals(STATE_CRITICAL)) {
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.red))
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.red))
-        } else if (body.status.equals(STATE_UNDER_CONTROL)) {
+        } else if (body.status.toUpperCase().equals(STATE_UNDER_CONTROL)) {
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.amber))
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.amber))
-        } else if (body.status.equals(STATE_RECOVERED)) {
+        } else if (body.status.toUpperCase().equals(STATE_RECOVERED)) {
             binding.tvPatientStatus.setBackgroundColor(mContext.resources.getColor(R.color.green))
             binding.tvReading.setTextColor(mContext.resources.getColor(R.color.green))
         }
@@ -40,7 +39,7 @@ class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.V
 
 //setNotificationData
         binding.tvNotificationMessage.text = body.patientName
-        binding.tvPatientStatus.text = Utills.parseDate(body.bedNumber)
+        binding.tvPatientStatus.text = body.status
         binding.tvReading.text = body.obsValue + " " + body.obsType
         binding.tvBedNo.text = mContext.getString(R.string.msg_bed_number) + ": " + body.bedNumber
         binding.tvWardNo.text =
@@ -59,31 +58,30 @@ class NotificationHolder(val binding: ItemNotificationsBinding) : RecyclerView.V
         patientStatus: String,
         mContext: Context
     ) {
-        if (patientStatus.equals(STATE_CRITICAL)) {
-           if (unit.equals(UNIT_HEART_RATE)){
-               Glide.with(mContext).load(R.drawable.ic_heart_rate_critical).into(icNotification)
-           }
-            else if (unit.equals(UNIT_RESPIRATION)){
-               Glide.with(mContext).load(R.drawable.ic_resp_rate_critical).into(icNotification)
-           }else if (unit.equals(UNIT_TEMPERATURE)){
-               Glide.with(mContext).load(R.drawable.ic_temp_critical).into(icNotification)
-           }
-        } else if (patientStatus.equals(STATE_UNDER_CONTROL)) {
-            if (unit.equals(UNIT_HEART_RATE)){
-                Glide.with(mContext).load(R.drawable.ic_heart_rate_under_control).into(icNotification)
+        if (patientStatus.toUpperCase().equals(STATE_CRITICAL)) {
+            if (unit.equals(UNIT_HEART_RATE)) {
+                Glide.with(mContext).load(R.drawable.ic_heart_rate_critical).into(icNotification)
+            } else if (unit.equals(UNIT_RESPIRATION)) {
+                Glide.with(mContext).load(R.drawable.ic_resp_rate_critical).into(icNotification)
+            } else if (unit.equals(UNIT_TEMPERATURE)) {
+                Glide.with(mContext).load(R.drawable.ic_temp_critical).into(icNotification)
             }
-            else if (unit.equals(UNIT_RESPIRATION)){
-                Glide.with(mContext).load(R.drawable.ic_resp_rate_under_control).into(icNotification)
-            }else if (unit.equals(UNIT_TEMPERATURE)){
+        } else if (patientStatus.toUpperCase().equals(STATE_UNDER_CONTROL)) {
+            if (unit.equals(UNIT_HEART_RATE)) {
+                Glide.with(mContext).load(R.drawable.ic_heart_rate_under_control)
+                    .into(icNotification)
+            } else if (unit.equals(UNIT_RESPIRATION)) {
+                Glide.with(mContext).load(R.drawable.ic_resp_rate_under_control)
+                    .into(icNotification)
+            } else if (unit.equals(UNIT_TEMPERATURE)) {
                 Glide.with(mContext).load(R.drawable.ic_temp_under_control).into(icNotification)
             }
-        } else if (patientStatus.equals(STATE_RECOVERED)) {
-            if (unit.equals(UNIT_HEART_RATE)){
+        } else if (patientStatus.toUpperCase().equals(STATE_RECOVERED)) {
+            if (unit.equals(UNIT_HEART_RATE)) {
                 Glide.with(mContext).load(R.drawable.ic_heart_rate_recovered).into(icNotification)
-            }
-            else if (unit.equals(UNIT_RESPIRATION)){
+            } else if (unit.equals(UNIT_RESPIRATION)) {
                 Glide.with(mContext).load(R.drawable.ic_resp_rate_recovered).into(icNotification)
-            }else if (unit.equals(UNIT_TEMPERATURE)){
+            } else if (unit.equals(UNIT_TEMPERATURE)) {
                 Glide.with(mContext).load(R.drawable.ic_temp_recovered).into(icNotification)
             }
         }

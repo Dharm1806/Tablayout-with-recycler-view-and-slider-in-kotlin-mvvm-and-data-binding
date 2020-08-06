@@ -436,11 +436,11 @@ object Utills {
     }
 
     fun isPatient(userInfoBody: UserInfoBody?): Boolean {
-        return !((userInfoBody?.roles?.contains(SUPERVISOR_ROLE)!!) || userInfoBody.roles.contains(
-            SUPER_ADMIN_ROLE
-        ) || userInfoBody.roles.contains(
+        return !(userInfoBody != null && userInfoBody.roles != null && ((userInfoBody.roles.contains(
+            SUPERVISOR_ROLE
+        )) || userInfoBody.roles.contains(SUPER_ADMIN_ROLE) || userInfoBody.roles.contains(
             HEALTH_CARE_WORKER_ROLE
-        ))
+        )))
     }
 
     fun isPatientAndHc(userInfoBody: UserInfoBody?): Boolean {

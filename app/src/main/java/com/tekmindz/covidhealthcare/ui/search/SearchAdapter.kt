@@ -20,13 +20,13 @@ class SearchHolder(val binding: ItemSearchListBinding) : RecyclerView.ViewHolder
         //load the patient profile image
         Glide.with(mContext).load(observation.imageUrl).into(binding.imgProfile)
 
-        if (observation.status.equals(STATE_CRITICAL)) {
+        if (observation.status.toUpperCase().equals(STATE_CRITICAL)) {
             binding.imgProfile.borderColor = mContext.resources.getColor(R.color.red)
             binding.patientName.setTextColor(mContext.resources.getColor(R.color.red))
-        } else if (observation.status.equals(STATE_UNDER_CONTROL)) {
+        } else if (observation.status.toUpperCase().equals(STATE_UNDER_CONTROL)) {
             binding.imgProfile.borderColor = mContext.resources.getColor(R.color.amber)
             binding.patientName.setTextColor(mContext.resources.getColor(R.color.amber))
-        } else if (observation.status.equals(STATE_RECOVERED)) {
+        } else if (observation.status.toUpperCase().equals(STATE_RECOVERED)) {
             binding.patientName.setTextColor(mContext.resources.getColor(R.color.green))
             binding.imgProfile.borderColor = mContext.resources.getColor(R.color.green)
         }

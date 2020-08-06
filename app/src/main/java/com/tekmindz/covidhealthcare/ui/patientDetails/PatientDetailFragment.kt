@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -21,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -34,7 +36,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 
 class PatientDetailFragment : Fragment() {
-    private var painLevel: Int = 0
+    private var painLevel: String = "0"
     private lateinit var tvNotificationItemCount: TextView
     private lateinit var binding: PatientDetailFragmentBinding
     private var mProgressDialog: ProgressDialog? = null
@@ -210,6 +212,7 @@ class PatientDetailFragment : Fragment() {
                 "patientId" to patientId,
                 "painLevel" to painLevel
             )
+            Log.e("painLevel", "$painLevel")
             findNavController().navigate(R.id.pDetailsToUpdateReadings, bundle)
         }
 
@@ -526,27 +529,30 @@ class PatientDetailFragment : Fragment() {
 
     private fun showPatientObserVations(data: PatientObservation) {
         // formatString("103.012955")
+        Log.e("observations", "${Gson().toJson(data)}")
         binding.tvHeartRateValue.text = Utills.round(data.heartRate)
         binding.tvRespirationRateValue.text = Utills.round(data.respirationRate)
         binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemprature)
         binding.tvSpO2.text = data.spo2 + " " + getString(R.string.spo2_unit)
         binding.tvBloodPressure.text =
             (data.bpHigh + "/" + data.bpLow) + " " + getString(R.string.bp_unit)
-        var painLl = data.painlevel
+        var painLl = data.painLevel
+        Log.e("painLevelesdsd", "${data.painLevel}")
         if (painLl != null) {
-            painLevel = painLl.toInt()
+            Log.e("painLl", "$painLl")
+            painLevel = painLl
         } else {
-            painLevel = 0
+            painLevel = "0"
         }
-        if (data.status.equals(Constants.STATE_RECOVERED)) {
+        if (data.status.toUpperCase().equals(Constants.STATE_RECOVERED)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.recovered_bg)
         }
 
-        if (data.status.equals(Constants.STATE_UNDER_CONTROL)) {
+        if (data.status.toUpperCase().equals(Constants.STATE_UNDER_CONTROL)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.under_control_bg)
         }
 
-        if (data.status.equals(Constants.STATE_CRITICAL)) {
+        if (data.status.toUpperCase().equals(Constants.STATE_CRITICAL)) {
             binding.tvPatientStatus.background = activity?.getDrawable(R.drawable.critical_bg)
         }
 

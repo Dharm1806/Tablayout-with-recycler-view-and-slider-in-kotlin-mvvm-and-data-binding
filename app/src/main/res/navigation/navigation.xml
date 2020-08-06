@@ -193,6 +193,7 @@
         <action
             android:id="@+id/homeToPatientDetails"
             app:destination="@id/patient_details" />
+
     </fragment>
     <fragment
         android:id="@+id/helpFragment"

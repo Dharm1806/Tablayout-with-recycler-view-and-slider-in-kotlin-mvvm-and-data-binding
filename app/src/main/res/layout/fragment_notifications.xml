@@ -41,12 +41,9 @@
             android:background="@color/tab_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="@dimen/padding_20dp"
-            android:layout_marginStart="@dimen/padding_20dp"
             android:paddingBottom="@dimen/dimen_100dp"
-            android:layout_marginEnd="@dimen/padding_20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_critical_patient_list" />
         <com.tekmindz.covidhealthcare.utills.MovableButton

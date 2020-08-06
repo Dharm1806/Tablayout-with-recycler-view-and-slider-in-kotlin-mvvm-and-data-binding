@@ -1,6 +1,7 @@
 package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.application.App
@@ -43,13 +44,16 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
                 updatePatientObservations.value = Resource.loading()
             }
             .subscribe({
-
+                Log.e("request", "${it.code()} , ${it.raw().request()}")
+                Log.e("response", "${it.body()}")
                 if ((it.code() == 200 || it.code() == 201)) {
                     updatePatientObservations.value = (Resource.success(it.body()))
                 } else {
                     updatePatientObservations.value = Resource.error(it.message())
                 }
             }, {
+                Log.e("error", "${it.message} , ${it.localizedMessage} , ${it.stackTrace} ")
+
                 updatePatientObservations.value = Resource.error(it.localizedMessage)
             })
         )

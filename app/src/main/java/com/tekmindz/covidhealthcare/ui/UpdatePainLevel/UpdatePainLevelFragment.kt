@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -45,16 +46,16 @@ class UpdatePainLevelFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     var patientProgress = 0
-    var painLevel = 0
+    var painLevel = 0f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
             patientId = it.getString(PATIENT_ID)!!
-            val pain = it.getInt("painLevel")
+            val pain = it.getString("painLevel")
             if (pain != null) {
-                painLevel = pain.toInt()
+                painLevel = pain.toFloat()
             }
         }
     }
@@ -82,10 +83,11 @@ class UpdatePainLevelFragment : Fragment() {
 
         mUpdatePainLevelViewModel =
             ViewModelProviders.of(this).get(UpdatePainLevelViewModel::class.java)
-       // Log.e("painLevel", "$painLevel")
+        Log.e("painLevel", "$painLevel")
         if (painLevel != null) {
-            //seek_level_Of_pain.setProgress(painLevel.toFloat()?:0.0f)
+            seek_level_Of_pain.setProgress(painLevel.toFloat())
         }
+        // seek_level_Of_pain.setProgress(5f)
         seek_level_Of_pain.onProgressChangedListener = object : OnProgressChangedListenerAdapter() {
             override fun onProgressChanged(
                 bubbleSeekBar: BubbleSeekBar,

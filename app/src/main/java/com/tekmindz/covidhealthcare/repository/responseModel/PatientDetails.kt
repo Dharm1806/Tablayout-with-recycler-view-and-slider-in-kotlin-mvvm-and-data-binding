@@ -32,6 +32,6 @@ data class PatientObservation(
     val status: String,
     val bpLow: String,
     val bpHigh: String,
-    val painlevel: String,
+    val painLevel: String,
     val spo2: String
 )
