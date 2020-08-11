@@ -112,4 +112,6 @@
     <string name="spo2_unit"> %SpO2</string>
     <string name="you_are_not_being_monitered">You are not being monitored, please apply a patch on your body.</string>
     <string name="emergency_contact_updated">Emergency contact Number successfully updated.</string>
+    <string name="err_spo2_100">Spo2 % should not be greater than 100</string>
+    <string name="no_record_found">No record found</string>
 </resources>

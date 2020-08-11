@@ -120,4 +120,6 @@ class PatientDetailViewModel : ViewModel() {
     fun getPatientInfo(): UserInfoBody = mPatientDetailsRepository.getPatient()
     fun isPatient(): Boolean = mPatientDetailsRepository.isPatient()
     fun isPatientAndHC(): Boolean = mPatientDetailsRepository.isPatientAndHc()
+    fun isValidSpo2(s: CharSequence): Boolean =
+        !(s != null && s.toString().trim().length != 0 && s.toString().trim().toFloat() > 100.0f)
 }

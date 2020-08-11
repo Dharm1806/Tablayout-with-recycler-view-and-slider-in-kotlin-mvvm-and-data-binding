@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -12,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,7 +26,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
@@ -275,6 +277,11 @@ class PatientDetailFragment : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.add_oxygen)
+        val window: Window = dialog.window!!
+        window.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
         val etSpO2 = dialog.findViewById(R.id.et_spo2) as TextInputLayout
         //body.text = title
         val saveSpO2 = dialog.findViewById(R.id.saveSpO2) as TextView
@@ -291,6 +298,29 @@ class PatientDetailFragment : Fragment() {
             }
             false
         }
+        etSpO2.editText?.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int
+            ) {
+                if (!mPatientDetailViewModel.isValidSpo2(s)) {
+                    etSpO2.isErrorEnabled = true
+                    etSpO2.error = getString(R.string.err_spo2_100)
+                } else {
+                    etSpO2.isErrorEnabled = false
+                }
+
+            }
+        })
         etSpO2.editText?.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 if ((v as EditText).text.toString().trim().length != 0) {
@@ -306,17 +336,13 @@ class PatientDetailFragment : Fragment() {
             if (spO2.trim().length == 0) {
                 etSpO2.isErrorEnabled = true
                 etSpO2.error = getString(R.string.err_spo2)
-            } else {
+            } else if (mPatientDetailViewModel.isValidSpo2(spO2)) {
                 etSpO2.isErrorEnabled = false
+                Utills.hide(requireContext())
                 dialog.dismiss()
                 showProgressBar()
-
-                Utills.hideKeyboard(activity as HomeActivity)
                 binding.tvSpO2.text = spO2 + " " + getString(R.string.spo2_unit)
-                dialog.window
-                    ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-                Utills.hide(requireContext())
                 updateObservationType(
                     UpdateManualObservations(
                         listOf<UpdatePainLevel>(

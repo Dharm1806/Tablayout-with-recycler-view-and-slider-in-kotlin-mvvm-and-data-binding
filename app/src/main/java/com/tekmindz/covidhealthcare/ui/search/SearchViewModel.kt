@@ -39,9 +39,12 @@ class SearchViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
+
                 response.value = Resource.loading()
             }
             .subscribe({
+                Log.e("request", "${it.code()} , ${it.raw().request()}")
+                Log.e("response", "${it.body()}")
                 response.value = (Resource.success(it.body()))
 
             }, {

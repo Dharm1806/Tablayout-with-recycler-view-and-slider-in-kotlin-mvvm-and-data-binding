@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/tab_background">
@@ -36,6 +36,7 @@
         android:layout_marginEnd="@dimen/padding_20dp"
         android:gravity="start"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHeading">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -44,7 +45,7 @@
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/spo2"
             android:inputType="numberDecimal"
-            android:maxLength="5"
+            android:maxLength="4"
             android:textColor="@color/patient_details_text"
             android:textColorHint="@color/patient_details_text"
             android:textSize="@dimen/field_text_size" />
@@ -89,7 +90,7 @@
         />
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveSpO2"
         android:fontFamily="@font/roboto_regular"

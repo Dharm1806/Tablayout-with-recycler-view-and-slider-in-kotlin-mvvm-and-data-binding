@@ -27,7 +27,6 @@ import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
-import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.Analytics
@@ -132,7 +131,7 @@ class AnalyticsTabFragment : Fragment() {
                 }
             }
         })
-        if (mAnalyticsViewModel.getUserType() == UserTypes.PATIENT.toString()) {
+        if (mAnalyticsViewModel.isPatient()) {
             binding.btSos.visibility = View.VISIBLE
         } else {
             binding.btSos.visibility = View.GONE
@@ -150,7 +149,9 @@ class AnalyticsTabFragment : Fragment() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         //builder.setTheme(R.style.TimePickerTheme)
         val now = Calendar.getInstance()
+        builder.setCalendarConstraints(Utills.dateValidator(now.timeInMillis).build())
         builder.setSelection(androidx.core.util.Pair(now.timeInMillis, now.timeInMillis))
+
         val picker = builder.build()
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
@@ -175,10 +176,12 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     fun getPatientAnalytics() {
-        if (Utills.verifyAvailableNetwork(requireActivity()))
+        if (Utills.verifyAvailableNetwork(requireActivity())) {
             mAnalyticsViewModel.getPatientAnalytics(
                 patientAnalyticsRequest
             )
+            showProgressBar()
+        }
     }
 
     private fun handleObservations(it: Resource<AnalyticsResponse>) {
@@ -186,8 +189,11 @@ class AnalyticsTabFragment : Fragment() {
         when (it.status) {
             Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
-                if (it.data?.statusCode == 200 && it.data.body != null) showObservations(it.data.body)
-                else if (it.data?.statusCode == 401) {
+                hideProgressbar()
+
+                if (it.data?.statusCode == 200 && it.data.body != null) {
+                    showObservations(it.data.body)
+                } else if (it.data?.statusCode == 401) {
                     mAnalyticsViewModel.refreshToken()
 
                     Handler().postDelayed({
@@ -371,7 +377,7 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        //mProgressDialog?.show()
+        mProgressDialog?.show()
     }
 
     private fun showError(error: String) {
@@ -380,13 +386,14 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     private fun hideProgressbar() {
-        //  mProgressDialog?.hide()
+
+        binding.scrollView.visibility = View.VISIBLE
+        mProgressDialog?.hide()
     }
 
     private fun showMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
-
 
 
 }

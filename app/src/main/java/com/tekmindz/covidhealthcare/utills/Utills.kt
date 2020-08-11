@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -27,6 +28,9 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -37,6 +41,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_SECRET
 import com.tekmindz.covidhealthcare.constants.Constants.HEALTH_CARE_WORKER_ROLE
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SERVER_DOB_DATE_FORMAT
+import com.tekmindz.covidhealthcare.constants.Constants.SERVER_GRAPH_DATE_FORMAT
 import com.tekmindz.covidhealthcare.constants.Constants.SUPERVISOR_ROLE
 import com.tekmindz.covidhealthcare.constants.Constants.SUPER_ADMIN_ROLE
 import com.tekmindz.covidhealthcare.constants.UserTypes
@@ -56,7 +61,7 @@ object Utills {
     var dateRange: MutableLiveData<DateRange> = MutableLiveData<DateRange>()
 
     fun dateRange(dateRangeValue: String) {
-      //  Log.e("date", "$dateRangeValue")
+        //  Log.e("date", "$dateRangeValue")
         this.dateRange.value = DateRange(dateRangeValue)
     }
 
@@ -278,12 +283,21 @@ object Utills {
 
 
     fun parseDate(date: String): String {
-        val parser = SimpleDateFormat(SERVER_DOB_DATE_FORMAT)
+        Log.e("date", "$date")
+        var parser = SimpleDateFormat(SERVER_DOB_DATE_FORMAT)
         val formatter = SimpleDateFormat(APP_DATE_FORMAT)
         if (date.trim().length == 0) {
             return ""
         } else {
-            return formatter.format(parser.parse(date))
+            try {
+                Log.e("dsafsaf", "asfsa")
+                return formatter.format(parser.parse(date))
+            } catch (ex: Exception) {
+                parser = SimpleDateFormat(SERVER_GRAPH_DATE_FORMAT)
+                Log.e("parser", "dsadsa")
+                return formatter.format(parser.parse(date))
+            }
+
         }
     }
 
@@ -365,7 +379,6 @@ object Utills {
             ?: UserTypes.PATIENT.toString()
 
     }
-
 
 
     @Throws(Exception::class)
@@ -461,9 +474,19 @@ object Utills {
 
     fun hide(context: Context) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        if (imm?.isAcceptingText!!) {
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        }
 
     }
 
+    fun dateValidator(maxDate: Long): CalendarConstraints.Builder {
+        val constraintsBuilder = CalendarConstraints.Builder()
+        val validators: ArrayList<CalendarConstraints.DateValidator> = ArrayList()
+        //validators.add(DateValidatorPointForward.from(minDate))
+        validators.add(DateValidatorPointBackward.before(maxDate))
+        constraintsBuilder.setValidator(CompositeDateValidator.allOf(validators))
+        return constraintsBuilder
+    }
 
 }

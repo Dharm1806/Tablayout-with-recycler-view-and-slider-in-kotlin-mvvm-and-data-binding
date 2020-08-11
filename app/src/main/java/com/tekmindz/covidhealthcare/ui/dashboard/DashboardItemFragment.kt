@@ -127,8 +127,10 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val now = Calendar.getInstance()
+        builder.setCalendarConstraints(Utills.dateValidator(now.timeInMillis).build())
         builder.setSelection(androidx.core.util.Pair(now.timeInMillis, now.timeInMillis))
         val picker = builder.build()
+
         picker.show(activity?.supportFragmentManager!!, picker.toString())
         picker.addOnNegativeButtonClickListener {
             picker.dismiss()

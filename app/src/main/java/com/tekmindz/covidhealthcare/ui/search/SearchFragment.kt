@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.SearchFragmentBinding
@@ -140,19 +141,26 @@ class SearchFragment : Fragment(), OnItemClickListener {
 
         when (it.status) {
             //ResponseList.Status.LOADING -> showProgressBar()
-            Resource.Status.SUCCESS ->
+            Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) {
                     showResults(it.data.body)
-                }
-                else if (it.data?.statusCode == 401){
+                } else if (it.data?.statusCode == 401) {
                     mSearchViewModel.refreshToken()
                     Handler().postDelayed({
                         searchQuery()
                     }, Constants.DELAY_IN_API_CALL)
 
-                }else if (it.data?.body == null) {
+                } else if (it.data?.statusCode == 404) {
+                    showError(it.data.message)
+                } else if (it.data?.body == null) {
+                    showError(getString(R.string.no_record_found))
                     handleUi()
-                } else showError(it.data.message)
+                } else {
+                    showError(it.data.message)
+                }
+                Log.e("datasearch", "${Gson().toJson(it)}")
+
+            }
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }

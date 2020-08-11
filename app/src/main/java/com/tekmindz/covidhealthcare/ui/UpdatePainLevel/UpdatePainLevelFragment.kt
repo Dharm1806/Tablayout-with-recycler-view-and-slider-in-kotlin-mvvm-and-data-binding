@@ -9,16 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
+import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentUpdatePainLevelBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import com.xw.repo.BubbleSeekBar
@@ -86,6 +90,17 @@ class UpdatePainLevelFragment : Fragment() {
         Log.e("painLevel", "$painLevel")
         if (painLevel != null) {
             seek_level_Of_pain.setProgress(painLevel.toFloat())
+            val color: Int
+            color = if (painLevel <= 3) {
+                ContextCompat.getColor(requireActivity(), R.color.green)
+            } else if (painLevel <= 7) {
+                ContextCompat.getColor(requireActivity(), R.color.amber)
+            } else {
+                ContextCompat.getColor(requireActivity(), R.color.red)
+            }
+            seek_level_Of_pain.setSecondTrackColor(color)
+            seek_level_Of_pain.setThumbColor(color)
+            seek_level_Of_pain.setBubbleColor(color)
         }
         // seek_level_Of_pain.setProgress(5f)
         seek_level_Of_pain.onProgressChangedListener = object : OnProgressChangedListenerAdapter() {
@@ -100,7 +115,7 @@ class UpdatePainLevelFragment : Fragment() {
                 val color: Int
                 color = if (progress <= 3) {
                     ContextCompat.getColor(requireActivity(), R.color.green)
-                } else if (progress <= 8) {
+                } else if (progress <= 7) {
                     ContextCompat.getColor(requireActivity(), R.color.amber)
                 } else {
                     ContextCompat.getColor(requireActivity(), R.color.red)
@@ -142,7 +157,15 @@ class UpdatePainLevelFragment : Fragment() {
                 )
             )
         }
+        if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
 
+            bt_sos.visibility = View.VISIBLE
+        } else {
+            bt_sos.visibility = View.GONE
+        }
+        bt_sos.setOnClickListener {
+            Utills.callPhoneNumber(requireActivity())
+        }
 
     }
 
@@ -169,7 +192,15 @@ class UpdatePainLevelFragment : Fragment() {
 
         hideProgressbar()
         if (editProfileResponse.statusCode ==200 ||editProfileResponse.statusCode ==201) {
-            showMessage(editProfileResponse.message)
+            val bundle = bundleOf(
+                "patientId" to patientId.toInt(),
+                "painLevel" to painLevel
+            )
+            Log.e("painLevel", "$painLevel")
+            findNavController().popBackStack(R.id.updatePainLevel, true)
+
+            findNavController().navigate(R.id.painLevelToPatientDetails, bundle)
+            //  showMessage(editProfileResponse.message)
         }
 
     }

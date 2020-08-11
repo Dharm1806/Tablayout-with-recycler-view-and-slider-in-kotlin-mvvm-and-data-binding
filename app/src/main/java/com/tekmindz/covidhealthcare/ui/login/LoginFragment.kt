@@ -247,7 +247,9 @@ class LoginFragment : Fragment() {
     private fun validateFields(loginUser: LoginRequest) {
 
 
-        if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString()) && binding.textEmailLogin.editText?.text.toString().trim().length>20) {
+        if (mLoginViewModel.isValidEmail(binding.textEmailLogin.editText?.text.toString()) || binding.textEmailLogin.editText?.text.toString()
+                .trim().length > 20
+        ) {
 
             binding.textEmailLogin.error = getString(R.string.error_valid_email)
             binding.textEmailLogin.isErrorEnabled = true

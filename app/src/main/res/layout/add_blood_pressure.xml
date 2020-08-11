@@ -27,74 +27,92 @@
         android:layout_margin="@dimen/padding_20dp"
         android:background="@color/tab_background"
         android:foregroundGravity="center_vertical"
-        android:src="@drawable/ab_cross_login"
-        />
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tv_Sys"
-        style="@style/Widget.Design.TextInputLayoutPD"
-        android:theme="@style/TextInputLayoutAppearancePD"
-        android:layout_width="@dimen/dimen_150dp"
+        android:src="@drawable/ab_cross_login" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_input"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_20dp"
-        android:layout_marginEnd="@dimen/padding_20dp"
-        android:gravity="start"
-        app:layout_constraintEnd_toStartOf="@+id/tvSlash"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintTop_toBottomOf="@+id/tvHeading">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_Sys"
+            style="@style/Widget.Design.TextInputLayoutPD"
+            android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="@string/sys_mmhg"
-            android:inputType="numberDecimal"
+            android:layout_marginStart="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:gravity="start"
+            app:layout_constraintHorizontal_weight="3"
 
-            android:maxLength="3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvSlash"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="@dimen/dimen_150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/sys_mmhg"
+                android:inputType="number"
+
+                android:maxLength="3"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
+                android:textSize="@dimen/field_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintLeft_toRightOf="@+id/tv_Sys"
+
+            android:textSize="40sp"
             android:textColor="@color/patient_details_text"
-            android:textColorHint="@color/patient_details_text"
-            android:textSize="@dimen/field_text_size" />
-    </com.google.android.material.textfield.TextInputLayout>
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="/"
-    android:textSize="40sp"
-    android:textColor="@color/patient_details_text"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/tvHeading"
-    android:id="@+id/tvSlash"/>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tv_dia"
-        style="@style/Widget.Design.TextInputLayoutPD"
-        android:theme="@style/TextInputLayoutAppearancePD"
-        android:layout_width="@dimen/dimen_150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_20dp"
-        app:layout_goneMarginEnd="@dimen/padding_20dp"
-        android:layout_marginEnd="@dimen/padding_20dp"
-        android:gravity="end"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHeading">
+            app:layout_constraintRight_toLeftOf="@+id/tv_dia"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
 
-        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tvSlash" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_dia"
+            style="@style/Widget.Design.TextInputLayoutPD"
+            android:theme="@style/TextInputLayoutAppearancePD"
             android:layout_width="@dimen/dimen_150dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:hint="@string/dia_mmhg"
-            android:inputType="numberDecimal"
-            android:maxLength="3"
-            android:textColor="@color/patient_details_text"
-            android:textColorHint="@color/patient_details_text"
-            android:textSize="@dimen/field_text_size" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="@dimen/padding_20dp"
+            app:layout_goneMarginEnd="@dimen/padding_20dp"
+            android:layout_marginEnd="@dimen/padding_20dp"
+            android:gravity="end"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintLeft_toRightOf="@+id/tvSlash"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="@dimen/dimen_150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/dia_mmhg"
+                android:inputType="number"
+                android:maxLength="3"
+                android:textColor="@color/patient_details_text"
+                android:textColorHint="@color/patient_details_text"
+                android:textSize="@dimen/field_text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/saveBloodPressure"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/padding_20dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dia"
+        app:layout_constraintTop_toBottomOf="@+id/layout_input"
         android:fontFamily="@font/roboto_regular"
         android:textSize="@dimen/text_size_15sp"
         android:text="@string/action_save"
@@ -114,7 +132,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/padding_20dp"
         app:layout_constraintEnd_toStartOf="@+id/saveBloodPressure"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dia"
+        app:layout_constraintTop_toBottomOf="@+id/layout_input"
         android:fontFamily="@font/roboto_regular"
         android:textSize="@dimen/text_size_15sp"
         android:text="@string/action_cancel"

@@ -87,8 +87,11 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
     }
 
     fun getUserType(): String {
-        return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
+        return App.mSharedPrefrenceManager.getValueString(PREF_USER_TYPE)
+            ?: UserTypes.HEALTH_WORKER.toString()
     }
+
+    fun isPatient(): Boolean = mAnalyticsRepository.isPatient()
 
 
 }

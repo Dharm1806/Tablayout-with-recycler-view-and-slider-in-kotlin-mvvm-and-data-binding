@@ -263,7 +263,7 @@ class EditProfileFragment : Fragment() {
 
             if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
 
-                Utills.hide(requireActivity())
+                //Utills.hide(requireActivity())
                 mProgressDialog?.show()
 
                 mEditProfileViewModel.updateContactInfo(

@@ -58,7 +58,7 @@
                 android:fontFamily="@font/roboto_regular"
                 android:hint="@string/msg_emergency_contact_number"
                 android:inputType="number"
-
+                android:maxLength="12"
                 android:textSize="@dimen/field_text_size" />
         </com.google.android.material.textfield.TextInputLayout>
 

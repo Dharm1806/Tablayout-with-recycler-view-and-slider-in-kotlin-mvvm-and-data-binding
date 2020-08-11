@@ -191,8 +191,9 @@
         android:label="@string/level_of_pain"
         tools:layout="@layout/fragment_update_pain_level">
         <action
-            android:id="@+id/homeToPatientDetails"
-            app:destination="@id/patient_details" />
+            android:id="@+id/painLevelToPatientDetails"
+            app:destination="@id/patient_details"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment

@@ -48,6 +48,7 @@ class HelpFragment : Fragment() {
         } else {
             bt_sos.visibility = View.GONE
         }
+
         bt_sos.setOnClickListener {
             Utills.callPhoneNumber(requireActivity())
         }
@@ -57,5 +58,6 @@ class HelpFragment : Fragment() {
         val item = menu.findItem(R.id.updateProfile)
         if (item != null) item.isVisible = false
     }
+
 
 }
