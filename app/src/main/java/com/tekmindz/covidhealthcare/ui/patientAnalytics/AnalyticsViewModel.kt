@@ -2,6 +2,7 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.R
@@ -50,9 +51,9 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
                 response.value = Resource.loading()
             }
             .subscribe({
-               // Log.e("request", "${it.raw().request()}")
+                Log.e("request", "${it.raw().request()}")
 
-                //  Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
+                Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
 
                 response.value = (Resource.success(it.body()))
 
@@ -62,11 +63,25 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
         )
     }
 
-    fun getTimeFloat(observationDateTime: String, context: Context): Float {
+    fun getTimeFloat(observationDateTime: String, context: Context): Long {
+        //Log.e("observationDAteTime", "$observationDateTime")
         val parser = SimpleDateFormat(Constants.SERVER_GRAPH_DATE_FORMAT)
         val formatter = SimpleDateFormat(context.getString(R.string.graph_time))
-        val output = formatter.format(parser.parse(observationDateTime))
-        return output.replace(":", ".").toFloat()
+        //val output = formatter.format(parser.parse(observationDateTime))
+        val formatterrr =
+            SimpleDateFormat(Constants.SERVER_GRAPH_DATE_FORMAT).parse(observationDateTime)
+//val date = Date(observationDateTime)
+        // Log.e("datetimesdsfs", "${formatterrr.time}")
+        return formatterrr.time
+        // return output.replace(":", ".").toFloat()
+    }
+
+    fun formatXAxis(observationDateTime: String): Long {
+        val formatterrr =
+            SimpleDateFormat(Constants.SERVER_GRAPH_DATE_FORMAT).parse(observationDateTime)
+//val date = Date(observationDateTime)
+        //  Log.e("datetimesdsfs", "${formatterrr.time}")
+        return formatterrr.time
     }
 
     fun getIntPosture(posture: String, context: Context): Float {
@@ -74,12 +89,17 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
         when (posture) {
             context.getString(R.string.posture_sleeping) -> value = 0f
             context.getString(R.string.posture_sitting) -> value = 1f
-            context.getString(R.string.posture_standing) -> value =2f
+            context.getString(R.string.posture_standing) -> value = 2f
             context.getString(R.string.posture_lying) -> value = 3f
             context.getString(R.string.posture_motion) -> value = 4f
 
         }
         return value
+    }
+
+    fun getGranuality(hours: Int): Int {
+        var granuality = hours * 60 * 60 * 100
+        return granuality / 4
     }
 
     fun refreshToken() {
@@ -92,6 +112,23 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
     }
 
     fun isPatient(): Boolean = mAnalyticsRepository.isPatient()
+    fun getXAXIS(toDate: String, fromDate: String, context: Context): ArrayList<String> {
+        var min = formatXAxis(fromDate)
+        val max = formatXAxis(toDate)
+        val labelList: ArrayList<String> = ArrayList()
+        var diff = max - min
+        val mFormat: SimpleDateFormat =
+            SimpleDateFormat(context.getString(R.string.graph_time))
+
+
+        labelList.add(mFormat.format(min))
+        diff = diff / 7
+        for (x in 0..5) {
+            min = min + diff
+            labelList.add(mFormat.format(min + diff))
+        }
+        return labelList
+    }
 
 
 }

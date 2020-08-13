@@ -20,6 +20,7 @@
             android:background="@color/tab_background"
             android:id="@+id/scroll_view"
             android:visibility="gone"
+
             android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,7 +96,6 @@
                             android:layout_height="@dimen/dimen_200"
                             android:layout_margin="@dimen/padding_20dp"
                             android:background="@color/white"
-                            android:paddingStart="@dimen/padding_20dp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/health_alert_title" />
@@ -159,6 +159,7 @@
                                 android:gravity="center_vertical"
                                 android:rotation="-90"
                                 android:text="@string/text_temprature"
+                                android:visibility="gone"
                                 android:textColor="@color/black"
                                 app:layout_constraintRight_toRightOf="@+id/temp_chart"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -168,8 +169,11 @@
                                 android:id="@+id/temp_chart"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dimen_200"
-                                android:layout_margin="@dimen/padding_20dp"
+                                android:layout_marginStart="@dimen/margin_10dp"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:layout_marginEnd="@dimen/margin_10dp"
                                 android:background="@color/white"
+                                android:layout_marginBottom="@dimen/dimen_5dp"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintRight_toRightOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/tv_yaxis_title" />
@@ -234,6 +238,7 @@
                                 android:gravity="center"
                                 android:rotation="270"
                                 android:text="@string/msg_heart_rate"
+                                android:visibility="gone"
                                 android:textColor="@color/black"
                                 app:layout_constraintRight_toRightOf="@+id/heart_rate_chart"
                                 app:layout_constraintStart_toStartOf="@+id/heart_rate_chart"
@@ -243,7 +248,10 @@
                                 android:id="@+id/heart_rate_chart"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dimen_200"
-                                android:layout_margin="@dimen/margin_10dp"
+                                android:layout_marginStart="@dimen/margin_10dp"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:layout_marginEnd="@dimen/margin_10dp"
+                                android:layout_marginBottom="@dimen/dimen_5dp"
                                 android:background="@color/white"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -311,6 +319,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="fill_vertical"
                                 android:rotation="-90"
+                                android:visibility="gone"
                                 android:text="@string/msg_respiration_rate"
                                 android:textColor="@color/black"
                                 app:layout_constraintRight_toRightOf="@+id/respiration_rate_chart"
@@ -321,7 +330,11 @@
                                 android:id="@+id/respiration_rate_chart"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/dimen_200"
-                                android:layout_margin="@dimen/margin_10dp"
+                                android:layout_marginStart="@dimen/margin_10dp"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:layout_marginEnd="@dimen/margin_10dp"
+                                android:layout_marginBottom="@dimen/dimen_5dp"
+
                                 android:background="@color/white"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

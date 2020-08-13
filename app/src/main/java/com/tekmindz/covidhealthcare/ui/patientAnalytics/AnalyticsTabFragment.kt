@@ -3,6 +3,7 @@ package com.tekmindz.covidhealthcare.ui.patientAnalytics
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -26,6 +27,7 @@ import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
+import com.tekmindz.covidhealthcare.constants.Constants.LABEL_COUNT
 import com.tekmindz.covidhealthcare.constants.Constants.PATIENT_ID
 import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
@@ -37,11 +39,12 @@ import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 import kotlinx.android.synthetic.main.fragment_tab_item.select_date
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
 class AnalyticsTabFragment : Fragment() {
+    private lateinit var fromDate: String
+    private lateinit var toDate: String
     private lateinit var patientAnalyticsRequest: PatientAnalyticsRequest
     private var patientId: String = "0"
     private var hours: Int = 3
@@ -109,12 +112,14 @@ class AnalyticsTabFragment : Fragment() {
                 Utills.dateRange(Constants.DATE_RANGE)
 
                 binding.selectDate.visibility = View.GONE
-
+                toDate = Utills.getCurrentDate()
+                fromDate = Utills.getStartDate(hours)
                 patientAnalyticsRequest = PatientAnalyticsRequest(
                     patientId,
                     Utills.getStartDate(hours),
                     Utills.getCurrentDate()
                 )
+                Log.e("hours", "$hours")
                 getPatientAnalytics()
 
             }
@@ -159,8 +164,8 @@ class AnalyticsTabFragment : Fragment() {
             picker.dismiss()
         }
         picker.addOnPositiveButtonClickListener {
-            val fromDate = Utills.getDate(it.first!!)
-            val toDate = Utills.getDate(it.second!!)
+            fromDate = Utills.getDate(it.first!!)
+            toDate = Utills.getDate(it.second!!)
             select_date.text = Constants.parseDate(fromDate) + " - " + Constants.parseDate(toDate)
             patientAnalyticsRequest = PatientAnalyticsRequest(
                 patientId,
@@ -209,7 +214,7 @@ class AnalyticsTabFragment : Fragment() {
 
 
     private fun showObservations(data: List<Analytics>) {
-//Log.e("data", "123 t ${data.size}")
+        //  Log.e("data", "123 t ${data.size}")
         if (!data.isNullOrEmpty()) {
             mAnalyticsList.clear()
             posture?.clear()
@@ -223,22 +228,25 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     private fun filterData(mAnalyticsList: java.util.ArrayList<Analytics>) {
+//Log.e("filter data set", "analytics")
         mAnalyticsList.forEach {
+            // Log.e("inside list", "yes")
             if (posture != null && posture?.size != 0 && it.posture in posture!!) {
             } else {
                 posture?.add(it.posture)
             }
+
             var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
-            tempGraphEntry!!.add(Entry(time, it.bodyTemprature))
-            heartGraphEntry!!.add((Entry(time, it.heartRate)))
-            respirationGraphEntry!!.add(Entry(time, it.respirationRate))
+            tempGraphEntry!!.add(Entry(time.toFloat(), it.bodyTemprature))
+
+            heartGraphEntry!!.add((Entry(time.toFloat(), it.heartRate)))
+            respirationGraphEntry!!.add(Entry(time.toFloat(), it.respirationRate))
             helthGraphEntry!!.add(
                 Entry(
-                    time,
+                    time.toFloat(),
                     mAnalyticsViewModel.getIntPosture(it.posture, requireActivity())
                 )
             )
-
         }
         setTempGraph(temp_chart, tempGraphEntry!!)
         setTempGraph(heart_rate_chart, heartGraphEntry!!)
@@ -253,19 +261,20 @@ class AnalyticsTabFragment : Fragment() {
         graphEntry: ArrayList<Entry>
     ) {
 
+        mychart.clear()
         Collections.sort(graphEntry, EntryXComparator())
-        var lineDataSet = LineDataSet(graphEntry, "")
+        var lineDataSet = LineDataSet(graphEntry.subList(0, graphEntry.size), "")
         //setting draw values
         lineDataSet.setDrawValues(false)
         //setting line width
-        lineDataSet.lineWidth = 2f
+        lineDataSet.lineWidth = 1f
 
         // holo circle
         lineDataSet.setDrawCircleHole(true)
         //circle radius
-        lineDataSet.circleRadius = 5f
+        lineDataSet.circleRadius = 2f
         //circle holo radius
-        lineDataSet.circleHoleRadius = 3f
+        lineDataSet.circleHoleRadius = 1f
         val color = getColorGraph(mychart)
         //seting line color
         lineDataSet.color = color
@@ -277,12 +286,25 @@ class AnalyticsTabFragment : Fragment() {
         lineDataSetList.add(lineDataSet)
         var lineData = LineData(lineDataSetList as List<ILineDataSet>?)
         mychart.data = lineData
-        //mychart.getAxisLeft().setDrawGridLines(false);
+        mychart.invalidate()
+        var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
+        var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
+        mychart.xAxis.setLabelCount(Constants.LABEL_COUNT, true)
+        mychart.xAxis.axisMaximum = max.toFloat()
+        mychart.xAxis.axisMinimum = min.toFloat()
+        mychart.xAxis.setAvoidFirstLastClipping(true)
+        mychart.xAxis.setLabelCount(LABEL_COUNT, true)
+        // mychart.setViewPortOffsets(0f, 0f, 50f, 0f);
+        if (hours != null && hours != 0) {
+            //  mychart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
+        }
         mychart.xAxis.setDrawGridLines(false)
         mychart.axisRight.isEnabled = false
         mychart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         mychart.description.isEnabled = false
         mychart.legend.isEnabled = false
+        //
+        mychart.xAxis.setCenterAxisLabels(false)
         mychart.animate()
 
         //formating x axis label
@@ -291,14 +313,12 @@ class AnalyticsTabFragment : Fragment() {
             private val mFormat: SimpleDateFormat = SimpleDateFormat(getString(R.string.graph_time))
 
             override fun getFormattedValue(value: Float): String? {
-
-                val millis: Long = TimeUnit.HOURS.toMillis(value.toLong())
-                mFormat.timeZone = TimeZone.getTimeZone(getString(R.string.timezone))
-                return mFormat.format(Date(millis))
+                return mFormat.format(value.toLong())
             }
         }
 
         mychart.invalidate()
+        Log.e("chart", "${mychart.xAxis.labelCount} , ${mychart.xAxis.granularity} , $mychart")
     }
 
     private fun getColorGraph(mychart: LineChart): Int {
@@ -314,21 +334,22 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     private fun settingYLevel(heartEntry: ArrayList<Entry>) {
+        helth_chart.clear()
 
         Collections.sort(heartEntry, EntryXComparator())
         var lineDataSet = LineDataSet(heartEntry, "")
         //setting draw values
         lineDataSet.setDrawValues(false)
         //setting line width
-        lineDataSet.lineWidth = 2f
+        lineDataSet.lineWidth = 1f
         //seting line color
         lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
         // holo circle
         lineDataSet.setDrawCircleHole(true)
         //circle radius
-        lineDataSet.circleRadius = 5f
+        lineDataSet.circleRadius = 2f
         //circle holo radius
-        lineDataSet.circleHoleRadius = 3f
+        lineDataSet.circleHoleRadius = 1f
         //crircle color
 
         lineDataSet.setCircleColor(requireActivity().resources.getColor(R.color.health_alert_color))
@@ -351,25 +372,36 @@ class AnalyticsTabFragment : Fragment() {
         yAxis.labelCount = 5
         yAxis.axisMinimum = 0f
         yAxis.mAxisMaximum = 5f
-
-
         yAxis.valueFormatter = IndexAxisValueFormatter(postureYaxis)
-        // yAxis.axisMaximum=posture!!.size.toFloat()
-        //yAxis.axisMinimum=0f
-        // yAxis.mAxisRange = 5f
+        //helth_chart.setViewPortOffsets(20f, 0f, 10f, 60f);
+
+        var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
+        var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
+        helth_chart.xAxis.setLabelCount(LABEL_COUNT, true)
+        helth_chart.xAxis.axisMaximum = max.toFloat()
+        helth_chart.xAxis.axisMinimum = min.toFloat()
+        if (hours != null && hours != 0) {
+            // helth_chart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
+        }
+        helth_chart.xAxis.setAvoidFirstLastClipping(true)
+        helth_chart.xAxis.setLabelCount(LABEL_COUNT, true)
+        //  helth_chart.invalidate()
+        helth_chart.xAxis.setCenterAxisLabels(false)
 
         helth_chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         helth_chart.description.isEnabled = false
         helth_chart.legend.isEnabled = false
+        // val labelList = mAnalyticsViewModel.getXAXIS(toDate, fromDate, requireActivity())
+        //  helth_chart.xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
+        // Log.e("labelList", "${labelList.size}  , $labelList")
+
+
         helth_chart.xAxis.valueFormatter = object : ValueFormatter() {
             private val mFormat: SimpleDateFormat =
                 SimpleDateFormat(getString(R.string.graph_time))
 
             override fun getFormattedValue(value: Float): String? {
-                val millis: Long = TimeUnit.HOURS.toMillis(value.toLong())
-                mFormat.timeZone = TimeZone.getTimeZone(getString(R.string.timezone))
-
-                return mFormat.format(Date(millis))
+                return mFormat.format(value)
             }
 
         }

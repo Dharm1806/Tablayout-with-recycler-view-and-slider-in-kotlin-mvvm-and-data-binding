@@ -14,7 +14,8 @@ import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_analytics_tab.*
+import kotlinx.android.synthetic.main.fragment_analytics_tab.bt_sos
+import kotlinx.android.synthetic.main.fragment_help.*
 
 
 class HelpFragment : Fragment() {
@@ -35,13 +36,18 @@ class HelpFragment : Fragment() {
         val youTubePlayerView: YouTubePlayerView =
             requireActivity().findViewById(R.id.youtube_player_view)
         lifecycle.addObserver(youTubePlayerView)
-
+        /* val youTubePlayerFragment =
+             supportFragmentManager.findFragmentById(R.id.youtubeFragment) as YouTubePlayerSupportFragment?
+         youTubePlayerFragment?.initialize("YOUR_API_KEY", this)*/
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 val videoId = "qWCrnwzk9kA"//"S0Q4gqBUs7c"
-                youTubePlayer.loadVideo(videoId, 0f)
+                youTubePlayer.cueVideo(videoId, 0f)
             }
         })
+        webview_player_view.settings.javaScriptEnabled = true
+        webview_player_view.loadUrl("https://www.youtube.com/embed/qWCrnwzk9kA")
+
         if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
 
             bt_sos.visibility = View.VISIBLE

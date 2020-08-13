@@ -4,26 +4,28 @@ import java.text.SimpleDateFormat
 
 
 object Constants {
+  const val LABEL_COUNT: Int = 5
+
   //base url for apis
   const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    var BASE_URL = "http://52.12.3.184:8081/"
+  var BASE_URL = "http://52.12.3.184:8081/"
 
-    lateinit var device_token: String
-    val OBSERVATION: String? = "observation"
+  lateinit var device_token: String
+  val OBSERVATION: String? = "observation"
 
-    //dev base url
-    // const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    //var BASE_URL = "http://54.188.160.119:8081/"
+  //dev base url
+  // const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+  //var BASE_URL = "http://54.188.160.119:8081/"
 
-    //endpoints for apis
-    // const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
-    // const val CLIENT_ID: String = "test-app"
-    // const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
+  //endpoints for apis
+  // const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
+  // const val CLIENT_ID: String = "test-app"
+  // const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
 
-    const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
-    const val CLIENT_ID: String = "ctms-qa-app"
-    val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
-    const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
+  const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+  const val CLIENT_ID: String = "ctms-qa-app"
+  val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
+  const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
     const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
 
     const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
@@ -108,25 +110,26 @@ object Constants {
   const val OBSERVATION_TYPE_PAIN_LEVEL = "painlevel"
 
 
-    const val DATE_RANGE = "Date Range"
+  const val DATE_RANGE = "Date Range"
 
-    const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
+  const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
 
 
-    const val HEALTH_CARE_WORKER_ROLE = "healthcare-worker"
-    const val PATIENT_ROLE = "patient"
-    const val SUPER_ADMIN_ROLE = "super-admin"
-    const val OFFLINE_ACCESS_ROLE = "offline_access"
-    const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
-    const val SUPERVISOR_ROLE = "supervisor"
-    //parse server date to app format
+  const val HEALTH_CARE_WORKER_ROLE = "healthcare-worker"
+  const val PATIENT_ROLE = "patient"
+  const val SUPER_ADMIN_ROLE = "super-admin"
+  const val OFFLINE_ACCESS_ROLE = "offline_access"
+  const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
+  const val SUPERVISOR_ROLE = "supervisor"
 
-    fun parseDate(date: String): String {
-        val parser = SimpleDateFormat(SERVER_DATE_FORMAT)
-        val formatter = SimpleDateFormat(APP_DATE_FORMAT)
-        return formatter.format(parser.parse(date))
-    }
+  const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
+  //parse server date to app format
 
+  fun parseDate(date: String): String {
+    val parser = SimpleDateFormat(SERVER_DATE_FORMAT)
+    val formatter = SimpleDateFormat(APP_DATE_FORMAT)
+    return formatter.format(parser.parse(date))
+  }
 
 
 }

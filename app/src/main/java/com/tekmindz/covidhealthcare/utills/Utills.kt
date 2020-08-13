@@ -266,7 +266,6 @@ object Utills {
         val cal = Calendar.getInstance()
         cal.add(Calendar.MONTH, -1)
         val date = cal.time
-
         return formatDateIntoFilterFormat(date)
     }
 

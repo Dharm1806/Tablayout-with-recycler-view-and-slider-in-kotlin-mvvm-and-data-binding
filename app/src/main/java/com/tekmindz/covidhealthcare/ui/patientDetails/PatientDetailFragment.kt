@@ -262,7 +262,7 @@ class PatientDetailFragment : Fragment() {
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
-                if ((it.data?.statusCode == 200 || it.data?.statusCode == 201)) showError(it.data.message)
+                if ((it.data?.statusCode == 200 || it.data?.statusCode == 201)) hideProgressbar()// showError(it.data.message)
                 else showError(it.data?.message!!)
 
             }
@@ -286,6 +286,7 @@ class PatientDetailFragment : Fragment() {
         //body.text = title
         val saveSpO2 = dialog.findViewById(R.id.saveSpO2) as TextView
         val cancelSpO2 = dialog.findViewById(R.id.cancelSpO2) as TextView
+
         etSpO2.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (etSpO2.editText?.text.toString().trim().length == 0) {
@@ -298,6 +299,7 @@ class PatientDetailFragment : Fragment() {
             }
             false
         }
+
         etSpO2.editText?.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {}
@@ -391,6 +393,11 @@ class PatientDetailFragment : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.add_blood_pressure)
+        val window: Window = dialog.window!!
+        window.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
         val etSys = dialog.findViewById(R.id.tv_Sys) as TextInputLayout
         val etDia = dialog.findViewById(R.id.tv_dia) as TextInputLayout
 
