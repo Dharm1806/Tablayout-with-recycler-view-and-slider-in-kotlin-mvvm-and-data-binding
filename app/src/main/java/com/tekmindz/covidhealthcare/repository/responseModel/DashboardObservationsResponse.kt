@@ -15,7 +15,7 @@ data class observations(
     val wardNo: String,
     val heartRate: Double,
     val respirationRate: Double,
-    val bodyTemprature: Double,
+    val bodyTemperature: Double,
     val status: String,
     val observationDateTime: String,
     val imageUrl: String,

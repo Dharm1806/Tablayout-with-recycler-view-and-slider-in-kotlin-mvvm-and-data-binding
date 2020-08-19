@@ -1,5 +1,4 @@
 package com.tekmindz.covidhealthcare.repository.responseModel
 
-import org.json.JSONObject
 
-data class EditProfileResponse(val body: JSONObject) : BaseResponse()
+data class EditProfileResponse(val dad: String) : BaseResponse()

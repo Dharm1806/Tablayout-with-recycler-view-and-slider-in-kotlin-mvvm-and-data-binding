@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 
 
 object Constants {
-  const val LABEL_COUNT: Int = 5
+  const val LABEL_COUNT: Int = 7
 
   //base url for apis
   const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
@@ -14,25 +14,25 @@ object Constants {
   val OBSERVATION: String? = "observation"
 
   //dev base url
-  // const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+  //  const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
   //var BASE_URL = "http://54.188.160.119:8081/"
 
   //endpoints for apis
-  // const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
-  // const val CLIENT_ID: String = "test-app"
-  // const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
+  //const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
+  //const val CLIENT_ID: String = "test-app"
+  //const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
 
   const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
   const val CLIENT_ID: String = "ctms-qa-app"
   val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
   const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
-    const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
+  const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
 
-    const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
+  const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
 
-    const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+  const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 
-    //  const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
+  //const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
   const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
   const val GET_DASHBOARD_COUNTS = "api/dashboard/ragstatus/count"
   const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"

@@ -99,7 +99,7 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
 
     fun getGranuality(hours: Int): Int {
         var granuality = hours * 60 * 60 * 100
-        return granuality / 4
+        return granuality / 6
     }
 
     fun refreshToken() {

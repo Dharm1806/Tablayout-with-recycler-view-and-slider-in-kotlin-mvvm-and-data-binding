@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.UserTypes
@@ -31,6 +32,7 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
 
 
     fun updateObservationType(mUpdatePainLevel: UpdatePainLevel) {
+        Log.e("update", "${Gson().toJson(mUpdatePainLevel)}")
         val updateManualObservationsList = listOf<UpdatePainLevel>(mUpdatePainLevel)
 
         subscribe(mUpdatePatientDetailsRepository.updatePainLevel(

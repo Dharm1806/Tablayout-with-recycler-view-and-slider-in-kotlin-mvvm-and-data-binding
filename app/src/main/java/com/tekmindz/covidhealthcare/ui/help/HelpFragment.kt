@@ -14,8 +14,7 @@ import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.utills.Utills
-import kotlinx.android.synthetic.main.fragment_analytics_tab.bt_sos
-import kotlinx.android.synthetic.main.fragment_help.*
+import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 
 
 class HelpFragment : Fragment() {
@@ -45,8 +44,8 @@ class HelpFragment : Fragment() {
                 youTubePlayer.cueVideo(videoId, 0f)
             }
         })
-        webview_player_view.settings.javaScriptEnabled = true
-        webview_player_view.loadUrl("https://www.youtube.com/embed/qWCrnwzk9kA")
+        //  webview_player_view.settings.javaScriptEnabled = true
+        //webview_player_view.loadUrl("https://www.youtube.com/embed/qWCrnwzk9kA")
 
         if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {
 

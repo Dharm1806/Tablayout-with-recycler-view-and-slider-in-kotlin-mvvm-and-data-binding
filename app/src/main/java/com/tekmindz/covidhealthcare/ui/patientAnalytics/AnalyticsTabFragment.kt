@@ -237,7 +237,7 @@ class AnalyticsTabFragment : Fragment() {
             }
 
             var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
-            tempGraphEntry!!.add(Entry(time.toFloat(), it.bodyTemprature))
+            tempGraphEntry!!.add(Entry(time.toFloat(), it.bodyTemperature))
 
             heartGraphEntry!!.add((Entry(time.toFloat(), it.heartRate)))
             respirationGraphEntry!!.add(Entry(time.toFloat(), it.respirationRate))
@@ -262,63 +262,86 @@ class AnalyticsTabFragment : Fragment() {
     ) {
 
         mychart.clear()
+
         Collections.sort(graphEntry, EntryXComparator())
-        var lineDataSet = LineDataSet(graphEntry.subList(0, graphEntry.size), "")
+        var lineDataSet = LineDataSet(graphEntry, "")
         //setting draw values
         lineDataSet.setDrawValues(false)
+        lineDataSet.setDrawCircles(false)
         //setting line width
         lineDataSet.lineWidth = 1f
-
+        //seting line color
+        lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
         // holo circle
-        lineDataSet.setDrawCircleHole(true)
+        lineDataSet.setDrawCircleHole(false)
         //circle radius
         lineDataSet.circleRadius = 2f
         //circle holo radius
         lineDataSet.circleHoleRadius = 1f
-        val color = getColorGraph(mychart)
-        //seting line color
-        lineDataSet.color = color
         //crircle color
-        lineDataSet.setCircleColor(color)
+
+        lineDataSet.setCircleColor(requireActivity().resources.getColor(R.color.health_alert_color))
+        var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
+        var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
 
 
         var lineDataSetList = ArrayList<LineDataSet>()
         lineDataSetList.add(lineDataSet)
         var lineData = LineData(lineDataSetList as List<ILineDataSet>?)
         mychart.data = lineData
-        mychart.invalidate()
-        var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
-        var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
-        mychart.xAxis.setLabelCount(Constants.LABEL_COUNT, true)
-        mychart.xAxis.axisMaximum = max.toFloat()
-        mychart.xAxis.axisMinimum = min.toFloat()
-        mychart.xAxis.setAvoidFirstLastClipping(true)
-        mychart.xAxis.setLabelCount(LABEL_COUNT, true)
-        // mychart.setViewPortOffsets(0f, 0f, 50f, 0f);
-        if (hours != null && hours != 0) {
-            //  mychart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
-        }
+        //mychart.getAxisLeft().setDrawGridLines(false);
         mychart.xAxis.setDrawGridLines(false)
         mychart.axisRight.isEnabled = false
+
+        //mychart.getAxisRight().setDrawGridLines(false);
+        //mychart.axisRight.setDrawGridLines(false);
+        //mychart.setDrawGridBackground(false)
+
+        //Uncomment to show Y axis lables in Text
+
+        //helth_chart.setViewPortOffsets(20f, 0f, 10f, 60f);
+
+
+        mychart.xAxis.setLabelCount(LABEL_COUNT, true)
+        mychart.xAxis.setAvoidFirstLastClipping(true)
+
+        mychart.xAxis.axisMaximum = max.toFloat()
+        mychart.xAxis.axisMinimum = min.toFloat()
+        if (hours != null && hours != 0) {
+            // mychart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
+        }
+        mychart.xAxis.setAvoidFirstLastClipping(true)
+        mychart.xAxis.setLabelCount(LABEL_COUNT, true)
+        //  mychart.invalidate()
+        mychart.xAxis.setCenterAxisLabels(false)
+
         mychart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         mychart.description.isEnabled = false
         mychart.legend.isEnabled = false
-        //
-        mychart.xAxis.setCenterAxisLabels(false)
-        mychart.animate()
 
-        //formating x axis label
+        // val labelList = mAnalyticsViewModel.getXAXIS(toDate, fromDate, requireActivity())
+        //  mychart.xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
+        // Log.e("labelList", "${labelList.size}  , $labelList")
+
+
         mychart.xAxis.valueFormatter = object : ValueFormatter() {
-
-            private val mFormat: SimpleDateFormat = SimpleDateFormat(getString(R.string.graph_time))
+            private val mFormat: SimpleDateFormat =
+                SimpleDateFormat(getString(R.string.graph_time))
 
             override fun getFormattedValue(value: Float): String? {
-                return mFormat.format(value.toLong())
-            }
-        }
 
+                return mFormat.format(value)
+            }
+
+        }
+        mychart.setExtraOffsets(15f, 0f, 15f, 0f)
         mychart.invalidate()
-        Log.e("chart", "${mychart.xAxis.labelCount} , ${mychart.xAxis.granularity} , $mychart")
+        Log.e(
+            "chart",
+            "${mychart.xAxis.labelCount} , ${mychart.xAxis.axisMaximum.toDouble()} ,${mychart.xAxis.granularity} ,${mychart.xAxis
+                .isAxisMaxCustom} , $mychart"
+        )
+        Log.e("labels", "${mychart.scaleX}")
     }
 
     private fun getColorGraph(mychart: LineChart): Int {
@@ -344,8 +367,9 @@ class AnalyticsTabFragment : Fragment() {
         lineDataSet.lineWidth = 1f
         //seting line color
         lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        lineDataSet.setDrawCircles(false)
         // holo circle
-        lineDataSet.setDrawCircleHole(true)
+        lineDataSet.setDrawCircleHole(false)
         //circle radius
         lineDataSet.circleRadius = 2f
         //circle holo radius
@@ -378,6 +402,8 @@ class AnalyticsTabFragment : Fragment() {
         var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
         var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
         helth_chart.xAxis.setLabelCount(LABEL_COUNT, true)
+        helth_chart.xAxis.setAvoidFirstLastClipping(true)
+
         helth_chart.xAxis.axisMaximum = max.toFloat()
         helth_chart.xAxis.axisMinimum = min.toFloat()
         if (hours != null && hours != 0) {

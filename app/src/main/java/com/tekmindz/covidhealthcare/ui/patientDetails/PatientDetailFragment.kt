@@ -565,7 +565,7 @@ class PatientDetailFragment : Fragment() {
         Log.e("observations", "${Gson().toJson(data)}")
         binding.tvHeartRateValue.text = Utills.round(data.heartRate)
         binding.tvRespirationRateValue.text = Utills.round(data.respirationRate)
-        binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemprature)
+        binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemperature)
         binding.tvSpO2.text = data.spo2 + " " + getString(R.string.spo2_unit)
         binding.tvBloodPressure.text =
             (data.bpHigh + "/" + data.bpLow) + " " + getString(R.string.bp_unit)

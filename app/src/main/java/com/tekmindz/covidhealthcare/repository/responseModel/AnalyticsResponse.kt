@@ -7,5 +7,5 @@ abstract class BaseResponse {
 }
 data class Analytics(
     val heartRate: Float, val respirationRate: Float,
-    val bodyTemprature: Float, val observationDateTime: String, val posture: String
+    val bodyTemperature: Float, val observationDateTime: String, val posture: String
 )
