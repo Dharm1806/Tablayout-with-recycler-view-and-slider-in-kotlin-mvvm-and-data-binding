@@ -33,7 +33,7 @@
     <string name="msg_ward_no">Ward No. </string>
     <string name="msg_bed_no">Bed No. </string>
     <string name="msg_ward_number">Ward Number</string>
-    <string name="msg_addmitted_since">Addmitted Since</string>
+    <string name="msg_addmitted_since">Admitted Since</string>
     <string name="msg_biosensor_id">Biosensor ID</string>
     <string name="msg_bed_number">Bed Number</string>
     <string name="msg_gender">Gender</string>
@@ -97,6 +97,7 @@
     <string name="msg_oxygen_saturation">Oxygen Saturation</string>
     <string name="err_spo2">Please enter valid spO2</string>
     <string name="err_sys">Please enter valid SYS</string>
+    <string name="err_sys_greater">Systolic value cannot be greater then or equal to Diastolic value</string>
     <string name="level_of_pain">LEVEL OF PAIN</string>
     <string name="assess_the_intensity_of_pain">Assess the intensity of pain</string>
     <string name="zero">0</string>

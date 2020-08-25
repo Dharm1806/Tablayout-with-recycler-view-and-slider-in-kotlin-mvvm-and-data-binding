@@ -458,36 +458,40 @@ class PatientDetailFragment : Fragment() {
             }
 
             if (sys.trim().length != 0 && dia.trim().length != 0) {
+                if (sys.toInt()>=dia.toInt()){
+                    etSys.isErrorEnabled = true
+                    etSys.error = getString(R.string.err_sys_greater)
+                }else {
 
-                Utills.hideKeyboard(requireActivity())
-                showProgressBar()
+                    Utills.hideKeyboard(requireActivity())
+                    showProgressBar()
 
-                binding.tvBloodPressure.text =
-                    (sys + "/" + dia) + " " + getString(R.string.bp_unit)
-                dialog.window
-                    ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-                Utills.hide(requireContext())
+                    binding.tvBloodPressure.text =
+                        (sys + "/" + dia) + " " + getString(R.string.bp_unit)
+                    dialog.window
+                        ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+                    Utills.hide(requireContext())
 
-                updateObservationType(
-                    UpdateManualObservations(
-                        listOf<UpdatePainLevel>(
-                            UpdatePainLevel(
-                                patientId,
-                                Constants.OBSERVATION_TYPE_BP_HIGH,
-                                sys,
-                                Utills.getCurrentDate()
-                            ),
-                            UpdatePainLevel(
-                                patientId,
-                                Constants.OBSERVATION_TYPE_BP_LOW,
-                                dia,
-                                Utills.getCurrentDate()
+                    updateObservationType(
+                        UpdateManualObservations(
+                            listOf<UpdatePainLevel>(
+                                UpdatePainLevel(
+                                    patientId,
+                                    Constants.OBSERVATION_TYPE_BP_HIGH,
+                                    sys,
+                                    Utills.getCurrentDate()
+                                ),
+                                UpdatePainLevel(
+                                    patientId,
+                                    Constants.OBSERVATION_TYPE_BP_LOW,
+                                    dia,
+                                    Utills.getCurrentDate()
+                                )
                             )
                         )
                     )
-                )
-                dialog.dismiss()
-
+                    dialog.dismiss()
+                }
             }
         }
 
