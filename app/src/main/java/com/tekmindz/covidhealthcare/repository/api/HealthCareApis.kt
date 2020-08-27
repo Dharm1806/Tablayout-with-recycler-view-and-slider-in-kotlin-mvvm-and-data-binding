@@ -16,6 +16,7 @@ import com.tekmindz.covidhealthcare.constants.Constants.UPDATE_MANUAL_OBSERVSTIO
 import com.tekmindz.covidhealthcare.repository.requestModels.*
 import com.tekmindz.covidhealthcare.repository.responseModel.*
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -24,24 +25,21 @@ import retrofit2.http.Body
 interface HealthCareApis {
 
     /*  call the login api*/
-    @FormUrlEncoded
+
+    @Multipart
     @POST(LOGIN_END_POINTS)
     fun login(
-        @Field("client_id") client_id: String,
-        @Field("username") username: String,
-        @Field("password") password: String,
-        @Field("grant_type") grant_type: String,
-        @Field("client_secret") client_secret: String
-
+        @Part("username") username: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("grant_type") grant_type: RequestBody
     ): Observable<Response<UserModel>>
 
     /*  call the login api*/
-    @FormUrlEncoded
+    @Multipart
     @POST(REFRESH_TOKEN_END_POINTS)
     fun refreshToken(
-        @Field("client_id") client_id: String,
-        @Field("refresh_token") username: String,
-        @Field("grant_type") grant_type: String
+        @Part("refresh_token") username: RequestBody,
+        @Part("grant_type") grant_type: RequestBody
 
     ): Call<UserModel>
 

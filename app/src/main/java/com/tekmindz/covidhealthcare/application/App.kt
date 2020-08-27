@@ -11,6 +11,9 @@ import com.google.gson.GsonBuilder
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.BASE_URL
 import com.tekmindz.covidhealthcare.constants.Constants.LOGIN_BASE_URL
+import com.tekmindz.covidhealthcare.constants.Constants.PASSWROD
+import com.tekmindz.covidhealthcare.constants.Constants.USER_CLIENT_APP
+import com.tekmindz.covidhealthcare.repository.api.BasicAuthInterceptor
 import com.tekmindz.covidhealthcare.repository.api.HealthCareApis
 import com.tekmindz.covidhealthcare.utills.SharedPreference
 import okhttp3.*
@@ -46,7 +49,7 @@ class App : Application(), LifecycleObserver {
         retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gGson.create()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(provideOkHttpClient()!!)
+            .client(getHttpClient()!!)
             .baseUrl(LOGIN_BASE_URL)
             .build()
 
@@ -90,6 +93,13 @@ class App : Application(), LifecycleObserver {
             .build()
     }
 
+    /*Http client for login with openid*/
+    private fun getHttpClient(): OkHttpClient? {
+        return OkHttpClient.Builder()
+            .addInterceptor(BasicAuthInterceptor(USER_CLIENT_APP, PASSWROD))
+            .build()
+    }
+
     //return okHttp client
     private fun provideOkHttpClient(): OkHttpClient? = OkHttpClient.Builder()
         //.addNetworkInterceptor(provideCacheInterceptor()!!)
@@ -109,6 +119,7 @@ class App : Application(), LifecycleObserver {
         }
         return cache
     }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppBackgrounded() {
         isForeGround = false

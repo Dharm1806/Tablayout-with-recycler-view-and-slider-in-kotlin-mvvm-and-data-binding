@@ -12,6 +12,8 @@ import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.utills.Utills
 import io.reactivex.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,7 +38,8 @@ class EditProfileRepository : Callback<UserModel> {
         val valueString =  App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
         val mResponse = App.healthCareApiLogin
             .refreshToken(
-               clientID, valueString!!, refreshGrantType
+                RequestBody.create(MediaType.parse("multipart/form-data"),valueString!!),
+               RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
             )
 
         mResponse.enqueue(this)

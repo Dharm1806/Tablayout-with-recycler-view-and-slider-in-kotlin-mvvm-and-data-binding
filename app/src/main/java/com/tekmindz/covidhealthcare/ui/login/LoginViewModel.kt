@@ -47,9 +47,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
         val loginUser = LoginRequest(
             UserName.value.toString(),
             Password.value.toString(),
-            Constants.CLIENT_ID,
-            Constants.PASSWROD,
-            Constants.CLIENT_SECRET
+            Constants.PASSWROD
         )
         userMutableLiveData!!.value = loginUser
     }

@@ -7,6 +7,8 @@ import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import io.reactivex.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,11 +19,9 @@ class SetBaseUrlRepository : Callback<UserModel> {
     /*request to login user from login api*/
     fun login(loginRequestModel: LoginRequest): Observable<Response<UserModel>> =
         App.healthCareApiLogin.login(
-            loginRequestModel.client_id,
-            loginRequestModel.username,
-            loginRequestModel.password,
-            loginRequestModel.grant_type,
-            loginRequestModel.client_secret
+            RequestBody.create(MediaType.parse("multipart/form-data"), loginRequestModel.username),
+            RequestBody.create(MediaType.parse("multipart/form-data"), loginRequestModel.password),
+            RequestBody.create(MediaType.parse("multipart/form-data"), loginRequestModel.grant_type)
 
         )
 
@@ -35,7 +35,8 @@ class SetBaseUrlRepository : Callback<UserModel> {
         val valueString =  App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
         val mResponse = App.healthCareApiLogin
             .refreshToken(
-               clientID, valueString!!, refreshGrantType
+                RequestBody.create(MediaType.parse("multipart/form-data"),valueString!!),
+                RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
             )
 
         mResponse.enqueue(this)

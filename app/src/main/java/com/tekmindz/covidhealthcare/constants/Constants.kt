@@ -4,33 +4,41 @@ import java.text.SimpleDateFormat
 
 
 object Constants {
-  const val LABEL_COUNT: Int = 7
+    const val LABEL_COUNT: Int = 7
 
-  //base url for apis
-//  const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-//  var BASE_URL = "http://52.12.3.184:8081/"
+    /*openId*/
+    const val LOGIN_BASE_URL = "http://54.218.218.85:9001/"
+
+    //base url for apis
+    //const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+    var BASE_URL = "http://52.12.3.184:8081/"
 
   lateinit var device_token: String
   val OBSERVATION: String? = "observation"
 
-  //dev base url
-    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-  var BASE_URL = "http://54.188.160.119:8081/"
+    //dev base url
+//    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+//     var BASE_URL = "http://54.188.160.119:8081/"
+    //var BASE_URL = "http://192.168.10.108:8081/"
 
-  //endpoints for apis
-  const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
-  const val CLIENT_ID: String = "test-app"
-  const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
+    /*openId auth & refresh token endpoint*/
+    const val LOGIN_END_POINTS = "oauth/token"
+    const val REFRESH_TOKEN_END_POINTS = "oauth/token"
 
-//  const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+    //endpoints for apis
+//  const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
+    const val CLIENT_ID: String = "test-app"
+    const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
+
+    //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 //  const val CLIENT_ID: String = "ctms-qa-app"
 //  val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
-  const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
-  const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
+    const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
+    const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
 
-  const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
+    const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
 
-  const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+   // const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 
   //const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
   const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
@@ -63,6 +71,7 @@ object Constants {
     const val HEADER_AUTHRIZATION = "Authorization"
 
     const val FILTER_DATE_FORMAT = "yyyy-MM-dd hh-mm-ss"
+    const val USER_CLIENT_APP = "USER_CLIENT_APP"
     const val PASSWROD = "password"
     const val EXTRA_GRANT_TYPE = "grantType"
     const val SET_PASSWROD = "Set Password"
@@ -115,15 +124,17 @@ object Constants {
   const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
 
 
-  const val HEALTH_CARE_WORKER_ROLE = "healthcare-worker"
-  const val PATIENT_ROLE = "patient"
-  const val SUPER_ADMIN_ROLE = "super-admin"
-  const val OFFLINE_ACCESS_ROLE = "offline_access"
-  const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
-  const val SUPERVISOR_ROLE = "supervisor"
+    const val HEALTH_CARE_WORKER_ROLE = "healthcare-worker"
+    const val PATIENT_ROLE = "patient"
+    const val SUPER_ADMIN_ROLE = "super-admin"
+    const val OFFLINE_ACCESS_ROLE = "offline_access"
+    const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
+    const val SUPERVISOR_ROLE = "supervisor"
 
-  const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
-  //parse server date to app format
+    const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
+    //parse server date to app format
+    //val credential:String="USER_CLIENT_APP:$PASSWROD"
+   //val encoding =Base64.getEncoder().encodeToString((credential).toByteArray(Charset.forName("utf-8")))
 
   fun parseDate(date: String): String {
     val parser = SimpleDateFormat(SERVER_DATE_FORMAT)

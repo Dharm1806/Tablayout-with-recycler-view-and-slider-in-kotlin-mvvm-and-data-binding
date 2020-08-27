@@ -8,5 +8,7 @@ data class UserModel(
     val token_type: String,
 
     val session_state: String,
-    val scope: String
+    val scope: String,
+    val email:String,
+    val jti:String
 )
