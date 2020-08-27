@@ -198,6 +198,7 @@ class AnalyticsTabFragment : Fragment() {
 
                 if (it.data?.statusCode == 200 && it.data.body != null) {
                     showObservations(it.data.body)
+                    showGraph(true)
                 } else if (it.data?.statusCode == 401) {
                     mAnalyticsViewModel.refreshToken()
 
@@ -206,12 +207,32 @@ class AnalyticsTabFragment : Fragment() {
                     }, Constants.DELAY_IN_API_CALL)
 
                 }
+                else if (it.data?.body == null) {
+                    showError(getString(R.string.no_record_found))
+                    showGraph(false)
+                } else {
+                    showError(it.data.message)
+                }
             }
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
     }
 
+    /*function to show or hide view when no data available draw graph*/
+    private fun showGraph(isShow: Boolean) {
+        if (isShow) {
+            health_alert.visibility = View.VISIBLE
+            body_temp.visibility = View.VISIBLE
+            heart_rate.visibility = View.VISIBLE
+            respiration_rate.visibility = View.VISIBLE
+        } else {
+            health_alert.visibility = View.GONE
+            body_temp.visibility = View.GONE
+            heart_rate.visibility = View.GONE
+            respiration_rate.visibility = View.GONE
+        }
+    }
 
     private fun showObservations(data: List<Analytics>) {
         //  Log.e("data", "123 t ${data.size}")
@@ -439,8 +460,10 @@ class AnalyticsTabFragment : Fragment() {
     }
 
     private fun showError(error: String) {
-        showMessage(error)
         hideProgressbar()
+        showGraph(false)
+        showMessage(error)
+
     }
 
     private fun hideProgressbar() {

@@ -115,7 +115,10 @@ class NotificationFragment : Fragment(), OnItemClickListener {
                         fetchNotifications()
                     }, Constants.DELAY_IN_API_CALL)
 
-                } else showError(it.data?.message!!)
+                }else if (it.data?.body == null) {
+                    showError(getString(R.string.no_record_found))
+                }
+                else showError(it.data?.message!!)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
