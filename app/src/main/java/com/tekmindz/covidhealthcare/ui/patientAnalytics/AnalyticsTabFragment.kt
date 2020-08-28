@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_PATIENT_NAME
@@ -33,16 +34,18 @@ import com.tekmindz.covidhealthcare.databinding.FragmentAnalyticsTabBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.PatientAnalyticsRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.Analytics
 import com.tekmindz.covidhealthcare.repository.responseModel.AnalyticsResponse
+import com.tekmindz.covidhealthcare.repository.responseModel.ECGResponse
 import com.tekmindz.covidhealthcare.utills.Resource
 import com.tekmindz.covidhealthcare.utills.Utills
 import kotlinx.android.synthetic.main.fragment_analytics_tab.*
 import kotlinx.android.synthetic.main.fragment_tab_item.select_date
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AnalyticsTabFragment : Fragment() {
+class AnalyticsTabFragment : Fragment(), View.OnClickListener {
     private lateinit var fromDate: String
     private lateinit var toDate: String
     private lateinit var patientAnalyticsRequest: PatientAnalyticsRequest
@@ -56,6 +59,7 @@ class AnalyticsTabFragment : Fragment() {
     var helthGraphEntry: ArrayList<Entry>? = null
     var heartGraphEntry: ArrayList<Entry>? = null
     var respirationGraphEntry: ArrayList<Entry>? = null
+    var ecgGraphEntry: ArrayList<Entry>? = null
 
     private lateinit var mAnalyticsViewModel: AnalyticsViewModel
     private var mProgressDialog: ProgressDialog? = null
@@ -78,6 +82,8 @@ class AnalyticsTabFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.ecgCollapseIcon.setOnClickListener(this)
+        binding.ecgExpandIcon.setOnClickListener(this)
         mProgressDialog =
             activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
@@ -96,6 +102,7 @@ class AnalyticsTabFragment : Fragment() {
         helthGraphEntry = ArrayList()
         heartGraphEntry = ArrayList()
         respirationGraphEntry = ArrayList()
+        ecgGraphEntry = ArrayList()
 
         binding.selectDate.setOnClickListener { showDateRangePicker() }
         //Log.e("patientNAme", "${arguments?.getString(ARG_PATIENT_NAME)}")
@@ -206,8 +213,7 @@ class AnalyticsTabFragment : Fragment() {
                         getPatientAnalytics()
                     }, Constants.DELAY_IN_API_CALL)
 
-                }
-                else if (it.data?.body == null) {
+                } else if (it.data?.body == null) {
                     showError(getString(R.string.no_record_found))
                     showGraph(false)
                 } else {
@@ -359,8 +365,10 @@ class AnalyticsTabFragment : Fragment() {
         mychart.invalidate()
         Log.e(
             "chart",
-            "${mychart.xAxis.labelCount} , ${mychart.xAxis.axisMaximum.toDouble()} ,${mychart.xAxis.granularity} ,${mychart.xAxis
-                .isAxisMaxCustom} , $mychart"
+            "${mychart.xAxis.labelCount} , ${mychart.xAxis.axisMaximum.toDouble()} ,${mychart.xAxis.granularity} ,${
+                mychart.xAxis
+                    .isAxisMaxCustom
+            } , $mychart"
         )
         Log.e("labels", "${mychart.scaleX}")
     }
@@ -476,5 +484,40 @@ class AnalyticsTabFragment : Fragment() {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.ecg_expand_icon -> setECGVisible(true)
+            R.id.ecg_collapse_icon -> setECGVisible(false)
+        }
+    }
 
+    /*will show or hide ECG graph when user click to expand/collapse  */
+    private fun setECGVisible(visible: Boolean) {
+        if (visible) {
+            ecg_chart.visibility = View.VISIBLE
+            txt_ecg_xaxis_title.visibility = View.VISIBLE
+            ecg_collapse_icon.visibility = View.VISIBLE
+            ecg_expand_icon.visibility = View.GONE
+            //showECGChart()
+        } else {
+            ecg_chart.visibility = View.GONE
+            txt_ecg_xaxis_title.visibility = View.GONE
+            ecg_collapse_icon.visibility = View.GONE
+            ecg_expand_icon.visibility = View.VISIBLE
+        }
+    }
+
+    /*will use to bind ecg data with chart*/
+    private fun showECGChart() {
+        try {
+            val gson = Gson()
+            var data =
+                gson.fromJson(getString(R.string.ecg_temp_data), ECGResponse::class.java)
+
+        /*    ecgGraphEntry!!.add(Entry(data.))
+            setTempGraph(ecg_chart, tempGraphEntry!!)*/
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+    }
 }

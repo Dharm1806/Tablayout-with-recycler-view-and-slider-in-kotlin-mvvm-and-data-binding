@@ -11,14 +11,14 @@ object Constants {
 
     //base url for apis
     //const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    var BASE_URL = "http://52.12.3.184:8081/"
+    //var BASE_URL = "http://52.12.3.184:8081/"
 
   lateinit var device_token: String
   val OBSERVATION: String? = "observation"
 
     //dev base url
 //    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-//     var BASE_URL = "http://54.188.160.119:8081/"
+     var BASE_URL = "http://54.188.160.119:8081/"
     //var BASE_URL = "http://192.168.10.108:8081/"
 
     /*openId auth & refresh token endpoint*/

@@ -355,14 +355,119 @@
                             app:layout_constraintTop_toBottomOf="@+id/respiration_rate_layout" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
+                <!-- ECG Starts-->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ecg_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_20dp"
+                    android:layout_marginTop="@dimen/padding_20dp"
+                    android:layout_marginEnd="@dimen/padding_20dp"
+                    android:background="@color/white_50"
+                    android:paddingStart="@dimen/width_40dp"
+                    android:paddingTop="@dimen/width_40dp"
+                    android:paddingEnd="@dimen/width_40dp"
+                    android:paddingBottom="@dimen/width_40dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/respiration_rate">
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/ecg_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/padding_20dp"
+                            android:layout_marginTop="@dimen/padding_20dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="@string/title_ecg_graph"
+                            android:textColor="@color/analytics_title_color"
+                            android:textSize="@dimen/text_size_15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                        <ImageView
+                            android:id="@+id/ecg_expand_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/expand_icon"
+                            android:layout_marginTop="@dimen/dimen_25dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            app:layout_constraintRight_toRightOf="@+id/ecg_title"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:foregroundGravity="center_vertical" />
+                        <ImageView
+                            android:id="@+id/ecg_collapse_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/collapse_icon"
+                            android:layout_marginTop="@dimen/dimen_25dp"
+                            android:layout_marginEnd="@dimen/margin_10dp"
+                            app:layout_constraintRight_toRightOf="@+id/ecg_title"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:foregroundGravity="center_vertical"
+                            android:visibility="gone"/>
+                        <LinearLayout
+                            android:id="@+id/ecg_graph_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toBottomOf="@+id/ecg_title"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tv_ecg_yaxis_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="fill_vertical"
+                                android:rotation="-90"
+                                android:visibility="gone"
+                                android:text="@string/msg_respiration_rate"
+                                android:textColor="@color/black"
+                                app:layout_constraintRight_toRightOf="@+id/respiration_rate_chart"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/ecg_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_200"
+                                android:layout_marginStart="@dimen/margin_10dp"
+                                android:layout_marginTop="@dimen/padding_20dp"
+                                android:layout_marginEnd="@dimen/margin_10dp"
+                                android:layout_marginBottom="@dimen/dimen_5dp"
+                                android:background="@color/white"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txt_ecg_xaxis_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="@dimen/padding_20dp"
+                            android:gravity="center_horizontal"
+                            android:paddingBottom="@dimen/margin_10dp"
+                            android:text="@string/text_time"
+                            android:textColor="@color/black"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/ecg_graph_layout"
+                            android:visibility="gone"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <!-- ECG ends-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/padding_20dp"
                     android:background="@color/tab_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/respiration_rate" />
+                    app:layout_constraintTop_toBottomOf="@+id/ecg_placeholder" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
         <com.tekmindz.covidhealthcare.utills.MovableButton

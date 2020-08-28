@@ -184,21 +184,21 @@ class LoginFragment : Fragment() {
             //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
           //  Log.e("userdeco", "fecd")
-        val userType =
-             Utills.decoded(userData.access_token)
+  /*      val userType =
+             Utills.decoded(userData.access_token)*/
 
             //  Log.e("jwtToken", "$userType")
-            mLoginViewModel.saveUserData(
-                PREF_USER_TYPE, userType)
+//            mLoginViewModel.saveUserData(
+//                PREF_USER_TYPE, userType)
             mLoginViewModel.saveUserData(PREF_EXPIRES_IN, userData.expires_in.toString())
-            mLoginViewModel.saveUserData(
-                PREF_REFRESH_EXPIRES_IN,
-                userData.refresh_expires_in.toString()
-            )
+//            mLoginViewModel.saveUserData(
+//                PREF_REFRESH_EXPIRES_IN,
+//                userData.refresh_expires_in.toString()
+//            )
             mLoginViewModel.saveUserData(PREF_REFRESH_TOKEN, userData.refresh_token)
             mLoginViewModel.saveUserData(PREF_TOKEN_TYPE, userData.token_type)
             //mLoginViewModel.saveUserData(PREF_NOT_BEFORE_POLICY, userData.not_before_policy)
-            mLoginViewModel.saveUserData(PREF_SESSION_STATE, userData.session_state)
+           // mLoginViewModel.saveUserData(PREF_SESSION_STATE, userData.session_state)
             mLoginViewModel.saveUserData(PREF_SCOPE, userData.scope)
             // mLoginViewModel.setIsLogin(true)
 
@@ -234,7 +234,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun showError(error: String) {
-        showMessage(error)
+        if (error.isNullOrEmpty()) {
+            showMessage("Unauthorized")
+        }else{
+            showMessage(error)
+        }
         hideProgressbar()
     }
 

@@ -16,7 +16,7 @@ class BasicAuthInterceptor(var id:String,var password:String):Interceptor {
         val request = chain.request()
         val authenticatedRequest = request.newBuilder()
             .header("Authorization", credentials).build()
-        Log.e("Log:::", String.format("\nheaders:\n%s", authenticatedRequest.headers()))
+      //  Log.e("Log:::", String.format("\nheaders:\n%s", authenticatedRequest.headers()))
         return chain.proceed(authenticatedRequest)
     }
 
