@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -184,7 +185,7 @@ class LoginFragment : Fragment() {
             //Log.e("id", "$id")
             mLoginViewModel.saveUserData(PREF_ACCESS_TOKEN, userData.access_token)
           //  Log.e("userdeco", "fecd")
-  /*      val userType =
+    /*    val userType =
              Utills.decoded(userData.access_token)*/
 
             //  Log.e("jwtToken", "$userType")
@@ -285,7 +286,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
     }
 
     companion object {

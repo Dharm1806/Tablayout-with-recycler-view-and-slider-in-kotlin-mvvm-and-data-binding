@@ -80,10 +80,14 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        ecg_expand_icon.setOnClickListener(this)
+        ecg_collapse_icon.setOnClickListener(this)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ecgCollapseIcon.setOnClickListener(this)
-        binding.ecgExpandIcon.setOnClickListener(this)
+
         mProgressDialog =
             activity?.let { Utills.initializeProgressBar(it, R.style.AppTheme_WhiteAccent) }
 
@@ -275,15 +279,16 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
                 )
             )
         }
-        setTempGraph(temp_chart, tempGraphEntry!!)
-        setTempGraph(heart_rate_chart, heartGraphEntry!!)
-        setTempGraph(respiration_rate_chart, respirationGraphEntry!!)
+        setTempGraph(false,temp_chart, tempGraphEntry!!)
+        setTempGraph(false,heart_rate_chart, heartGraphEntry!!)
+        setTempGraph(false,respiration_rate_chart, respirationGraphEntry!!)
         settingYLevel(helthGraphEntry!!)
 
     }
 
 
     private fun setTempGraph(
+        isEcgGraph:Boolean,
         mychart: LineChart,
         graphEntry: ArrayList<Entry>
     ) {
@@ -298,7 +303,8 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         //setting line width
         lineDataSet.lineWidth = 1f
         //seting line color
-        lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        //lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        lineDataSet.color= getColorGraph(mychart)
         // holo circle
         lineDataSet.setDrawCircleHole(false)
         //circle radius
@@ -306,11 +312,15 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         //circle holo radius
         lineDataSet.circleHoleRadius = 1f
         //crircle color
-
+        if (isEcgGraph){
+            lineDataSet.mode=LineDataSet.Mode.CUBIC_BEZIER
+        }else{
+            var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
+            var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
+            mychart.xAxis.axisMaximum = max.toFloat()
+            mychart.xAxis.axisMinimum = min.toFloat()
+        }
         lineDataSet.setCircleColor(requireActivity().resources.getColor(R.color.health_alert_color))
-        var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
-        var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
-
 
         var lineDataSetList = ArrayList<LineDataSet>()
         lineDataSetList.add(lineDataSet)
@@ -327,13 +337,8 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         //Uncomment to show Y axis lables in Text
 
         //helth_chart.setViewPortOffsets(20f, 0f, 10f, 60f);
-
-
         mychart.xAxis.setLabelCount(LABEL_COUNT, true)
         mychart.xAxis.setAvoidFirstLastClipping(true)
-
-        mychart.xAxis.axisMaximum = max.toFloat()
-        mychart.xAxis.axisMinimum = min.toFloat()
         if (hours != null && hours != 0) {
             // mychart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
         }
@@ -350,16 +355,17 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         //  mychart.xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
         // Log.e("labelList", "${labelList.size}  , $labelList")
 
+        if (!isEcgGraph){
+            mychart.xAxis.valueFormatter = object : ValueFormatter() {
+                private val mFormat: SimpleDateFormat =
+                    SimpleDateFormat(getString(R.string.graph_time))
 
-        mychart.xAxis.valueFormatter = object : ValueFormatter() {
-            private val mFormat: SimpleDateFormat =
-                SimpleDateFormat(getString(R.string.graph_time))
+                override fun getFormattedValue(value: Float): String? {
 
-            override fun getFormattedValue(value: Float): String? {
+                    return mFormat.format(value)
+                }
 
-                return mFormat.format(value)
             }
-
         }
         mychart.setExtraOffsets(15f, 0f, 15f, 0f)
         mychart.invalidate()
@@ -395,7 +401,8 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
         //setting line width
         lineDataSet.lineWidth = 1f
         //seting line color
-        lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        //lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
+        lineDataSet.color=getColorGraph(helth_chart)
         lineDataSet.setDrawCircles(false)
         // holo circle
         lineDataSet.setDrawCircleHole(false)
@@ -494,14 +501,12 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
     /*will show or hide ECG graph when user click to expand/collapse  */
     private fun setECGVisible(visible: Boolean) {
         if (visible) {
-            ecg_chart.visibility = View.VISIBLE
-            txt_ecg_xaxis_title.visibility = View.VISIBLE
+            ecg_graph_layout.visibility = View.VISIBLE
             ecg_collapse_icon.visibility = View.VISIBLE
             ecg_expand_icon.visibility = View.GONE
-            //showECGChart()
+            showECGChart()
         } else {
-            ecg_chart.visibility = View.GONE
-            txt_ecg_xaxis_title.visibility = View.GONE
+            ecg_graph_layout.visibility = View.GONE
             ecg_collapse_icon.visibility = View.GONE
             ecg_expand_icon.visibility = View.VISIBLE
         }
@@ -513,9 +518,17 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener {
             val gson = Gson()
             var data =
                 gson.fromJson(getString(R.string.ecg_temp_data), ECGResponse::class.java)
-
-        /*    ecgGraphEntry!!.add(Entry(data.))
-            setTempGraph(ecg_chart, tempGraphEntry!!)*/
+                val liveData=data.liveData
+                liveData.forEach {root->liveData
+                    var i=0
+                    root.ECG0.forEach {
+                        if (it!=null&&root.ECG1[i]!=null){
+                            ecgGraphEntry!!.add(Entry(root.ECG1[i],it))
+                        }
+                        i++
+                    }
+                }
+            setTempGraph(true,ecg_chart, ecgGraphEntry!!)
         }catch (ex:Exception){
             ex.printStackTrace()
         }

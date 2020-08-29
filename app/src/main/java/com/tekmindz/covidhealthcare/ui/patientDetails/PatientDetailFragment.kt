@@ -250,7 +250,7 @@ class PatientDetailFragment : Fragment() {
                 userInfoBody.wardNo,
                 "",
                 userInfoBody.relayId,
-                userInfoBody.wearableIdentifier.toString(),
+                userInfoBody.wearableIdentifier,
                 "",
                 userInfoBody.imageUrl
             )
@@ -458,7 +458,7 @@ class PatientDetailFragment : Fragment() {
             }
 
             if (sys.trim().length != 0 && dia.trim().length != 0) {
-                if (sys.toInt()>=dia.toInt()){
+                if (sys.toInt()<dia.toInt()){
                     etSys.isErrorEnabled = true
                     etSys.error = getString(R.string.err_sys_greater)
                 }else {
@@ -602,14 +602,31 @@ class PatientDetailFragment : Fragment() {
         Glide.with(requireActivity()).load(data.imageUrl).placeholder(R.drawable.ic_placeholder)
             .into(binding.imgPatientProfile)
 
-        binding.tvPatientName.text = patientName
-        binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)
-        binding.tvGenderId.text = data.gender.toUpperCase()
-        binding.tvBedNo.text = data.bedNumber
-        binding.tvWardNo.text = data.wardNo
-        binding.tvRelayId.text = data.relayId
-        binding.tvAddmittedSince.text = mPatientDetailViewModel.parseDate(data.admittedDate)
-        binding.tvBioSensorId.text = data.wearableIdentifier
+        binding.tvPatientName.text =""+ patientName
+        if (!data.dob.isNullOrEmpty()) {
+            binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)
+        }else{
+            binding.tvPatientDob.text=""
+        }
+        if (!data.gender.isNullOrEmpty()) {
+            binding.tvGenderId.text =data.gender.toUpperCase()
+        }else{
+            binding.tvGenderId.text = ""
+        }
+        binding.tvBedNo.text =""+ data.bedNumber
+        binding.tvWardNo.text =""+ data.wardNo
+        binding.tvRelayId.text =""+ data.relayId
+        if (!data.admittedDate.isNullOrEmpty()) {
+            binding.tvAddmittedSince.text = mPatientDetailViewModel.parseDate(data.admittedDate)
+        }else{
+            binding.tvAddmittedSince.text =""
+        }
+        if (!data.wearableIdentifier.isNullOrEmpty()) {
+            binding.tvBioSensorId.text =data.wearableIdentifier
+        }else
+        {
+            binding.tvBioSensorId.text = ""
+        }
         hideProgressbar()
     }
 

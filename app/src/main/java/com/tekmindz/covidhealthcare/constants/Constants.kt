@@ -9,16 +9,16 @@ object Constants {
     /*openId*/
     const val LOGIN_BASE_URL = "http://54.218.218.85:9001/"
 
-    //base url for apis
+    //base url for  QA apis
     //const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-    //var BASE_URL = "http://52.12.3.184:8081/"
+    var BASE_URL = "http://52.12.3.184:8081/"
 
   lateinit var device_token: String
   val OBSERVATION: String? = "observation"
 
     //dev base url
 //    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
-     var BASE_URL = "http://54.188.160.119:8081/"
+    // var BASE_URL = "http://54.188.160.119:8081/"
     //var BASE_URL = "http://192.168.10.108:8081/"
 
     /*openId auth & refresh token endpoint*/
@@ -124,12 +124,12 @@ object Constants {
   const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
 
 
-    const val HEALTH_CARE_WORKER_ROLE = "healthcare-worker"
-    const val PATIENT_ROLE = "patient"
-    const val SUPER_ADMIN_ROLE = "super-admin"
+    const val HEALTH_CARE_WORKER_ROLE = "role_healthcare_worker"
+    const val PATIENT_ROLE = "role_patient"
+    const val SUPER_ADMIN_ROLE = "role_super_admin"
     const val OFFLINE_ACCESS_ROLE = "offline_access"
     const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
-    const val SUPERVISOR_ROLE = "supervisor"
+    const val SUPERVISOR_ROLE = "role_supervisor"
 
     const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
     //parse server date to app format
