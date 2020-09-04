@@ -25,7 +25,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.PatientDetailFragmentBinding
@@ -121,7 +120,10 @@ class PatientDetailFragment : Fragment() {
                 showProgressBar()
 
                 //  mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
-                mPatientDetailViewModel.getPatientObservations(patientId.toString())
+                mPatientDetailViewModel.getPatientObservations(
+                    patientId.toString(),
+                    requireActivity()
+                )
             }
         }
 
@@ -236,7 +238,7 @@ class PatientDetailFragment : Fragment() {
             showProgressBar()
 
             //  mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
-            mPatientDetailViewModel.getPatientObservations(patientId.toString())
+            mPatientDetailViewModel.getPatientObservations(patientId.toString(), requireActivity())
         }
 
         showPatientDeatils(
@@ -385,7 +387,7 @@ class PatientDetailFragment : Fragment() {
 
     private fun updateObservationType(updateManualObservations: UpdateManualObservations) {
 
-        mPatientDetailViewModel.updateObservationType(updateManualObservations)
+        mPatientDetailViewModel.updateObservationType(updateManualObservations, requireActivity())
     }
 
     private fun addBP() {
@@ -458,10 +460,10 @@ class PatientDetailFragment : Fragment() {
             }
 
             if (sys.trim().length != 0 && dia.trim().length != 0) {
-                if (sys.toInt()<dia.toInt()){
+                if (sys.toInt() <= dia.toInt()) {
                     etSys.isErrorEnabled = true
                     etSys.error = getString(R.string.err_sys_greater)
-                }else {
+                } else {
 
                     Utills.hideKeyboard(requireActivity())
                     showProgressBar()
@@ -530,10 +532,13 @@ class PatientDetailFragment : Fragment() {
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) showPatientDeatils(it.data.body)
                 else if (it.data?.statusCode == 401) {
-                    mPatientDetailViewModel.refreshToken()
+                    mPatientDetailViewModel.refreshToken(requireActivity())
 
                     Handler().postDelayed({
-                        mPatientDetailViewModel.getPatientDetails(patientId = patientId.toString())
+                        mPatientDetailViewModel.getPatientDetails(
+                            patientId = patientId.toString(),
+                            context = requireActivity()
+                        )
                     }, Constants.DELAY_IN_API_CALL)
 
                 } else showError(it.data?.message!!)
@@ -544,19 +549,15 @@ class PatientDetailFragment : Fragment() {
     }
 
     private fun handlePatientObservations(it: Resource<PatientObservations>) {
+        Log.e("handleObse", "yes")
+        hideProgressbar()
 
         when (it.status) {
             //Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 hideProgressbar()
-                if (it.data?.statusCode == 200 && it.data.body != null) showPatientObserVations(it.data.body)
-                else if (it.data?.statusCode == 401) {
-                    mPatientDetailViewModel.refreshToken()
-
-                    Handler().postDelayed({
-                        mPatientDetailViewModel.getPatientObservations(patientId = patientId.toString())
-
-                    }, Constants.DELAY_IN_API_CALL)
+                if (it.data?.statusCode == 200 && it.data.body != null) {
+                    showPatientObserVations(it.data.body)
                 } else showError(it.data?.message!!)
 
             }
@@ -566,17 +567,16 @@ class PatientDetailFragment : Fragment() {
 
     private fun showPatientObserVations(data: PatientObservation) {
         // formatString("103.012955")
-        Log.e("observations", "${Gson().toJson(data)}")
         binding.tvHeartRateValue.text = Utills.round(data.heartRate)
         binding.tvRespirationRateValue.text = Utills.round(data.respirationRate)
         binding.tvBodyTempratureValue.text = Utills.round(data.bodyTemperature)
         binding.tvSpO2.text = data.spo2 + " " + getString(R.string.spo2_unit)
         binding.tvBloodPressure.text =
-            (data.bpHigh + "/" + data.bpLow) + " " + getString(R.string.bp_unit)
+            (data.bpHigh.toString() + "/" + data.bpLow.toString()) + " " + getString(R.string.bp_unit)
         var painLl = data.painLevel
-        Log.e("painLevelesdsd", "${data.painLevel}")
+        //Log.e("painLevelesdsd", "${data.painLevel}")
         if (painLl != null) {
-            Log.e("painLl", "$painLl")
+            //   Log.e("painLl", "$painLl")
             painLevel = painLl
         } else {
             painLevel = "0"
@@ -604,7 +604,8 @@ class PatientDetailFragment : Fragment() {
 
         binding.tvPatientName.text =""+ patientName
         if (!data.dob.isNullOrEmpty()) {
-            binding.tvPatientDob.text = mPatientDetailViewModel.parseDate(data.dob)
+            binding.tvPatientDob.text =
+                getString(R.string.birth_date) + " " + mPatientDetailViewModel.parseDate(data.dob)
         }else{
             binding.tvPatientDob.text=""
         }

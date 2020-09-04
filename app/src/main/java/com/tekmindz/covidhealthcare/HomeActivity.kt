@@ -1,6 +1,7 @@
 package com.tekmindz.covidhealthcare
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -30,8 +32,11 @@ import com.google.firebase.iid.InstanceIdResult
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_IS_LOGIN
+import com.tekmindz.covidhealthcare.repository.responseModel.Logout
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfoBody
+import com.tekmindz.covidhealthcare.ui.login.LoginRepository
 import com.tekmindz.covidhealthcare.utills.Utills
+import kotlinx.android.synthetic.main.activity_home.*
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -43,12 +48,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var drawerLayout: DrawerLayout
     lateinit var navController: NavController
     lateinit var navigationView: NavigationView
-
+    var mContext: Context = this
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme1)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         setupNavigation()
+        mContext = this
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(
             this
         ) { instanceIdResult: InstanceIdResult ->
@@ -56,6 +62,18 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Log.e("newToken", newToken)
             Constants.device_token = newToken
         }
+        LoginRepository().responseLiveData.observe(this, Observer {
+            when (it) {
+                is Logout -> {
+                    Log.e("logout", "logout")
+                    if (it.isLOgout) {
+                        logout()
+                    }
+                }
+            }
+        })
+
+
     }
 
 
@@ -85,14 +103,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.logout -> {
-                App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
-                navController.navigate(
-                    R.id.homeTologin, null, NavOptions.Builder()
-                        .setPopUpTo(
-                            R.id.home,
-                            true
-                        ).build()
-                )
+                logout()
             }
 
 
@@ -113,6 +124,56 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
         return true
+    }
+
+    fun logout() {
+
+        App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
+        navController.navigate(
+            R.id.homeTologin, null, NavOptions.Builder()
+                .setPopUpTo(
+                    R.id.home,
+                    true
+                ).build()
+        )
+    }
+
+    fun refreshTokenExpire(mContext: Activity) {
+
+        App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
+        Log.e("refreshTokenExpure", "  ${App.mSharedPrefrenceManager.getIsLogin(PREF_IS_LOGIN)}")
+        // ProcessPhoenix.triggerRebirth(mContext);
+        // navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+
+        logout()
+        //navigateUpTo(Intent(this@HomeActivity, HomeActivity::class.java))
+
+        /*val dialog = Dialog(baseContext)
+        //  dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.show_alert_message_layout)
+        val window: Window = dialog.window!!
+        window.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+        val tvMessage = dialog.findViewById(R.id.tvMessage) as TextView
+        val tvOk = dialog.findViewById(R.id.tvOk) as TextView
+        tvMessage.text = "Time out. \n Need to login Again"
+        tvOk.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                Utills.hide(this@HomeActivity)
+                App.mSharedPrefrenceManager.setIsLogin(PREF_IS_LOGIN, false)
+
+                navigateUpTo(Intent(this@HomeActivity, HomeActivity::class.java))
+
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+        dialog.show()*/
+
+
     }
 
     private fun showAlertMessage() {
@@ -154,7 +215,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.notifications -> {
-                navController.navigate(R.id.navigateToNotifications, null)
+                if (!nav_host_fragment.childFragmentManager.fragments[0].toString()
+                        .contains("NotificationFragment")
+                ) {
+                    navController.navigate(R.id.navigateToNotifications, null)
+                }
             }
 
         }
@@ -166,7 +231,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
-    override  fun onRequestPermissionsResult(
+    override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -177,6 +242,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
+
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

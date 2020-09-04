@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.setBaseUrl
 
+import android.app.Activity
 import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
@@ -95,8 +96,8 @@ class SetBaseUrlViewModel(application: Application) : AndroidViewModel(Applicati
     fun saveUserData(key: String, value: String) = mLoginRepository.saveUserDate(key, value)
 
     fun setIsLogin(isLogin: Boolean) = mLoginRepository.setISLogin(isLogin)
-    fun refreshToken() {
-        mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
+    fun refreshToken(context: Activity) {
+        mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE, context)
         /*  val presenter = Presenter(Application())
           presenter.schedule(userData.expires_in)*/
     }

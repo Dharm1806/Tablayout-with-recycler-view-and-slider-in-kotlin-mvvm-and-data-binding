@@ -94,7 +94,7 @@ class EditProfileFragment : Fragment() {
             Utills.callPhoneNumber(requireActivity())
         }
 
-        mEditProfileViewModel.getEmerncyContact(patientId)
+        mEditProfileViewModel.getEmerncyContact(patientId, requireActivity())
 
         mEditProfileViewModel.response().observe(requireActivity(), Observer {
             when (it) {
@@ -270,7 +270,7 @@ class EditProfileFragment : Fragment() {
                     EditProfileRequest(
                         patientId.toInt(),
                         binding.etEmergencyContactNumber.editText?.text.toString()
-                    )
+                    ), requireActivity()
                 )
 
             }

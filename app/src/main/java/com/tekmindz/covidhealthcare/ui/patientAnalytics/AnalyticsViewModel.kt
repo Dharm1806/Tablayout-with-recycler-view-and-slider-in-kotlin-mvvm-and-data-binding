@@ -1,7 +1,9 @@
 package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -43,7 +45,7 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
         return disposable
     }
 
-    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest) {
+    fun getPatientAnalytics(patientAnalyticsRequest: PatientAnalyticsRequest, context: Activity) {
         subscribe(mAnalyticsRepository.getPatientAnalytics(patientAnalyticsRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -53,10 +55,21 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
             .subscribe({
                 Log.e("request", "${it.raw().request()}")
 
-                Log.e("response", "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}")
+                Log.e(
+                    "response",
+                    "${it.body()}, ${it.code()}, ${it.message()} , ${it.errorBody()}"
+                )
 
-                response.value = (Resource.success(it.body()))
+                if (it.code() == 401 && Constants.refreshTokenCall == true) {
+                    refreshToken(context)
+                    Handler().postDelayed({
+                        getPatientAnalytics(patientAnalyticsRequest, context)
+                    }, Constants.DELAY_IN_API_CALL)
 
+                } else {
+                    Constants.refreshTokenCall = true
+                    response.value = (Resource.success(it.body()))
+                }
             }, {
                 response.value = Resource.error(it.localizedMessage)
             })
@@ -102,8 +115,9 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
         return granuality / 6
     }
 
-    fun refreshToken() {
-        mAnalyticsRepository.refreshToken()
+    fun refreshToken(context: Activity) {
+        Log.e("refreshTOken", "yes")
+        mAnalyticsRepository.refreshToken(context = context)
     }
 
     fun getUserType(): String {
@@ -128,6 +142,28 @@ class AnalyticsViewModel(application: Application) : AndroidViewModel(Applicatio
             labelList.add(mFormat.format(min + diff))
         }
         return labelList
+    }
+
+    fun getFormat(toDate: Long, fromDate: Long): String {
+        val days = getDays(toDate, fromDate)
+        var mFormat = Constants.DAY_ONE
+        Log.e("days", "$days")
+        if (days <= 1) {
+            mFormat = Constants.DAY_ONE
+        } else if (days <= 3) {
+            mFormat = Constants.DAY_THREE
+        } else if (days > 3) {
+            mFormat = Constants.MORE_THAN_THREE_DAY
+        }
+        return mFormat
+    }
+
+    private fun getDays(toDate: Long, fromDate: Long): Int {
+        var days = 1
+        val diffms = toDate - fromDate
+        days = (diffms / (1000 * 60 * 60 * 24)).toInt()
+        return days
+
     }
 
 

@@ -22,7 +22,7 @@
     <string name="logout">LOGOUT</string>
     <string name="dashboard">DASHBOARD</string>
     <string name="self_assesment">SELF ASSESMENT</string>
-    <string name="hours_3">3 Hour</string>
+    <string name="hours_3">3 Hours</string>
     <string name="hours_6">6 Hours</string>
     <string name="hours_12">12 Hours</string>
     <string name="hours_24">24 Hours</string>
@@ -38,7 +38,7 @@
     <string name="msg_bed_number">Bed Number</string>
     <string name="msg_gender">Gender</string>
     <string name="msg_relay_id">Relay ID</string>
-    <string name="msg_respiration_rate">Respiratory</string>
+    <string name="msg_respiration_rate">Respiration Rate</string>
     <string name="unit_bpm">BPM</string>
     <string name="msg_heart_rate">Heart Rate</string>
     <string name="unit_heart_rate">BPM</string>
@@ -98,7 +98,7 @@
     <string name="msg_oxygen_saturation">Oxygen Saturation</string>
     <string name="err_spo2">Please enter valid spO2</string>
     <string name="err_sys">Please enter valid SYS</string>
-    <string name="err_sys_greater">Systolic value must be greater then Diastolic.</string>
+    <string name="err_sys_greater">Diastolic value cannot be greater then or equal to Systolic value</string>
     <string name="level_of_pain">LEVEL OF PAIN</string>
     <string name="assess_the_intensity_of_pain">Assess the intensity of pain</string>
     <string name="zero">0</string>
@@ -125,4 +125,5 @@
         "Temperature":0,"PatchId":"SIB99","RR_OUT":0,"POSTURE":0}],
         "rqst_name":"getlivedata"}
     </string>
+    <string name="birth_date">DOB : </string>
 </resources>

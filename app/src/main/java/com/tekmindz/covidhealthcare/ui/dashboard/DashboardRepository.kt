@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.dashboard
 
+import android.app.Activity
 import android.app.Application
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
@@ -46,10 +47,9 @@ class DashboardRepository {
         )
 
 
-
-    fun refreshToken(){
+    fun refreshToken(context: Activity) {
         val presenter = Presenter(Application())
-        presenter.refreshToken()
+        presenter.refreshToken(context)
     }
 
     fun saveRefreshToken(data: UserModel) {

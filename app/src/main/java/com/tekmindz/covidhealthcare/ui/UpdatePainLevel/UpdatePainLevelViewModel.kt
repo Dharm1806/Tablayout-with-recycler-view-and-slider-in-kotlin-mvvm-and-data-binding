@@ -1,6 +1,8 @@
 package com.tekmindz.covidhealthcare.ui.UpdatePainLevel
 
+import android.app.Activity
 import android.app.Application
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +13,7 @@ import com.tekmindz.covidhealthcare.constants.UserTypes
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdateManualObservations
 import com.tekmindz.covidhealthcare.repository.requestModels.UpdatePainLevel
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
+import com.tekmindz.covidhealthcare.utills.Presenter
 import com.tekmindz.covidhealthcare.utills.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -29,9 +32,7 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
         UpdatePainLevelRepository()
 
 
-
-
-    fun updateObservationType(mUpdatePainLevel: UpdatePainLevel) {
+    fun updateObservationType(mUpdatePainLevel: UpdatePainLevel, context: Activity) {
         Log.e("update", "${Gson().toJson(mUpdatePainLevel)}")
         val updateManualObservationsList = listOf<UpdatePainLevel>(mUpdatePainLevel)
 
@@ -49,7 +50,14 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
                 Log.e("request", "${it.code()} , ${it.raw().request()}")
                 Log.e("response", "${it.body()}")
                 if ((it.code() == 200 || it.code() == 201)) {
+                    Constants.refreshTokenCall = true
                     updatePatientObservations.value = (Resource.success(it.body()))
+                } else if (it.code() == 401 && Constants.refreshTokenCall == true) {
+                    refreshToken(context)
+                    Handler().postDelayed({
+                        updateObservationType(mUpdatePainLevel, context)
+                    }, Constants.DELAY_IN_API_CALL)
+
                 } else {
                     updatePatientObservations.value = Resource.error(it.message())
                 }
@@ -59,6 +67,11 @@ class UpdatePainLevelViewModel(application: Application) : AndroidViewModel(Appl
                 updatePatientObservations.value = Resource.error(it.localizedMessage)
             })
         )
+    }
+
+    private fun refreshToken(context: Activity) {
+        val presenter = Presenter(Application())
+        presenter.refreshToken(context = context)
     }
 
 

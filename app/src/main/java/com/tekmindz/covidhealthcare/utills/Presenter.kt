@@ -4,17 +4,13 @@ import android.app.Activity
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.constants.Constants.CLIENT_ID
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.REFRESH_GRANT_TYPE
 import com.tekmindz.covidhealthcare.constants.Constants.TIME_DIFFERENCE
 import com.tekmindz.covidhealthcare.repository.responseModel.UserModel
 import com.tekmindz.covidhealthcare.ui.login.LoginRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -54,7 +50,7 @@ class Presenter(mApplication: Application) :
 
             delay((miliseconds - TIME_DIFFERENCE) * 1000)
 
-            refreshToken()
+            //refreshToken()
         }
     }
 
@@ -62,10 +58,12 @@ class Presenter(mApplication: Application) :
      * call refresh token api
      */
 
-    fun refreshToken() {
+    fun refreshToken(context: Activity) {
+        Log.e("presenter", "refresh")
         LoginRepository().refreshToken(
             CLIENT_ID,
-            REFRESH_GRANT_TYPE
+            REFRESH_GRANT_TYPE,
+            context
 
         )
 

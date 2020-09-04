@@ -3,6 +3,7 @@ package com.tekmindz.covidhealthcare.ui.dashboard
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -19,6 +20,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.constants.Constants.ARG_TIME
@@ -160,7 +162,7 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
        //showProgressBar()
         if (Utills.verifyAvailableNetwork(activity = requireActivity())) {
             mDashboardViewModel.getDashboardObservations(
-                dashBoardObservations
+                dashBoardObservations, requireActivity()
             )
         }
 
@@ -183,27 +185,41 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
         item.isVisible = false //mDashboardViewModel.getUserType() == UserTypes.PATIENT.toString()
     }*/
     private fun handleObservations(it: Resource<DashboardObservationsResponse>) {
+    Log.e("it.data", "${Gson().toJson(it)}, ${it.data}")
 
         when (it.status) {
             Resource.Status.LOADING -> showProgressBar()
             Resource.Status.SUCCESS -> {
                 // showObservations(it.data?.body!!)
-
                 if (it.data?.statusCode == 200) {
+                    binding.tvNoRecordFound.visibility = View.GONE
+
                     showObservations(it.data.body)
-                }else if (it.data?.statusCode == 401){
-                    mDashboardViewModel.refreshToken()
+                }else if (it.data?.statusCode == 401) {
+                    binding.pateintList.visibility = View.GONE
+                    mDashboardViewModel.refreshToken(requireActivity())
                     Handler().postDelayed({
                         getDashBoardObservation()
                     }, Constants.DELAY_IN_API_CALL)
                 }
                 else {
+
+                    binding.pateintList.visibility = View.GONE
+                    if (it.data == null || it.data.body == null) {
+                        binding.tvNoRecordFound.visibility = View.VISIBLE
+
+                        //  Utills.showAlertMessage(requireActivity(), getString(R.string.no_record_found))
+
+                    }
                     if (it.data != null && it.data.message != null) {
                         showError(it.data.message)
                     }
                 }
             }
-            Resource.Status.ERROR -> showError(it.exception!!)
+            Resource.Status.ERROR -> {
+                Log.e("error", "erryr")
+                showError(it.exception!!)
+            }
 
         }
     }
@@ -215,14 +231,23 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode != 200 && it.data?.body != null) {
                     showError(it.data.message)
-                }else if (it.data?.statusCode == 401){
-                    mDashboardViewModel.refreshToken()
+                    binding.graphView.visibility = View.GONE
+
+                }else if (it.data?.statusCode == 401) {
+                    binding.graphView.visibility = View.GONE
+
+                    mDashboardViewModel.refreshToken(requireActivity())
                     Handler().postDelayed({
                         getDashboardCount()
                     }, Constants.DELAY_IN_API_CALL)
                 }
                 else {
-                    showCounts(it.data!!)
+                    if (it.data == null || it.data.body == null || it.data.body.total == null || it.data.body.total == "0") {
+                        binding.graphView.visibility = View.GONE
+                    } else {
+                        showCounts(it.data)
+                        binding.graphView.visibility = View.VISIBLE
+                    }
                 }
             }
             Resource.Status.ERROR -> showError(it.exception!!)
@@ -274,12 +299,19 @@ class DashboardItemFragment : Fragment(), OnItemClickListener {
 
 
     private fun showObservations(data: List<observations>) {
-        //   Log.e("size", "${data.size}")
+        Log.e("size", "${data.size}")
         hideProgressbar()
         if (!data.isNullOrEmpty()) {
+            binding.pateintList.visibility = View.VISIBLE
             mObservationList.clear()
             mObservationList.addAll(data)
             mObservationAdapter.notifyDataSetChanged()
+            binding.tvNoRecordFound.visibility = View.GONE
+
+        } else {
+            // Utills.showAlertMessage(requireActivity(), getString(R.string.no_record_found))
+            binding.tvNoRecordFound.visibility = View.VISIBLE
+            binding.pateintList.visibility = View.GONE
         }
     }
 

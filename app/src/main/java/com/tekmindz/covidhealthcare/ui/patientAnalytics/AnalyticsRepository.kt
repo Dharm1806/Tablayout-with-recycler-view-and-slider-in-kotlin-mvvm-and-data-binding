@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.patientAnalytics
 
+import android.app.Activity
 import android.app.Application
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
@@ -27,9 +28,9 @@ class AnalyticsRepository {
         )
     }
 
-    fun refreshToken() {
+    fun refreshToken(context: Activity) {
         val presenter = Presenter(Application())
-        presenter.refreshToken()
+        presenter.refreshToken(context = context)
     }
 
     fun isPatient(): Boolean =

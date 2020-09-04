@@ -1,5 +1,7 @@
 package com.tekmindz.covidhealthcare.ui.notifications
 
+import android.app.Activity
+import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tekmindz.covidhealthcare.application.App
@@ -35,7 +37,7 @@ class NotificationViewModel : ViewModel() {
         return disposable
     }
 
-    fun getNotifications() {
+    fun getNotifications(context: Activity) {
         subscribe(mNotificationRepository.getNotifications()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -43,22 +45,30 @@ class NotificationViewModel : ViewModel() {
                 response.value = Resource.loading()
             }
             .subscribe({
-                response.value = (Resource.success(it.body()))
+                if (it.code() == 401) {
+                    refreshToken(context)
+                    Handler().postDelayed({
+                        getNotifications(context)
+                    }, Constants.DELAY_IN_API_CALL)
 
+                } else {
+                    response.value = (Resource.success(it.body()))
+                }
             }, {
                 response.value = Resource.error(it.localizedMessage)
             })
         )
     }
 
-    fun refreshToken() {
-        mNotificationRepository.refreshToken()
+    fun refreshToken(context: Activity) {
+        mNotificationRepository.refreshToken(context = context)
     }
 
 
-        fun getUserType(): String {
-            return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)?: UserTypes.HEALTH_WORKER.toString()
-        }
+    fun getUserType(): String {
+        return App.mSharedPrefrenceManager.getValueString(Constants.PREF_USER_TYPE)
+            ?: UserTypes.HEALTH_WORKER.toString()
+    }
 
 
     fun isPatient(): Boolean = mNotificationRepository.isPatient()

@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -100,7 +99,7 @@ class NotificationFragment : Fragment(), OnItemClickListener {
 
     }
 
-    private fun fetchNotifications() = mNotificationViewModel.getNotifications()
+    private fun fetchNotifications() = mNotificationViewModel.getNotifications(requireActivity())
 
     private fun handleObservations(it: Resource<NotificationResponse>) {
 
@@ -110,15 +109,14 @@ class NotificationFragment : Fragment(), OnItemClickListener {
                 if (it.data?.statusCode == 200 && it.data.body != null) {
                     showResults(it.data.body)
                 } else if (it.data?.statusCode == 401) {
-                    mNotificationViewModel.refreshToken()
+                    mNotificationViewModel.refreshToken(requireActivity())
                     Handler().postDelayed({
                         fetchNotifications()
                     }, Constants.DELAY_IN_API_CALL)
 
                 }else if (it.data?.body == null) {
                     showError(getString(R.string.no_record_found))
-                }
-                else showError(it.data?.message!!)
+                } else showError(it.data.message)
             Resource.Status.ERROR -> showError(it.exception!!)
 
         }
@@ -129,7 +127,9 @@ class NotificationFragment : Fragment(), OnItemClickListener {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
+        Utills.showAlertMessage(requireActivity(), message)
+
+        //    Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 
     private fun showResults(data: List<Body>) {

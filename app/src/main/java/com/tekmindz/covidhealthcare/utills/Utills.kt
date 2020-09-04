@@ -3,6 +3,7 @@ package com.tekmindz.covidhealthcare.utills
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -14,9 +15,7 @@ import android.os.Build
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -25,6 +24,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
@@ -488,4 +488,30 @@ object Utills {
         return constraintsBuilder
     }
 
+
+    fun showAlertMessage(context: Activity, message: String) {
+
+        val dialog = Dialog(context)
+        //  dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.show_alert_message_layout)
+        val window: Window = dialog.window!!
+        window.setLayout(
+            ConstraintLayout.LayoutParams.MATCH_PARENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        )
+        val tvMessage = dialog.findViewById(R.id.tvMessage) as TextView
+        val tvOk = dialog.findViewById(R.id.tvOk) as TextView
+        tvMessage.text = message
+        tvOk.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                Utills.hide(context)
+
+                dialog.dismiss()
+                return v?.onTouchEvent(event) ?: true
+            }
+        })
+        dialog.show()
+
+    }
 }

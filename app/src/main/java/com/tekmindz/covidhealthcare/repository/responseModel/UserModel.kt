@@ -9,6 +9,8 @@ data class UserModel(
 
     val session_state: String,
     val scope: String,
-    val email:String,
-    val jti:String
+    val email: String,
+    val jti: String
 )
+
+data class Logout(var isLOgout: Boolean)

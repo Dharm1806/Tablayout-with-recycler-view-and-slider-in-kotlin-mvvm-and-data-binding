@@ -1,5 +1,7 @@
 package com.tekmindz.covidhealthcare.ui.setBaseUrl
 
+import android.app.Activity
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -15,7 +17,7 @@ import retrofit2.Response
 
 
 class SetBaseUrlRepository : Callback<UserModel> {
-
+    lateinit var context: Activity
     /*request to login user from login api*/
     fun login(loginRequestModel: LoginRequest): Observable<Response<UserModel>> =
         App.healthCareApiLogin.login(
@@ -29,17 +31,21 @@ class SetBaseUrlRepository : Callback<UserModel> {
 
     fun refreshToken(
         clientID: String,
-        refreshGrantType: String
+        refreshGrantType: String, context: Activity
 
-    ){
-        val valueString =  App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
-        val mResponse = App.healthCareApiLogin
-            .refreshToken(
-                RequestBody.create(MediaType.parse("multipart/form-data"),valueString!!),
-                RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
-            )
+    ) {
+        if (Constants.refreshTokenCall) {
+            this.context = context
+            val valueString =
+                App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
+            val mResponse = App.healthCareApiLogin
+                .refreshToken(
+                    RequestBody.create(MediaType.parse("multipart/form-data"), valueString!!),
+                    RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
+                )
 
-        mResponse.enqueue(this)
+            mResponse.enqueue(this)
+        }
     }
 
     fun saveUserDate(key: String, value: String) = mSharedPrefrenceManager.saveString(key, value)
@@ -50,13 +56,18 @@ class SetBaseUrlRepository : Callback<UserModel> {
     }
 
     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-        if (response.isSuccessful && response.code()==200 && response.body()!= null)
-        saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
-        saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
-        saveUserDate(
-            Constants.PREF_REFRESH_EXPIRES_IN,
-            response.body()?.refresh_expires_in.toString()
-        )
+        if (response.isSuccessful && response.code() == 200 && response.body() != null) {
+            saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
+            saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
+            saveUserDate(
+                Constants.PREF_REFRESH_EXPIRES_IN,
+                response.body()?.refresh_expires_in.toString()
+            )
+        } else if (response.code() == 401) {
+            Constants.refreshTokenCall = false
+            var homeActivity = context as HomeActivity
+            homeActivity.refreshTokenExpire(context)
+        }
 
     }
 

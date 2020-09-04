@@ -1,5 +1,7 @@
 package com.tekmindz.covidhealthcare.ui.editProfile
 
+import android.app.Activity
+import com.tekmindz.covidhealthcare.HomeActivity
 import com.tekmindz.covidhealthcare.application.App
 import com.tekmindz.covidhealthcare.application.App.Companion.mSharedPrefrenceManager
 import com.tekmindz.covidhealthcare.constants.Constants
@@ -20,7 +22,7 @@ import retrofit2.Response
 
 
 class EditProfileRepository : Callback<UserModel> {
-
+    lateinit var context: Activity
     /*request to update mobile number and emergency contact number using api */
     fun updateContactInfo(editProfileRequest: EditProfileRequest): Observable<Response<EditProfileResponse>> =
         App.healthCareApi.updateProfile(
@@ -32,17 +34,23 @@ class EditProfileRepository : Callback<UserModel> {
 
     fun refreshToken(
         clientID: String,
-        refreshGrantType: String
+        refreshGrantType: String,
+        mContext: Activity
 
     ){
-        val valueString =  App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
-        val mResponse = App.healthCareApiLogin
-            .refreshToken(
-                RequestBody.create(MediaType.parse("multipart/form-data"),valueString!!),
-               RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
-            )
+        if (Constants.refreshTokenCall) {
+            this.context = mContext
 
-        mResponse.enqueue(this)
+            val valueString =
+                App.mSharedPrefrenceManager.getValueString(Constants.PREF_REFRESH_TOKEN)
+
+            val mResponse = App.healthCareApiLogin
+                .refreshToken(
+                    RequestBody.create(MediaType.parse("multipart/form-data"), valueString!!),
+                    RequestBody.create(MediaType.parse("multipart/form-data"), refreshGrantType)
+                )
+            mResponse.enqueue(this)
+        }
     }
 
     fun saveUserDate(key: String, value: String) = mSharedPrefrenceManager.saveString(key, value)
@@ -53,13 +61,20 @@ class EditProfileRepository : Callback<UserModel> {
     }
 
     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-        if (response.isSuccessful && response.code() == 200 && response.body() != null)
+        if (response.isSuccessful && response.code() == 200 && response.body() != null) {
             saveUserDate(Constants.PREF_ACCESS_TOKEN, response.body()?.access_token!!)
-        saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
-        saveUserDate(
-            Constants.PREF_REFRESH_EXPIRES_IN,
-            response.body()?.refresh_expires_in.toString()
-        )
+            saveUserDate(Constants.PREF_EXPIRES_IN, response.body()?.expires_in.toString())
+            saveUserDate(
+                Constants.PREF_REFRESH_EXPIRES_IN,
+                response.body()?.refresh_expires_in.toString()
+            )
+        } else if (response.code() == 401) {
+            Constants.refreshTokenCall = false
+
+            val homeActivity: HomeActivity = context as HomeActivity
+            homeActivity.refreshTokenExpire(context)
+        }
+
 
     }
 

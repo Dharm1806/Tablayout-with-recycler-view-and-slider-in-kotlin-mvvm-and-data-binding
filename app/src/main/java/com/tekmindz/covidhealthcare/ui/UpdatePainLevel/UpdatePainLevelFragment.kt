@@ -154,7 +154,7 @@ class UpdatePainLevelFragment : Fragment() {
                     Constants.OBSERVATION_TYPE_PAIN_LEVEL,
                     patientProgress.toString(),
                     Utills.getCurrentDate()
-                )
+                ), requireActivity()
             )
         }
         if (Utills.isPatient(App.mSharedPrefrenceManager.get<UserInfoBody>(Constants.PREF_USER_INFO))) {

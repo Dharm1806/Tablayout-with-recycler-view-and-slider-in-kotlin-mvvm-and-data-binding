@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.login
 
+import android.app.Activity
 import android.app.Application
 import android.util.Log
 import android.view.View
@@ -65,6 +66,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
                 if (it.code() == 200 && it.isSuccessful) {
                     response.value = (Resource.success(it.body()))
 
+                } else if (it.code() == 401) {
+                    response.value = Resource.error("Invalid username or password")
                 } else {
                     response.value = Resource.error(it.message())
                 }
@@ -126,8 +129,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(Application())
         mLoginRepository.saveUserInfo(key, userInfo)
 
     fun setIsLogin(isLogin: Boolean) = mLoginRepository.setISLogin(isLogin)
-    fun refreshToken() {
-        mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
+    fun refreshToken(context: Activity) {
+        mLoginRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE, context)
         /*  val presenter = Presenter(Application())
           presenter.schedule(userData.expires_in)*/
     }

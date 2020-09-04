@@ -1,5 +1,6 @@
 package com.tekmindz.covidhealthcare.ui.patientDetails
 
+import android.app.Activity
 import android.app.Application
 import android.util.Log
 import com.google.gson.Gson
@@ -33,9 +34,9 @@ class PatientDetailsRepository {
             "bearer " + mSharedPrefrenceManager.getValueString(Constants.PREF_ACCESS_TOKEN)!!
         )
 
-    fun refreshToken() {
+    fun refreshToken(context: Activity) {
         val presenter = Presenter(Application())
-        presenter.refreshToken()
+        presenter.refreshToken(context)
     }
 
     fun updatePainLevel(updateManualObservations: UpdateManualObservations): Observable<Response<EditProfileResponse>> {

@@ -127,7 +127,7 @@ class SearchFragment : Fragment(), OnItemClickListener {
                         true,
                         DateFilter(fromDateTime = fromTime!!, toDateTime = toTime!!),
                         mQuery
-                    )
+                    ), requireActivity()
                 )
 
             }
@@ -144,16 +144,27 @@ class SearchFragment : Fragment(), OnItemClickListener {
             Resource.Status.SUCCESS -> {
                 if (it.data?.statusCode == 200 && it.data.body != null) {
                     showResults(it.data.body)
+                    binding.text1.visibility = View.GONE
+                    binding.searchList.visibility = View.VISIBLE
+
                 } else if (it.data?.statusCode == 401) {
-                    mSearchViewModel.refreshToken()
+                    binding.text1.visibility = View.GONE
+
+                    mSearchViewModel.refreshToken(requireActivity())
                     Handler().postDelayed({
                         searchQuery()
                     }, Constants.DELAY_IN_API_CALL)
 
                 } else if (it.data?.statusCode == 404) {
                     showError(it.data.message)
+                    binding.text1.visibility = View.GONE
+                    binding.searchList.visibility = View.GONE
+
+
                 } else if (it.data?.body == null) {
-                    showError(getString(R.string.no_record_found))
+                    binding.text1.visibility = View.VISIBLE
+                    binding.searchList.visibility = View.GONE
+                    // showError(getString(R.string.no_record_found))
                     handleUi()
                 } else {
                     showError(it.data.message)

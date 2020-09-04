@@ -1,8 +1,11 @@
 package com.tekmindz.covidhealthcare.ui.search
 
+import android.app.Activity
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.repository.requestModels.SearchRequestModel
 import com.tekmindz.covidhealthcare.repository.responseModel.DashboardObservationsResponse
 import com.tekmindz.covidhealthcare.utills.Resource
@@ -34,7 +37,7 @@ class SearchViewModel : ViewModel() {
         return disposable
     }
 
-    fun getSearchPatientResults(searchRequestModel: SearchRequestModel) {
+    fun getSearchPatientResults(searchRequestModel: SearchRequestModel, context: Activity) {
         subscribe(mSearchRepository.getSearchResults(searchRequestModel)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,7 +48,18 @@ class SearchViewModel : ViewModel() {
             .subscribe({
                 Log.e("request", "${it.code()} , ${it.raw().request()}")
                 Log.e("response", "${it.body()}")
-                response.value = (Resource.success(it.body()))
+                if (it.code() == 401) {
+                    if (Constants.refreshTokenCall) {
+                        refreshToken(context = context)
+                        Handler().postDelayed({
+                            getSearchPatientResults(searchRequestModel, context)
+                        }, Constants.DELAY_IN_API_CALL)
+                    }
+
+                } else {
+                    Constants.refreshTokenCall = true
+                    response.value = (Resource.success(it.body()))
+                }
 
             }, {
                 response.value = Resource.error(it.localizedMessage)
@@ -53,8 +67,8 @@ class SearchViewModel : ViewModel() {
         )
     }
 
-    fun refreshToken() {
-        mSearchRepository.refreshToken()
+    fun refreshToken(context: Activity) {
+        mSearchRepository.refreshToken(context)
     }
 
 

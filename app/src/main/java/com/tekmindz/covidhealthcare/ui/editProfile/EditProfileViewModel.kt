@@ -1,10 +1,13 @@
 package com.tekmindz.covidhealthcare.ui.editProfile
 
+import android.app.Activity
 import android.app.Application
+import android.os.Handler
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.tekmindz.covidhealthcare.constants.Constants
+import com.tekmindz.covidhealthcare.constants.Constants.refreshTokenCall
 import com.tekmindz.covidhealthcare.repository.requestModels.EditProfileRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.EditProfileResponse
 import com.tekmindz.covidhealthcare.repository.responseModel.EmergencyContact
@@ -47,7 +50,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
         ePMutableLiveData!!.value = editProfileRequest
     }
 
-    fun updateContactInfo(editProfileRequest: EditProfileRequest) {
+    fun updateContactInfo(editProfileRequest: EditProfileRequest, context: Activity) {
 
         subscribe(mEditProfileRepository.updateContactInfo(editProfileRequest)
             .subscribeOn(Schedulers.io())
@@ -59,7 +62,14 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
                 //   Log.e("request", "${it.code()} , ${it.raw().request()}")
                 // Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
+                    Constants.refreshTokenCall = true
                     response.value = (Resource.success(it.body()))
+
+                } else if (it.code() == 401 && refreshTokenCall == true) {
+                    refreshToken(context)
+                    Handler().postDelayed({
+                        updateContactInfo(editProfileRequest, context)
+                    }, Constants.DELAY_IN_API_CALL)
 
                 } else {
                     response.value = Resource.error(it.message())
@@ -95,8 +105,12 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
     fun saveUserData(key: String, value: String) = mEditProfileRepository.saveUserDate(key, value)
 
     fun setIsLogin(isLogin: Boolean) = mEditProfileRepository.setISLogin(isLogin)
-    fun refreshToken() {
-        mEditProfileRepository.refreshToken(Constants.CLIENT_ID, Constants.REFRESH_GRANT_TYPE)
+    fun refreshToken(context: Activity) {
+        mEditProfileRepository.refreshToken(
+            Constants.CLIENT_ID,
+            Constants.REFRESH_GRANT_TYPE,
+            context
+        )
         /*  val presenter = Presenter(Application())
           presenter.schedule(userData.expires_in)*/
     }
@@ -104,7 +118,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
 
     fun isPatient(): Boolean = mEditProfileRepository.isPatient()
 
-    fun getEmerncyContact(patientId: String) {
+    fun getEmerncyContact(patientId: String, context: Activity) {
 
         subscribe(mEditProfileRepository.getEmeregncyContact(patientId)
             .subscribeOn(Schedulers.io())
@@ -116,7 +130,14 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(Applicat
                 //  Log.e("request", "${it.code()} , ${it.raw().request()}")
                 // Log.e("response", "${it.body()}")
                 if (it.code() == 200 && it.isSuccessful) {
+                    Constants.refreshTokenCall = true
                     emergencyContactResponse.value = (Resource.success(it.body()))
+
+                } else if (it.code() == 401 && refreshTokenCall == true) {
+                    refreshToken(context = context)
+                    Handler().postDelayed({
+                        getEmerncyContact(patientId, context)
+                    }, Constants.DELAY_IN_API_CALL)
 
                 } else {
                     emergencyContactResponse.value = Resource.error(it.message())

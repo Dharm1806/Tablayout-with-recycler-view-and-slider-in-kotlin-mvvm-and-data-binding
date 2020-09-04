@@ -4,13 +4,11 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -21,13 +19,10 @@ import androidx.navigation.fragment.findNavController
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_ACCESS_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_EXPIRES_IN
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_EXPIRES_IN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_REFRESH_TOKEN
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_SCOPE
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_SESSION_STATE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_TOKEN_TYPE
 import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_INFO
-import com.tekmindz.covidhealthcare.constants.Constants.PREF_USER_TYPE
 import com.tekmindz.covidhealthcare.databinding.FragmentLoginBinding
 import com.tekmindz.covidhealthcare.repository.requestModels.LoginRequest
 import com.tekmindz.covidhealthcare.repository.responseModel.UserInfo
@@ -236,7 +231,7 @@ class LoginFragment : Fragment() {
 
     private fun showError(error: String) {
         if (error.isNullOrEmpty()) {
-            showMessage("Unauthorized")
+            showMessage("Invalid username or password")
         }else{
             showMessage(error)
         }
@@ -286,7 +281,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
+        Utills.showAlertMessage(requireActivity(), message)
+        //Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
     }
 
     companion object {
