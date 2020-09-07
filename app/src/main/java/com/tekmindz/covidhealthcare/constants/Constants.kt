@@ -4,63 +4,64 @@ import java.text.SimpleDateFormat
 
 
 object Constants {
- const val LABEL_COUNT: Int = 7
- var refreshTokenCall = true
+    val RIGHT_OFFSET: Float = 5f
+    const val LABEL_COUNT: Int = 7
+    var refreshTokenCall = true
 
- /*openId*/
- const val LOGIN_BASE_URL = "http://54.218.218.85:9001/"
- //  const val LOGIN_BASE_URL = "http://192.168.10.231:9001"
+    /*openId*/
+    const val LOGIN_BASE_URL = "http://54.218.218.85:9001/"
+    //  const val LOGIN_BASE_URL = "http://192.168.10.231:9001"
 
- //base url for  QA apis
- //const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
- var BASE_URL = "http://52.12.3.184:8081/"
- // var BASE_URL = "http://192.168.10.231:8081/"
+    //base url for  QA apis
+    //const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
+    var BASE_URL = "http://52.12.3.184:8081/"
+    // var BASE_URL = "http://192.168.10.231:8081/"
 
- lateinit var device_token: String
- val OBSERVATION: String? = "observation"
+    lateinit var device_token: String
+    val OBSERVATION: String? = "observation"
 
- //dev base url
+    //dev base url
 //    const val LOGIN_BASE_URL = "http://54.218.218.85:8080/"
- // var BASE_URL = "http://54.188.160.119:8081/"
- //var BASE_URL = "http://192.168.10.108:8081/"
+    // var BASE_URL = "http://54.188.160.119:8081/"
+    //var BASE_URL = "http://192.168.10.108:8081/"
 
- /*openId auth & refresh token endpoint*/
- const val LOGIN_END_POINTS = "oauth/token"
- const val REFRESH_TOKEN_END_POINTS = "oauth/token"
+    /*openId auth & refresh token endpoint*/
+    const val LOGIN_END_POINTS = "oauth/token"
+    const val REFRESH_TOKEN_END_POINTS = "oauth/token"
 
     //endpoints for apis
 //  const val LOGIN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
     const val CLIENT_ID: String = "test-app"
     const val CLIENT_SECRET = "2d78ccf8-0781-4ad9-a63b-d66ca37db970"
 
- //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+    //const val LOGIN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 //  const val CLIENT_ID: String = "ctms-qa-app"
 //  val CLIENT_SECRET = "cc4c9228-0278-4d65-ada4-42808a3aa20b"
- const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
- const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
+    const val UPDATE_CONTACT_NUMBER = "api/patient/addEmegerncyContact"
+    const val GET_EMERGENCY_CONTACT_NUMBER = "api/patient/getEmergencyContact/{patientId}"
 
- const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
+    const val GET_USER_INFO = "api/dashboard/user/getUserInfo"
 
- // const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
+    // const val REFRESH_TOKEN_END_POINTS = "auth/realms/ctms-qa/protocol/openid-connect/token"
 
- //const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
- const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
- const val GET_DASHBOARD_COUNTS = "api/dashboard/ragstatus/count"
- const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"
- const val GET_PATIENT_OBSERVATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
- const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
- const val UPDATE_MANUAL_OBSERVSTION = "api/manual/observation/create"
- const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
- const val GET_NOTIFICATIONS = "api/dashboard/notification/list"
+    //const val REFRESH_TOKEN_END_POINTS = "auth/realms/test/protocol/openid-connect/token"
+    const val GET_DASHBOARD_OBSERVATIONS = "api/dashboard/observations/"
+    const val GET_DASHBOARD_COUNTS = "api/dashboard/ragstatus/count"
+    const val GET_PATIENT_DETAILS = "api/dashboard/patientDetails/{patientId}"
+    const val GET_PATIENT_OBSERVATIONS = "api/dashboard/mobile/patientDetails/{patientId}"
+    const val GET_PATIENT_ANALYTICS = "api/dashboard/patient/observations"
+    const val UPDATE_MANUAL_OBSERVSTION = "api/manual/observation/create"
+    const val SET_PASSWORD_API_END_POINTS = "repos/firebase/firebase-ios-sdk/issues"
+    const val GET_NOTIFICATIONS = "api/dashboard/notification/list"
 
- const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
- const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"
- const val SERVER_GRAPH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
- const val DELAY_IN_API_CALL = 7000L
- const val APP_DATE_FORMAT = "dd/MM/yyyy"
- const val BASIC = "Basic "
- val ARG_TIME = "time"
- val ARG_PATIENT_NAME = "patientName"
+    const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+    const val SERVER_DOB_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.ms"
+    const val SERVER_GRAPH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"
+    const val DELAY_IN_API_CALL = 7000L
+    const val APP_DATE_FORMAT = "dd/MM/yyyy"
+    const val BASIC = "Basic "
+    val ARG_TIME = "time"
+    val ARG_PATIENT_NAME = "patientName"
 
     val ARG_FROM_TIME = "from_time"
     val ARG_TO_TIME = "to_time"
@@ -88,65 +89,65 @@ object Constants {
 
     const val PREF_EXPIRES_IN = "expires_in"
     const val PREF_REFRESH_EXPIRES_IN = "refresh_expires_in"
- const val PREF_REFRESH_TOKEN = "refresh_token"
- const val PREF_TOKEN_TYPE = "token_type"
- const val PREF_NOT_BEFORE_POLICY = "not_before_policy"
- const val PREF_SESSION_STATE = "session_state"
- const val PREF_SCOPE = "scope"
- const val PREF_USER_TYPE = "user_type"
- const val PREF_USER_ID = "user_id"
+    const val PREF_REFRESH_TOKEN = "refresh_token"
+    const val PREF_TOKEN_TYPE = "token_type"
+    const val PREF_NOT_BEFORE_POLICY = "not_before_policy"
+    const val PREF_SESSION_STATE = "session_state"
+    const val PREF_SCOPE = "scope"
+    const val PREF_USER_TYPE = "user_type"
+    const val PREF_USER_ID = "user_id"
 
 
- const val EXTRA_OBSERVATION_TYPE = "obsType"
- const val EXTRA_OBSERVATION_VALUE = "obsValue"
- const val EXTRA_PATIENT_ID = "patientId"
- const val EXTRA_STATUS = "status"
- const val EXTRA_PATIENT_NAME = "patientName"
- const val EXTRA_WARD_NUMBER = "wardNumber"
- const val EXTRA_BED_NUMBER = "bedNumber"
- const val EXTRA_MESSAGE = "message"
- const val EXTRA_NOTIFICATION_TIME = "notificationTime"
- const val EXTRA_NOTIFICATION_ID = "notificationId"
+    const val EXTRA_OBSERVATION_TYPE = "obsType"
+    const val EXTRA_OBSERVATION_VALUE = "obsValue"
+    const val EXTRA_PATIENT_ID = "patientId"
+    const val EXTRA_STATUS = "status"
+    const val EXTRA_PATIENT_NAME = "patientName"
+    const val EXTRA_WARD_NUMBER = "wardNumber"
+    const val EXTRA_BED_NUMBER = "bedNumber"
+    const val EXTRA_MESSAGE = "message"
+    const val EXTRA_NOTIFICATION_TIME = "notificationTime"
+    const val EXTRA_NOTIFICATION_ID = "notificationId"
 
- const val STATE_CRITICAL = "CRITICAL"
- const val STATE_UNDER_CONTROL = "UNDERCONTROL"
- const val STATE_RECOVERED = "RECOVERED"
- const val UNIT_HEART_RATE = "BPM"
- const val UNIT_RESPIRATION = "BrPM"
- const val UNIT_TEMPERATURE = "°C"
+    const val STATE_CRITICAL = "CRITICAL"
+    const val STATE_UNDER_CONTROL = "UNDERCONTROL"
+    const val STATE_RECOVERED = "RECOVERED"
+    const val UNIT_HEART_RATE = "BPM"
+    const val UNIT_RESPIRATION = "BrPM"
+    const val UNIT_TEMPERATURE = "°C"
 
- const val OBSERVATION_TYPE_SPO2 = "spo2"
- const val OBSERVATION_TYPE_BP_HIGH = "bpHigh"
- const val OBSERVATION_TYPE_BP_LOW = "bpLow"
+    const val OBSERVATION_TYPE_SPO2 = "spo2"
+    const val OBSERVATION_TYPE_BP_HIGH = "bpHigh"
+    const val OBSERVATION_TYPE_BP_LOW = "bpLow"
 
- const val OBSERVATION_TYPE_PAIN_LEVEL = "painlevel"
-
-
- const val DATE_RANGE = "Date Range"
-
- const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
+    const val OBSERVATION_TYPE_PAIN_LEVEL = "painlevel"
 
 
- const val HEALTH_CARE_WORKER_ROLE = "role_healthcare_worker"
- const val PATIENT_ROLE = "role_patient"
- const val SUPER_ADMIN_ROLE = "role_super_admin"
- const val OFFLINE_ACCESS_ROLE = "offline_access"
- const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
- const val SUPERVISOR_ROLE = "role_supervisor"
- const val DAY_ONE = "HH:mm"
- const val DAY_THREE = "dd/MM\nHH:mm"
- const val MORE_THAN_THREE_DAY = "dd/MM/yy"
- const val ANGLE = -60f
- const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
- //parse server date to app format
- //val credential:String="USER_CLIENT_APP:$PASSWROD"
- //val encoding =Base64.getEncoder().encodeToString((credential).toByteArray(Charset.forName("utf-8")))
+    const val DATE_RANGE = "Date Range"
 
- fun parseDate(date: String): String {
-  val parser = SimpleDateFormat(SERVER_DATE_FORMAT)
-  val formatter = SimpleDateFormat(APP_DATE_FORMAT)
-  return formatter.format(parser.parse(date))
- }
+    const val BROADCAST_RECEIVER_NAME = "NotificationReceiver"
+
+
+    const val HEALTH_CARE_WORKER_ROLE = "role_healthcare_worker"
+    const val PATIENT_ROLE = "role_patient"
+    const val SUPER_ADMIN_ROLE = "role_super_admin"
+    const val OFFLINE_ACCESS_ROLE = "offline_access"
+    const val UMA_AUTHORIZATION_ROLE = "uma_authorization"
+    const val SUPERVISOR_ROLE = "role_supervisor"
+    const val DAY_ONE = "HH:mm"
+    const val DAY_THREE = "dd/MM\nHH:mm"
+    const val MORE_THAN_THREE_DAY = "dd/MM/yy"
+    const val ANGLE = -60f
+    const val YOUTUBE_API_KEY = "AIzaSyBUVkoC5spfeFSY6GwTyPfzGHY06rGhYTY"
+    //parse server date to app format
+    //val credential:String="USER_CLIENT_APP:$PASSWROD"
+    //val encoding =Base64.getEncoder().encodeToString((credential).toByteArray(Charset.forName("utf-8")))
+
+    fun parseDate(date: String): String {
+        val parser = SimpleDateFormat(SERVER_DATE_FORMAT)
+        val formatter = SimpleDateFormat(APP_DATE_FORMAT)
+        return formatter.format(parser.parse(date))
+    }
 
 
 }

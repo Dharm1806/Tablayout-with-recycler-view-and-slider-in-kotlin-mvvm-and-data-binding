@@ -10,23 +10,23 @@ data class DashboardObservationsResponse(
 @Parcelize
 data class observations(
     var firstName: String,
-    val lastName: String,
-    val bedNumber: String,
-    val wardNo: String,
-    val heartRate: Double,
-    val respirationRate: Double,
-    val bodyTemperature: Double,
-    val status: String,
-    val observationDateTime: String,
-    val imageUrl: String,
-    val patientId: Long,
-    val gender: String,
-    val dob: String,
-    val admittedDate: String,
-    val wearableId: String,
-    val relayId: String,
-    val wearableIdentifier: String,
-    val wearableName: String
+    var lastName: String,
+    var bedNumber: String,
+    var wardNo: String,
+    var heartRate: Double,
+    var respirationRate: Double,
+    var bodyTemperature: Double,
+    var status: String,
+    var observationDateTime: String,
+    var imageUrl: String,
+    var patientId: Long,
+    var gender: String,
+    var dob: String,
+    var admittedDate: String,
+    var wearableId: String,
+    var relayId: String,
+    var wearableIdentifier: String,
+    var wearableName: String
 ) : Parcelable
 
 data class DashboardCounts(

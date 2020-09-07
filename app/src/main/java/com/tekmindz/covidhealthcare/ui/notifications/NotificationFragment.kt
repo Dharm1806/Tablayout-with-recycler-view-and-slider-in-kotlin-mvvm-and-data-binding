@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.tekmindz.covidhealthcare.R
 import com.tekmindz.covidhealthcare.constants.Constants
 import com.tekmindz.covidhealthcare.databinding.FragmentNotificationsBinding
@@ -162,9 +163,10 @@ class NotificationFragment : Fragment(), OnItemClickListener {
     override fun onItemClicked(body: Body) {
 
         Utills.hideKeyboard(requireActivity())
-
+        Log.e("patientId", "${body.patientId},${Gson().toJson(body)}")
         val bundle = bundleOf("patientId" to body.patientId.toInt())
         findNavController().navigate(R.id.homeToPatientDetails, bundle)
+
     }
 
     private val mBroadCastReceiver: BroadcastReceiver = object : BroadcastReceiver() {

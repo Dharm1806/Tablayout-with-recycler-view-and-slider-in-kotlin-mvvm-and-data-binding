@@ -73,12 +73,7 @@ class PatientDetailFragment : Fragment() {
                     "patientId" to patientId.toInt()
 
                 )
-
-                findNavController().navigate(R.id.navigateToUpdateContactInfo, bundle)/*, NavOptions.Builder()
-                    .setPopUpTo(
-                        R.id.patient_details,
-                        true
-                    ).build())  */
+                findNavController().navigate(R.id.navigateToUpdateContactInfo, bundle)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -132,7 +127,7 @@ class PatientDetailFragment : Fragment() {
         }?.apply {
             if (getInt(Constants.PATIENT_ID) != 0) {
                 patientId = getInt(Constants.PATIENT_ID).toString()
-//                Log.e("patienTiD", "$patientId")
+                Log.e("patienTiD", "$patientId")
                 getPatient()
             }
         }

@@ -277,6 +277,8 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
             }
 
             var time = mAnalyticsViewModel.getTimeFloat(it.observationDateTime, requireActivity())
+            val min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
+            time = time - min
             tempGraphEntry!!.add(Entry(time.toFloat(), it.bodyTemperature))
 
             heartGraphEntry!!.add((Entry(time.toFloat(), it.heartRate)))
@@ -326,9 +328,10 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
         if (isEcgGraph) {
             lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         } else {
-
-            mychart.xAxis.axisMaximum = max.toFloat()
-            mychart.xAxis.axisMinimum = min.toFloat()
+            //mychart.xAxis.axisMaximum = 7f
+            //mychart.xAxis.axisMinimum = 0f
+            mychart.xAxis.axisMinimum = 0f
+            mychart.xAxis.axisMaximum = (max - min).toFloat()
         }
         lineDataSet.setCircleColor(requireActivity().resources.getColor(R.color.health_alert_color))
 
@@ -340,34 +343,17 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
         mychart.xAxis.setDrawGridLines(false)
         mychart.axisRight.isEnabled = false
 
-        //mychart.getAxisRight().setDrawGridLines(false);
-        //mychart.axisRight.setDrawGridLines(false);
-        //mychart.setDrawGridBackground(false)
-
-        //Uncomment to show Y axis lables in Text
-
-        //helth_chart.setViewPortOffsets(20f, 0f, 10f, 60f);
         mychart.xAxis.setLabelCount(LABEL_COUNT, true)
-        mychart.xAxis.setAvoidFirstLastClipping(true)
-        mychart.xAxis.setDrawLimitLinesBehindData(false)
-
-        if (hours != null && hours != 0) {
-            // mychart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
-        }
-        mychart.xAxis.setAvoidFirstLastClipping(true)
-        mychart.xAxis.setLabelCount(LABEL_COUNT, true)
-        //  mychart.invalidate()
         mychart.xAxis.setCenterAxisLabels(false)
 
         mychart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         mychart.description.isEnabled = false
         mychart.legend.isEnabled = false
 
-        // val labelList = mAnalyticsViewModel.getXAXIS(toDate, fromDate, requireActivity())
+        val labelList = mAnalyticsViewModel.getXAXIS(toDate, fromDate, requireActivity())
         //  mychart.xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
-        // Log.e("labelList", "${labelList.size}  , $labelList")
+        Log.e("labelList", "${labelList.size}  , $labelList")
         val mFormatValue = mAnalyticsViewModel.getFormat(max, min)
-        Log.e("mFOrmat", mFormatValue)
 
         if (!isEcgGraph) {
             mychart.xAxis.valueFormatter = object : ValueFormatter() {
@@ -375,32 +361,31 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
                     SimpleDateFormat(mFormatValue)
 
                 override fun getFormattedValue(value: Float): String? {
-                    var formated = mFormat.format(value)
+                    Log.e("value ", "${value.toLong()}")
+                    val time = min + value.toLong()
+                    var formated = mFormat.format(time)
+                    //   var formated = mFormat.format(value)
                     if (formated.contains(" ")) {
                         val newFormated = formated.split(" ")
                         if (newFormated.size == 2) {
                             formated = newFormated[0] + "\n" + newFormated[1]
                             mychart.xAxis.labelRotationAngle = Constants.ANGLE
                             Log.e("newFOrmated", formated)
+                            mychart.setExtraOffsets(0f, 0f, 0f, 5f)
+
                         }
                     } else if (formated.contains("/")) {
                         mychart.xAxis.labelRotationAngle = Constants.ANGLE
+                        mychart.setExtraOffsets(0f, 0f, 0f, 5f)
+
                     }
                     return formated
                 }
 
             }
         }
-        mychart.setExtraOffsets(0f, 0f, 0f, 5f)
+        mychart.extraRightOffset = Constants.RIGHT_OFFSET
         mychart.invalidate()
-        Log.e(
-            "chart",
-            "${mychart.xAxis.labelCount} , ${mychart.xAxis.axisMaximum.toDouble()} ,${mychart.xAxis.granularity} ,${
-            mychart.xAxis
-                .isAxisMaxCustom
-            } , $mychart"
-        )
-        Log.e("labels", "${mychart.scaleX}")
     }
 
     private fun getColorGraph(mychart: LineChart): Int {
@@ -423,7 +408,7 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
         //setting draw values
         lineDataSet.setDrawValues(false)
         //setting line width
-        lineDataSet.lineWidth = 1f
+        lineDataSet.lineWidth = 2f
         //seting line color
         //lineDataSet.color = requireActivity().resources.getColor(R.color.health_alert_color)
         lineDataSet.color = getColorGraph(helth_chart)
@@ -453,30 +438,33 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
 
         //Uncomment to show Y axis lables in Text
         val yAxis = helth_chart.axisLeft
-        yAxis.labelCount = 5
+        yAxis.labelCount = 4
         yAxis.axisMinimum = 0f
-        yAxis.mAxisMaximum = 5f
+        yAxis.mAxisMaximum = 4f
         yAxis.valueFormatter = IndexAxisValueFormatter(postureYaxis)
         //helth_chart.setViewPortOffsets(20f, 0f, 10f, 60f);
 
         var max = mAnalyticsViewModel.getTimeFloat(toDate, requireActivity())
         var min = mAnalyticsViewModel.getTimeFloat(fromDate, requireActivity())
         helth_chart.xAxis.setLabelCount(LABEL_COUNT, true)
-        helth_chart.xAxis.setAvoidFirstLastClipping(true)
+        // helth_chart.xAxis.setAvoidFirstLastClipping(true)
 
-        helth_chart.xAxis.axisMaximum = max.toFloat()
-        helth_chart.xAxis.axisMinimum = min.toFloat()
+        helth_chart.xAxis.axisMinimum = 0f
+        helth_chart.xAxis.axisMaximum = (max - min).toFloat()
+
         if (hours != null && hours != 0) {
             // helth_chart.xAxis.granularity = mAnalyticsViewModel.getGranuality(hours).toFloat()
         }
-        helth_chart.xAxis.setAvoidFirstLastClipping(true)
+        //  helth_chart.xAxis.setAvoidFirstLastClipping(true)
         helth_chart.xAxis.setLabelCount(LABEL_COUNT, true)
         //  helth_chart.invalidate()
-        helth_chart.xAxis.setCenterAxisLabels(false)
+        // helth_chart.xAxis.setCenterAxisLabels(false)
 
         helth_chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         helth_chart.description.isEnabled = false
         helth_chart.legend.isEnabled = false
+        helth_chart.xAxis.setDrawLimitLinesBehindData(true)
+
         // val labelList = mAnalyticsViewModel.getXAXIS(toDate, fromDate, requireActivity())
         //  helth_chart.xAxis.valueFormatter = IndexAxisValueFormatter(labelList)
         // Log.e("labelList", "${labelList.size}  , $labelList")
@@ -487,22 +475,28 @@ class AnalyticsTabFragment : Fragment(), View.OnClickListener, View.OnTouchListe
                 SimpleDateFormat(mFormatValue)
 
             override fun getFormattedValue(value: Float): String? {
-                var formated = mFormat.format(value)
+                val time = min + value.toLong()
+                var formated = mFormat.format(time)
                 if (formated.contains(" ")) {
                     val newFormated = formated.split(" ")
                     if (newFormated.size == 2) {
                         formated = newFormated[0] + "\n" + newFormated[1]
                         helth_chart.xAxis.labelRotationAngle = Constants.ANGLE
                         Log.e("newFOrmated", formated)
+                        helth_chart.setExtraOffsets(0f, 0f, 0f, 5f)
+
                     }
                 } else if (formated.contains("/")) {
                     helth_chart.xAxis.labelRotationAngle = Constants.ANGLE
+                    helth_chart.setExtraOffsets(0f, 0f, 0f, 5f)
+
                 }
                 return formated
             }
 
         }
-        helth_chart.setExtraOffsets(10f, 10f, 10f, 5f)
+
+        helth_chart.extraRightOffset = Constants.RIGHT_OFFSET
 
         helth_chart.invalidate()
     }
