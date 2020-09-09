@@ -1,0 +1,1 @@
+# Tablayout-with-recycler-view-and-slider-in-kotlin-mvvm-and-data-binding
