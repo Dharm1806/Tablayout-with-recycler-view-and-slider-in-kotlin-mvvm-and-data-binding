@@ -17,7 +17,16 @@
             android:theme="@style/ToolbarTheme"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/title_bg" />
+            android:background="@drawable/title_bg" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fitness &amp; Wellness"
+                android:layout_gravity="center"
+                android:id="@+id/toolbar_title" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <fragment
             android:id="@+id/nav_host_fragment"
@@ -36,6 +45,7 @@
         android:layout_gravity="start"
         app:itemTextColor="@color/white"
         android:fitsSystemWindows="true"
+        android:visibility="gone"
         style="@style/Widget.Custom.NavigationView"
         android:background="@color/colorPrimaryDark"
         app:menu="@menu/drawer_menu"

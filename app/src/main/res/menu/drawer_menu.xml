@@ -1,32 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/selfAssesment"
-            android:icon="@drawable/ic_self_assesment"
-            android:title="@string/self_assesment" />
-
-        <item
-            android:id="@+id/home"
-            android:icon="@drawable/ic_dashboard"
-            android:title="@string/dashboard" />
-        <item
-            android:id="@+id/base_url"
-            android:icon="@drawable/ic_dashboard"
-            android:title="@string/msg_base_url" />
-        <item
-            android:id="@+id/help"
-            android:icon="@drawable/help_icon"
-            android:title="@string/help" />
-
-        <item
-            android:id="@+id/logout"
-            android:actionLayout="@layout/action_layout_file"
-            android:icon="@drawable/ic_logout"
-            android:title="@string/logout" />
-    </group>
-
 </menu>

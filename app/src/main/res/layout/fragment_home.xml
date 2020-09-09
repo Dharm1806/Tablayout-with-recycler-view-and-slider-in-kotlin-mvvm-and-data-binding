@@ -16,11 +16,12 @@
         app:tabIndicator="@color/colorAccent"
         app:tabIndicatorHeight="@dimen/width_50dp"
         app:tabIconTintMode="add"
-        app:tabMode="scrollable"
+        app:tabMode="fixed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"/>
+        app:tabTextAppearance="@style/tab_text"
+    />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tekmindz.covidhealthcare"
+    package="com.dharam.offers"
     android:targetSandboxVersion="1">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -26,11 +25,11 @@
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".application.App"
+        android:name="com.dharam.offers.application.App"
         android:theme="@style/SplashTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".HomeActivity"
+        <activity android:name="com.dharam.offers.HomeActivity"
             android:windowSoftInputMode="stateHidden"
           >
             <intent-filter>
@@ -40,28 +39,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.tekmindz.lifesignals.SplashActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
 
-
-        </activity>
-
-        <activity
-            android:name="com.tekmindz.lifesignals.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme_lib"
-            android:windowSoftInputMode="stateHidden"
-            android:exported="true"/>
-
-        <service android:name="com.tekmindz.lifesignals.util.DataReceiverService"/>
-        <service android:name=".repository.fcm.HCFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

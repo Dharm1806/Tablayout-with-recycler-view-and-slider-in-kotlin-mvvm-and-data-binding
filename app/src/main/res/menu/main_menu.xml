@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/notifications"
-        android:icon="@drawable/ic_notification"
-        app:showAsAction="always"
-        app:actionLayout="@layout/notification_action_item"
-        android:title="@string/action_notification" />
-
-  <item
-        android:id="@+id/updateProfile"
-        android:icon="@drawable/ic_more"
-        app:showAsAction="always"
-        android:title="@string/action_notification" />
 
 </menu>
