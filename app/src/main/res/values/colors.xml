@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0667ad</color>
+    <color name="colorPrimaryDark">#0667ad</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="dark_black">#333333</color>
+    <color name="form_field_text_color">#9b9b9b</color>
+    <color name="button_bg">#8c8c8c</color>
+    <color name="dark_grey">#8c8c8c</color>
+    <color name="drawer_bg">#0667ad</color>
+    <color name="white">#ffffff</color>
+    <color name="white_70">#70ffffff</color>
+    <color name="white_50">#50ffffff</color>
+
+    <color name="end_color">#12b2e8</color>
+    <color name="start_color">#014b97</color>
+    <color name="red">#f9514d</color>
+    <color name="amber">#eca806</color>
+    <color name="green">#2ca345</color>
+    <color name="legend_text_color">#333333</color>
+    <color name="dashboard_text_color">#555555</color>
+    <color name="tab_background">#f7f7ff</color>
+    <color name="white_10">#10ffffff</color>
+    <color name="black">#000000</color>
+    <color name="tab_text_color">#30ffffff</color>
+    <color name="analytics_title_color">#53557c</color>
+    <color name="patient_details_text">#30000000</color>
+    <color name="health_alert_color">#314eae</color>
+    <color name="body_temp_color">#c8b05e</color>
+    <color name="respiration_color">#a415ee</color>
+    <color name="heart_rate_color">#ff64b4</color>
+
+</resources>

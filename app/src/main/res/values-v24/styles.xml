@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns2="http://schemas.android.com/apk/res-auto">
+
+    <style name="Base.V14.Theme.MaterialComponents" parent="Base.V14.Theme.MaterialComponents.Bridge">
+        <item name="viewInflaterClass">
+            com.google.android.material.theme.MaterialComponentsViewInflater
+        </item>
+
+        <!-- Colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/white</item>
+
+        <item name="android:colorBackground">@color/white</item>
+        <item name="colorError">@color/design_dark_default_color_error</item>
+
+        <!-- Action bar -->
+        <item name="actionBarSize">@dimen/mtrl_toolbar_default_height</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Surface</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.ActionBar.Surface</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.MaterialComponents.PopupMenu.Overflow
+        </item>
+
+        <!-- Widget styles -->
+        <item name="android:contextPopupMenuStyle" ns2:targetApi="n">
+            @style/Widget.MaterialComponents.PopupMenu.ContextMenu
+        </item>
+        <item name="buttonBarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="android:buttonBarButtonStyle">?attr/buttonBarButtonStyle</item>
+
+        <item name="borderlessButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>
+        <item name="checkboxStyle">@style/Widget.MaterialComponents.CompoundButton.CheckBox</item>
+        <item name="listPopupWindowStyle">
+            @style/Widget.MaterialComponents.PopupMenu.ListPopupWindow
+        </item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+        <item name="radioButtonStyle">@style/Widget.MaterialComponents.CompoundButton.RadioButton
+        </item>
+        <item name="switchStyle">@style/Widget.MaterialComponents.CompoundButton.Switch</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar</item>
+
+        <!-- Dialog themes -->
+        <item name="bottomSheetDialogTheme">
+            @style/ThemeOverlay.MaterialComponents.BottomSheetDialog
+        </item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+        <item name="materialAlertDialogTheme">
+            @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
+        </item>
+        <item name="android:datePickerDialogTheme" ns2:ignore="NewApi">
+            @style/ThemeOverlay.MaterialComponents.Dialog
+        </item>
+        <item name="android:timePickerDialogTheme" ns2:ignore="NewApi">
+            @style/ThemeOverlay.MaterialComponents.Dialog
+        </item>
+
+        <!-- Type styles -->
+        <item name="textAppearanceLargePopupMenu">?attr/textAppearanceSubtitle1</item>
+        <item name="textAppearanceSmallPopupMenu">?attr/textAppearanceSubtitle1</item>
+
+        <!-- Picker styles and themes. -->
+        <item name="materialCalendarStyle">@style/Widget.MaterialComponents.MaterialCalendar</item>
+        <item name="materialCalendarFullscreenTheme">
+            @style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen
+        </item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.MaterialComponents.MaterialCalendar
+        </item>
+    </style>
+</resources>

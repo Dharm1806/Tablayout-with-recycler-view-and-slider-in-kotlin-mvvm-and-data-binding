@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Fitness</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <string name="dashboard">DASHBOARD</string>
+    <string name="no_internet">No Internet</string>
+    <string name="msg_please_connect_to_internet">Please connect to Internet</string>
+    <string name="msg_please_wait">Please Wait...</string>
+
+    <string name="msg_please_connect">Please connect to internet for continue</string>
+    <string name="action_save">save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="no_record_found">No record found</string>
+
+    <string name="offers">Offers</string>
+    <string name="details">Details</string>
+    <string name="esitmated_savings">"Estimated Savings :  Rs  "</string>
+    <string name="fitness_wellness"><![CDATA[Fitness & Wellness]]></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="description">Description</string>
+    <string name="btn_redeem">Redeem</string>
+    <string name="menu">Menu</string>
+    <string name="call">Call</string>
+    <string name="map">Map</string>
+</resources>

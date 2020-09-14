@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="observations"
+            type="com.dharam.offers.repository.responseModel.Coupons" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:elevation="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/margin_10dp"
+            android:id="@+id/item_layout_observations">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_coupon_title"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:layout_marginStart="@dimen/margin_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/dark_black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_redem"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="@dimen/text_size_15sp"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_marginBottom="@dimen/margin_10dp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/btn_redeem"
+                android:background="@color/colorPrimary"
+                android:paddingStart="@dimen/margin_10dp"
+                android:paddingEnd="@dimen/margin_10dp"
+                android:paddingTop="@dimen/dimen_5dp"
+                android:paddingBottom="@dimen/dimen_5dp"
+                android:textColor="@color/white" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_coupon_description"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_redem"
+                android:textColor="@color/dark_black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_coupon_saving"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_10dp"
+                android:textSize="@dimen/dimen_10sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_coupon_description"
+                android:paddingBottom="@dimen/padding_20dp"
+                android:textColor="@color/dark_black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_coupon_validity"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_margin="@dimen/margin_10dp"
+                android:textSize="@dimen/dimen_10sp"
+                android:text="Valid till : 30th sep"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_coupon_description"
+                android:textColor="@color/black" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
